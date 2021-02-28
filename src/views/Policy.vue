@@ -96,6 +96,7 @@
           These are just what I recommend, it’s still up to you which you
           would like to book&nbsp;<span class="emoji">&#128513;</span>
         </h3>
+        <a href="https://app.acuityscheduling.com/schedule.php?owner=21110176" target="_blank" class="link policy-link">Book</a>
       </div>
     </div>
   </div>
@@ -116,6 +117,15 @@ export default {
 .page {
   &--policy {
     align-items: flex-start;
+    .link.policy-link {
+      max-width: 100%;
+      width: 100%;
+      margin: 30px auto 0;
+      @include bpMedium {
+        margin: 30px 0;
+        max-width: 300px;
+      }
+    }
   }
 
   .header {
@@ -150,7 +160,7 @@ export default {
 
   .disclaim {
     padding-left: 10px;
-    margin-top: -20px;
+    margin-top: -10px;
     position: relative;
     &:before {
       position: absolute;
