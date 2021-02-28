@@ -36,9 +36,11 @@ export default {
     .links {
       width: 100%;
       display: flex;
+      justify-content: center;
     }
     .link {
       width: 50%;
+      max-width: 300px;
       display: flex;
       justify-content: center;
       align-items: center;
