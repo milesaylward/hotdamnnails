@@ -1,0 +1,21 @@
+@import './_variables.scss';
+* {
+  box-sizing: border-box;
+}
+.page {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 0;
+}
+
+svg {
+  display: block;
+}
+.container {
+  width: 100%;
+  display: flex;
+  max-width: $max-width;
+  padding: 0 28px;
+  margin: 0 auto;
+}
