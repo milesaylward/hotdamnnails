@@ -9,6 +9,8 @@
             I am a home-based nail tech in Historic Norfolk.
             The only form of parking available is street parking.
             You may have to parallel park and are responsible for your parking.
+            Please read <b>ALL</b> parking signs as there are days
+            when the city does street sweeping.
           </li>
           <li>
             In case of severe allergies, I do have cats,
