@@ -48,7 +48,8 @@
              The more design add ons, the more time is needed. So please book accordingly.
           </li>
           <li>
-            Rushed appointments or repeatedly arriving late
+            <strong>Rushed appointments</strong> or
+            <strong>repeatedly arriving late</strong> (15 mins or later)
             will result in no future bookings with me.
             (On average hand designed sets take about 2 hours)
           </li>
