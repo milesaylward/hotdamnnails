@@ -83,7 +83,7 @@
             </span>
             <span class="indent">
               If you want a different base color acrylic (powder) such as <b>CLEAR</b>.
-              You can also pay for a repair to make specific nails clear.
+              You can also pay for a <b>SHAVE DOWN</b> to change the acrylic base color.
             </span>
             <span class="indent">
               If you have 3 or more broken nails after a couple weeks
