@@ -73,13 +73,13 @@
               If you have had 3 consecutive fill ins.
             </span>
             <span class="indent">
-              If you want a different shape or extreme length change.
+              If you want a different <b>SHAPE</b> or <b>EXTREME LENGTH CHANGE</b>.
             </span>
-            <span class="indent">
-              The bond between the nail and acrylic will
+            <span class="offset">
+              (The bond between the nail and acrylic will
               loosen when nail is filed down and reshaped multiple times.
               You can save money on nail repairs by getting a
-              fresh set if the nails seem to be getting weak.
+              fresh set if the nails seem to be getting weak.)
             </span>
             <span class="indent">
               If you want a different base color acrylic (powder) such as <b>CLEAR</b>.
@@ -198,6 +198,10 @@ export default {
         top: 0;
         left: -30px;
       }
+    }
+    .offset {
+      font-size: 18px;
+      margin-left: 35px;
     }
   }
 }
