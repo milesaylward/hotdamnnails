@@ -48,6 +48,10 @@
              The more design add ons, the more time is needed. So please book accordingly.
           </li>
           <li>
+            Being <strong>15 minutes late</strong> after an appointment time,
+            without first notifying me, will result in a canceled appointment.
+          </li>
+          <li>
             <strong>Rushed appointments</strong> or
             <strong>repeatedly arriving late</strong> (15 mins or later)
             will result in no future bookings with me.
