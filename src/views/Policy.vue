@@ -5,57 +5,93 @@
       <div class="body">
         <h2>Info/Policies</h2>
         <ul>
+          <li class="title">LOCATION INFO:</li>
           <li>
-            I am a home-based nail tech in Historic Norfolk.
-            The only form of parking available is street parking.
-            You may have to parallel park and are responsible for your parking.
-            Please read <b>ALL</b> parking signs as there are days
-            when the city does street sweeping.
+            Home based nail tech located in Downtown Norfolk.
+            Parking is 100% your responsibility.
           </li>
           <li>
-            In case of severe allergies, I do have cats,
-            but they are not in the nail room.
-            The nail room is enclosed, private,
-            and kept clean at all times.
+            In case of severe allergies, I do have cats, but they are not in the nail room.
+            The nail room is enclosed, private, and kept clean at all times.
           </li>
           <li>
-            To have an idea of where I am located,
-            check out
-            <a href="https://goo.gl/maps/un2chf8jUa7eMDQ89" target="_blank">Cure Coffeehouse</a> on Google Maps.
+            To have an idea of where I am located, check out
+            <a href="https://goo.gl/maps/tAw1oYxifFYf3iRq9" target="_blank">Cure Coffeehouse
+            on Google Maps</a>.
           </li>
           <li>
-            You will need to pay a <b>$10 NON-REFUNDABLE DEPOSIT</b> to secure a time-slot.
+            The actual address will be embedded in the appointment
+            confirmation email once you have completed the booking.
+          </li>
+        </ul>
+        <ul>
+          <li class="title">DEPOSIT/PAYMENT INFO:</li>
+          <li>
+            You will need to pay a $10 NON-REFUNDABLE DEPOSIT to secure a time-slot.
             I collect deposits through
             CashApp: <a href="https://cash.app/$hotdamnnails">$hotdamnnails</a> or
             Venmo: <a href="https://venmo.com/hotdamnnails">@hotdamnnails</a>
           </li>
           <li>
             The non-refundable deposit will go towards your set.
+            You are allowed to reschedule up until 48 hours
+            before your appointment. All reschedules and
+            cancelations are done through Direct Message on
+            Instagram <a href="https://www.instagram.com/hotdamnnails/" target="_blank">@hotdamnnails</a>
+            or Text <a href="tel:757-231-7978">757-231-7978</a>
+          </li>
+          <li>
+            One (1) reschedule is allowed per appointment
+            made and must be rebooked within the same month.
+            Any further need to reschedule will result in the forfeit of your deposit.
             Please try and book an appointment you are sure you can attend.
           </li>
-          <li>
-            Due to Covid-19 currently guests are not allowed to
-            accompany you to your appointment &amp; a mask must
-            be worn throughout the appointment.
-          </li>
+        </ul>
+        <ul>
+          <li class="title">UPON ARRIVAL:</li>
           <li>
             If you have previous nails, not done by me,
-            please have them soaked off and come in with bare nails.
+            I suggest please have them soaked off and come in with bare nails.
+            If you come in with nails (not my work) I will soak it off
+            for you for an add on 20$ & if there is enough time for it.
           </li>
           <li>
-             Time slots are in 3hr intervals. When you book with me, you are booking a 3 hr session
-             with me. 1-color fresh sets and fills are already 1.5hrs. A soak off is 30-45mins.
-             The more design add ons, the more time is needed. So please book accordingly.
+            Due to Covid-19 currently guests are not allowed to accompany you
+            to your appointment & a MASK must be worn throughout the appointment.
+          </li>
+        </ul>
+        <ul>
+          <li class="title">TIME INFO/LATE ARRIVAL:</li>
+          <li>
+            15 minutes late without notice, your appointment will automatically be canceled.
+            Deposits are not refundable and cannot be used to reschedule in this situation.
+          </li>
+          <li>Repetitively arriving late (15mins or later) will result in no future booking.</li>
+          <li>No call no show will result in no future booking.</li>
+          <li>
+            Time slots are in 3hr intervals. Your set and add-on services may
+            take 1.5hrs to 3hrs depending on the design.
+            Please make sure to have your time planned out.
           </li>
           <li>
-            Being <strong>15 minutes late</strong> after an appointment time,
-            without first notifying me, will result in a canceled appointment.
-          </li>
-          <li>
-            <strong>Rushed appointments</strong> or
-            <strong>repeatedly arriving late</strong> (15 mins or later)
+            Rushed appointments or repeatedly arriving late (15 mins or later)
             will result in no future bookings with me.
-            (On average hand designed sets take about 2 hours)
+            (On average, hand-designed sets take about 2 hours)
+          </li>
+        </ul>
+        <ul>
+          <li class="title">MY RIGHT TO CANCEL</li>
+          <li>
+            Due to unexpected emergencies such as illness and family matters and etc.,
+            cancelation of appointments may happen. If this does happen,
+            you will be given an option to refund the deposit or reschedule with a discount.
+          </li>
+          <li>Rudeness / Aggressive behavior will NOT be tolerated.</li>
+          <li>
+            Please let me know your expectations during your design consultation
+            or at the time of your appointment so that your needs can be met.
+            These changes will only be upheld during the appointment,
+            not after you leave your appointment.
           </li>
         </ul>
         <hr />
@@ -140,7 +176,9 @@ export default {
     width: 100%;
     margin-bottom: 20px;
   }
-
+  a {
+    font-weight: bold;
+  }
   ul {
     margin: 30px 0;
     padding-left: 25px;
@@ -187,9 +225,21 @@ export default {
       width: 17px;
       height: 17px;
       position: absolute;
-      top: 0;
+      top: 5px;
       left: -10px;
-      transform: translate(-100%, 50%);
+      transform: translate(-100%, 0);
+    }
+
+    &.title {
+      font-weight: bold;
+      font-size: 22px;
+      margin: 0;
+      &:before {
+        content: '\2014';
+        background: none;
+        top: -2px;
+        transform: translate(-100%, 0);
+      }
     }
     .indent {
       display: block;
