@@ -2,6 +2,8 @@
 @import './_fonts.scss';
 @import './_variables.scss';
 @import './_grid.scss';
+@import './_stickersheet.scss';
+@import './_transitions.scss';
 
 body {
   font-family: $headlineFontFamily;
@@ -24,9 +26,5 @@ body {
     &:hover {
       color: $hdRed;
     }
-  }
-  p, li {
-    font-size: 19px;
-    line-height: 1.5;
   }
 }

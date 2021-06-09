@@ -1,0 +1,35 @@
+@import './_mixins.scss';
+
+body {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: $headlineFontFamily;
+    font-weight: 700;
+    color: $darkGrey;
+    margin: 0;
+  }
+  h3 {
+    font-size: 24px;
+    @include bpMedium {
+      font-size: 28px;
+    }
+  }
+  h4 {
+    font-size: 16px;
+    @include bpMedium {
+      font-size: 20px;
+    }
+  }
+  p, a, buttom {
+    font-family: $bodyFontFamily;
+    font-weight: 400;
+    color: $lightGrey;
+    margin: 0;
+  }
+  p {
+    font-size: 16px;
+    line-height: 1.5;
+    @include bpMedium {
+      font-size: 18px;
+    }
+  }
+}

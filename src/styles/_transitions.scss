@@ -1,0 +1,30 @@
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s $easeOutMaterial;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+@keyframes spin {
+  0%   {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale3d(.5, .5, .5);
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

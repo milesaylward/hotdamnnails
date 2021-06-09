@@ -1,5 +1,52 @@
+@import './_variables.scss';
+
 @mixin bpMedium {
   @media screen and (min-width: $md) {
     @content;
   }
+}
+
+@mixin checkeredBorder($left: true) {
+  position: fixed;
+  width: calc(100vh - #{$headerHeight});
+  top: $headerHeight;
+  left: 0;
+  height: 10px;
+  z-index: 5;
+  transform-origin: top left;
+  transform: rotate(90deg) translate(0, -10px);
+  @if $left != true {
+    background-image:
+      linear-gradient($black, $black),
+      linear-gradient($white, $white),
+      linear-gradient($black, $black),
+      linear-gradient($white, $white),
+      linear-gradient($black, $black),
+      linear-gradient($white, $white),
+      linear-gradient($hdRed, $hdRed),
+      linear-gradient($white, $white),
+      linear-gradient($black, $black);
+  } @else {
+    background-image:
+      linear-gradient($black, $black),
+      linear-gradient($white, $white),
+      linear-gradient($hdRed, $hdRed),
+      linear-gradient($white, $white),
+      linear-gradient($black, $black),
+      linear-gradient($white, $white),
+      linear-gradient($black, $black),
+      linear-gradient($white, $white),
+      linear-gradient($black, $black);
+  }
+  background-size:
+    calc(1 * (100% / 9)) 100%,
+    calc(2 * (100% / 9)) 100%,
+    calc(3 * (100% / 9)) 100%,
+    calc(4 * (100% / 9)) 100%,
+    calc(5 * (100% / 9)) 100%,
+    calc(6 * (100% / 9)) 100%,
+    calc(7 * (100% / 9)) 100%,
+    calc(8 * (100% / 9)) 100%,
+    calc(9 * (100% / 9)) 100%;
+  background-repeat:no-repeat;
 }
