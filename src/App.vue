@@ -12,6 +12,7 @@
 import { mapActions, mapGetters, mapState } from 'vuex';
 import Navigation from '@/components/Navigation.vue';
 import Loader from '@/components/Loader.vue';
+import MediaListeners from '@/core/mediaListeners';
 
 export default {
   name: 'App',
@@ -26,16 +27,20 @@ export default {
   watch: {
     $route: {
       deep: true,
-      handler() {
-        this.setPageLoaded(false);
-        window.scrollTo({
-          top: 0,
-        });
+      handler(val, prevVal) {
+        if (val.name !== prevVal.name) {
+          this.setPageLoaded(false);
+          window.scrollTo({
+            top: 0,
+          });
+        }
       },
     },
   },
   created() {
     this.fetchSiteData();
+    this.media = new MediaListeners(this.$store);
+    this.media.init();
   },
   methods: {
     ...mapActions(['fetchSiteData']),

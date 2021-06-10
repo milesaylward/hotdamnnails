@@ -3,12 +3,15 @@ import parseData from './utils';
 import {
   SET_SITE_DATA,
   SET_PAGE_LOADED,
+  SET_WINDOW_SIZE,
 } from './mutationTypes';
 
 export default createStore({
   state: {
     siteDataLoaded: false,
     pageLoaded: false,
+    viewWidth: 0,
+    viewHeight: 0,
     app: {},
   },
   mutations: {
@@ -18,6 +21,12 @@ export default createStore({
     },
     [SET_PAGE_LOADED](state, bool) {
       state.pageLoaded = bool;
+    },
+    [SET_WINDOW_SIZE](state, { dimensions }) {
+      state.viewWidth = dimensions.width;
+      if (!state.viewHeight || Math.abs(state.viewHeight - dimensions.height) > 200) {
+        state.viewHeight = dimensions.height;
+      }
     },
   },
   getters: {
@@ -34,6 +43,7 @@ export default createStore({
       }
     },
     pageLoaded: (state) => state.siteDataLoaded && state.pageLoaded,
+    isMobile: (state) => state.viewWidth < 600,
   },
   actions: {
     fetchSiteData({ commit }) {

@@ -5,8 +5,10 @@
 .page {
   display: block;
   align-items: center;
-  min-height: 100vh;
-  padding: $headerHeight 0;
+  padding: $headerHeightMobile 0;
+  @include bpMedium {
+    padding: $headerHeight 0;
+  }
 }
 
 svg {

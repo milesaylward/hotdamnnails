@@ -28,8 +28,12 @@ export default {
 
 <style lang="scss">
 .booking {
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
+  padding: $headerHeightMobile 9px 0;
+  @include bpMedium {
+    padding: $headerHeight 9px 0;
+  }
   iframe {
     height: 100vh;
     border: none;

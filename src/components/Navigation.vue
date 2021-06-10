@@ -4,7 +4,10 @@
       <router-link to="/" class="navigation__logo">
         <Logo />
       </router-link>
-      <ul class="navigation__items">
+      <ul class="navigation__items" v-if="!isMobile">
+        <li class="navigation__items__item">
+          <router-link to="/#pricing">Pricing</router-link>
+        </li>
         <li class="navigation__items__item">
           <router-link to="/policies">Policies</router-link>
         </li>
@@ -12,17 +15,63 @@
           <router-link to="/booking">Booking</router-link>
         </li>
       </ul>
+      <div
+        class="navigation__mobile-icon"
+        :class="{ open: menuOpen }"
+        @click="menuOpen = !menuOpen"
+        v-else
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
       </div>
+      <div
+        class="navigation__mobile-menu"
+        :class="{ open: menuOpen }"
+        v-if="isMobile"
+      >
+      <div
+        class="navigation__mobile-menu__overlay"
+        @click="menuOpen = false;"
+      />
+        <ul class="navigation__mobile-menu__items">
+          <li class="navigation__mobile-menu__items__item">
+            <router-link
+              :to="{name: 'Home', hash: '#pricing'}"
+              @click="menuOpen = false"
+            >
+              Pricing
+            </router-link>
+          </li>
+          <li class="navigation__mobile-menu__items__item">
+            <router-link @click="menuOpen = false" to="/policies">Policies</router-link>
+          </li>
+          <li class="navigation__mobile-menu__items__item">
+            <router-link @click="menuOpen = false" to="/booking">Booking</router-link>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="navigation__border"></div>
+    <div class="navigation__border navigation__border--right"></div>
   </div>
 </template>
 
 <script>
 import Logo from '@/assets/svg/header_logo.svg';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Navagation',
+  data: () => ({
+    menuOpen: false,
+  }),
   components: {
     Logo,
+  },
+  computed: {
+    ...mapGetters(['isMobile']),
   },
 };
 </script>
@@ -31,39 +80,134 @@ export default {
 .navigation {
   position: fixed;
   width: 100%;
-  height: $headerHeight;
+  height: $headerHeightMobile;
+  @include bpMedium {
+    height: $headerHeight;
+  }
   top: 0;
   left: 0;
   // box-shadow: 0px 2px 5px 1px rgba(0,0,0,0.4);
-  z-index: 10;
+  z-index: 50;
   background: white;
   display: flex;
   align-items: center;
   padding: 10px 0;
+  &__border {
+    @include checkeredBorder;
+    &--right {
+      @include checkeredBorder(false);
+      transform-origin: top right;
+      transform: rotate(-90deg) translate(-100%, -10px) scaleX(-1);
+      left: auto;
+      right: 0;
+    }
+  }
+  &__mobile-menu {
+    position: fixed;
+    left: 0;
+    top: $headerHeightMobile;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    pointer-events: none;
+    &.open {
+      pointer-events: all;
+      .navigation__mobile-menu {
+        &__overlay { opacity: 1; }
+        &__items { transform: translateX(0); }
+      }
+    }
+    &__overlay {
+      background: rgba(0, 0, 0, 0.4);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      z-index: 1;
+      opacity: 0;
+      transition: opacity 350ms $easeOutMaterial;
+    }
+    &__items {
+      height: 100%;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 2;
+      background: white;
+      width: 60%;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      transform: translateX(100%);
+      transition: transform 350ms $easeOutMaterial;
+      &__item {
+        font-size: 28px;
+        text-align: center;
+        padding: 15px 0;
+        text-transform: uppercase;
+        // border-bottom: 1px solid $darkGrey;
+        &:first-child {
+          // border-top: 1px solid $darkGrey;
+        }
+        a {
+          border-bottom: none;
+          color: $hdRed;
+        }
+      }
+    }
+  }
   &__content {
     max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-  &__drip {
-    width: 105%;
-    height: 120px;
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translate(-50%, 100%);
-    z-index: -1;
-    path {
-      fill: white;
+  &__mobile-icon {
+    width: 25px;
+    height: 15px;
+    position: relative;
+    transform: rotate(0deg);
+    transition: .5s $easeOutMaterial;
+    span {
+      display: block;
+      position: absolute;
+      height: 2px;
+      width: 100%;
+      background: $hdRed;
+      opacity: 1;
+      left: 0;
+      transform: rotate(0deg);
+      transition: .25s $easeOutMaterial;
+      &:nth-child(1) { top: 0px; }
+      &:nth-child(2), &:nth-child(3) { top: 50%; }
+      &:nth-child(4) { top: 100%; }
+    }
+    &.open {
+      span {
+        &:nth-child(1) {
+          top: 50%;
+          width: 0%;
+          left: 50%;
+        }
+        &:nth-child(2) { transform: rotate(45deg); }
+        &:nth-child(3) { transform: rotate(-45deg); }
+        &:nth-child(4) {
+          top: 50%;
+          width: 0%;
+          left: 50%;
+        }
+      }
     }
   }
   &__logo {
     display: flex;
-    width: 50%;
+    width: 45%;
+    max-width: 200px;
     border: none;
     flex-shrink: 0;
     max-height: 100%;
     svg {
-      max-height: 100%;
-      max-width: 100%;
+      height: 100%;
+      width: 100%;
     }
   }
   &__items {
@@ -80,7 +224,7 @@ export default {
       }
       a {
         text-transform: uppercase;
-        font-size: 14px;
+        font-size: 16px;
         @include bpMedium {
           font-size: 20px;
         }

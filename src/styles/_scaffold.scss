@@ -4,27 +4,3 @@
 @import './_grid.scss';
 @import './_stickersheet.scss';
 @import './_transitions.scss';
-
-body {
-  font-family: $headlineFontFamily;
-  h2 {
-    margin: 0;
-    font-size: 32px;
-    line-height: 38px;
-    text-align: center;
-    font-weight: bold;
-    @include bpMedium {
-      font-size: 40px;
-      line-height: 46px;
-    }
-  }
-  a {
-    text-decoration: none;
-    color: $black;
-    border-bottom: 1px solid $hdRed;
-    transition: color 250ms $easeOutMaterial;
-    &:hover {
-      color: $hdRed;
-    }
-  }
-}

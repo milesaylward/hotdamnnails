@@ -8,8 +8,12 @@
 
 @mixin checkeredBorder($left: true) {
   position: fixed;
-  width: calc(100vh - #{$headerHeight});
-  top: $headerHeight;
+  width: calc(100vh - #{$headerHeightMobile});
+  top: $headerHeightMobile;
+  @include bpMedium() {
+    width: calc(100vh - #{$headerHeight});
+    top: $headerHeight;
+  }
   left: 0;
   height: 10px;
   z-index: 5;

@@ -42,7 +42,7 @@
     <div class="policy__recommended container">
       <Appearable>
         <div class="policy__recommended__title ap-child">
-          <h2>{{content.recommended.title.value}}</h2>
+          <h2 v-html="content.recommended.title.value" />
           <h3>{{content.recommended.title.smallCopy}}</h3>
         </div>
       </Appearable>
@@ -144,7 +144,7 @@ export default {
       left: 49%;
       width: 110%;
       transform: translate(-50%, 0) scaleY(-1);
-      z-index: 10;
+      z-index: 1;
       fill: white;
       height: 75px;
       @include bpMedium {
@@ -197,7 +197,9 @@ export default {
   }
   &__content {
     &__blocks {
-      margin: 50px 0 0;
+      @include bpMedium {
+        margin: 50px 0 0;
+      }
       .block {
         margin: 35px 0;
         &__title {
@@ -236,6 +238,10 @@ export default {
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      h2 {
+        font-size: 30px;
+        text-align: center;
+      }
     }
     &__notice {
       margin-top: 35px;

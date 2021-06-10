@@ -17,6 +17,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Appearable',
   props: {
@@ -31,12 +33,12 @@ export default {
     threshold: {
       type: Number,
       required: false,
-      default: 0.75,
+      default: 0.5,
     },
     thresholdMobile: {
       type: Number,
       required: false,
-      default: 0.35,
+      default: 0.05,
     },
     debug: {
       type: Boolean,
@@ -67,6 +69,7 @@ export default {
     appearThresholdFrequency: 0.05, // amount to increment by when populating threshold
   }),
   computed: {
+    ...mapGetters(['isMobile']),
     slotWrapperComponent() {
       return !this.noAppear ? 'Intersect' : 'div';
     },
@@ -78,9 +81,6 @@ export default {
     },
     canAppear() {
       return this.appearThresholdReached;
-    },
-    isMobile() {
-      return this.shouldUseMobile || this.shouldUseMobileLandscape;
     },
     halfwayVisible() {
       return this.halfwayReached;
@@ -98,11 +98,7 @@ export default {
       return this.isMobile ? this.thresholdMobile : this.threshold;
     },
     parsedFullThreshold() {
-      let fully = this.isMobile ? this.thresholdMobile : this.threshold;
-      if (this.shouldUseMobileLandscape) {
-        fully = this.fullyVisibleThresholdMobileLandscape;
-      }
-      return fully;
+      return this.isMobile ? this.thresholdMobile : this.threshold;
     },
   },
   created() {

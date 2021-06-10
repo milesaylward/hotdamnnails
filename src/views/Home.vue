@@ -1,6 +1,6 @@
 <template>
   <div class="page page--home home">
-    <div class="hero">
+    <div class="hero" :style="{ height: heroHeight }">
       <div class="hero__overlay" />
       <video
         :src="content.video"
@@ -21,8 +21,7 @@
           </div>
         </Appearable>
       </div>
-      <div class="hero__border"></div>
-      <div class="hero__border hero__border--right"></div>
+      <Drip class="hero__drip" />
     </div>
     <Pricing />
   </div>
@@ -31,10 +30,10 @@
 <script>
 import Logo from '@/assets/svg/logo.svg';
 import Arrow from '@/assets/svg/down_arrow.svg';
-import background from '@/assets/images/background.mp4';
+import Drip from '@/assets/svg/drip.svg';
 import Pricing from '@/components/Pricing.vue';
-import { HEADER_HEIGHT } from '@/core/constants';
-import { mapActions, mapGetters } from 'vuex';
+import { HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '@/core/constants';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'Home',
@@ -42,17 +41,30 @@ export default {
     Logo,
     Arrow,
     Pricing,
+    Drip,
   },
-  data: () => ({
-    background,
-  }),
   computed: {
-    ...mapGetters(['getContentByPath']),
+    ...mapGetters(['getContentByPath', 'isMobile']),
+    ...mapState(['viewHeight']),
+    heroHeight() {
+      return `${this.viewHeight - (this.offset * 1.5)}px`;
+    },
     offset() {
-      return HEADER_HEIGHT;
+      return this.isMobile ? HEADER_HEIGHT_MOBILE : HEADER_HEIGHT;
     },
     content() {
       return this.getContentByPath('landing');
+    },
+  },
+  watch: {
+    $route: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        if (val.hash === '#pricing') {
+          this.$nextTick(() => { this.scrollToPricing(); });
+        }
+      },
     },
   },
   methods: {
@@ -72,6 +84,9 @@ export default {
       this.setPageLoaded(true);
     },
   },
+  mounted() {
+    console.log(this.heroHeight);
+  },
 };
 </script>
 
@@ -80,20 +95,23 @@ export default {
   display: block;
   .hero {
     width: 100%;
-    height: calc(100vh - #{$headerHeight});
     display: flex;
     align-content: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    &__border {
-      @include checkeredBorder;
-      &--right {
-        @include checkeredBorder(false);
-        transform-origin: top right;
-        transform: rotate(-90deg) translate(-100%, -10px) scaleX(-1);
-        left: auto;
-        right: 0;
+    &__drip {
+      position: absolute;
+      bottom: -10px;
+      left: 49%;
+      width: 110%;
+      transform: translate(-50%, 0) scaleY(-1);
+      z-index: 1;
+      fill: white;
+      height: 75px;
+      pointer-events: none;
+      @include bpMedium {
+        height: 200px;
       }
     }
     &__overlay {
@@ -142,7 +160,10 @@ export default {
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 75px;
+      @include bpMedium {
+        margin-bottom: 125px;
+      }
       text-align: center;
       h4 {
         text-transform: uppercase;
@@ -157,7 +178,14 @@ export default {
         border-radius: 50%;
         width: 40px;
         height: 40px;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         svg {
+          margin-top: 1px;
+          width: 20px;
           position: relative;
           z-index: 3;
         }

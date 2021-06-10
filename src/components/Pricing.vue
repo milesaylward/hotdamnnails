@@ -64,7 +64,10 @@ export default {
 
 <style lang="scss">
 .pricing {
-  padding: 80px 0 0;
+  padding: 30px 0 0;
+  @include bpMedium {
+    padding: 80px 0 0;
+  }
   .title {
     color: $hdRed;
   }
