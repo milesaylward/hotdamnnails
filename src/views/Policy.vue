@@ -13,8 +13,10 @@
         muted
         autoplay
         loop
+        @play="fallback = false;"
         @canplay="handleVideoLoaded"
       />
+      <img :src="content.fallback" v-if="fallback">
       <Drip class="policy__hero__border" />
     </div>
     <div class="policy__content container">
@@ -88,6 +90,9 @@ export default {
   components: {
     Drip,
   },
+  data: () => ({
+    fallback: true,
+  }),
   computed: {
     ...mapGetters(['getContentByPath']),
     content() {
@@ -151,11 +156,14 @@ export default {
         height: 200px;
       }
     }
-    video {
+    video, img {
       object-fit: cover;
       object-position: center;
       height: 100%;
       width: 100%;
+    }
+    img {
+      position: absolute;
     }
     &__overlay {
       background: rgba(#000, 0.3);

@@ -4,12 +4,15 @@
       <div class="hero__overlay" />
       <video
         :src="content.video"
+        ref="video"
         playsinline
         muted
         autoplay
         loop
+        @play="fallback = false;"
         @canplay="handleVideoLoaded"
       />
+      <img :src="content.fallback" v-if="fallback">
       <div class="hero__content">
         <Appearable>
           <Logo class="hero__logo ap-child" />
@@ -43,6 +46,9 @@ export default {
     Pricing,
     Drip,
   },
+  data: () => ({
+    fallback: true,
+  }),
   computed: {
     ...mapGetters(['getContentByPath', 'isMobile']),
     ...mapState(['viewHeight']),
@@ -84,9 +90,6 @@ export default {
       this.setPageLoaded(true);
     },
   },
-  mounted() {
-    console.log(this.heroHeight);
-  },
 };
 </script>
 
@@ -121,9 +124,11 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: 2;
     }
     &__content {
       position: absolute;
+      z-index: 3;
       top: 0;
       left: 0;
       width: 100%;
@@ -148,12 +153,16 @@ export default {
         margin-top: 10%;
       }
     }
-    video {
+    video, img {
       display: block;
       width: 110%;
       object-fit: cover;
       object-position: center;
       margin-left: 10%;
+    }
+    img {
+      position: absolute;
+      z-index: 1;
     }
     .scroll-prompt {
       display: flex;
