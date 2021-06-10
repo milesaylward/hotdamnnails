@@ -1,12 +1,12 @@
 <template>
   <div class="navigation">
     <div class="navigation__content container">
-      <router-link to="/" class="navigation__logo">
+      <a @click="handleClick(false)" class="navigation__logo">
         <Logo />
-      </router-link>
+      </a>
       <ul class="navigation__items" v-if="!isMobile">
         <li class="navigation__items__item">
-          <router-link to="/#pricing">Pricing</router-link>
+          <a @click="handleClick(true)">Pricing</a>
         </li>
         <li class="navigation__items__item">
           <router-link to="/policies">Policies</router-link>
@@ -61,6 +61,7 @@
 <script>
 import Logo from '@/assets/svg/header_logo.svg';
 import { mapGetters } from 'vuex';
+import EventBus from '@/core/eventBus';
 
 export default {
   name: 'Navagation',
@@ -72,6 +73,21 @@ export default {
   },
   computed: {
     ...mapGetters(['isMobile']),
+  },
+  methods: {
+    handleClick(priceClick) {
+      if (this.$route.name === 'Home') {
+        if (priceClick) {
+          EventBus.emit('scrollToPricing');
+        } else {
+          EventBus.emit('scrollToTop');
+        }
+      } else if (priceClick) {
+        this.$router.push({ name: 'Home', hash: '#pricing' });
+      } else {
+        this.$router.push({ name: 'Home' });
+      }
+    },
   },
 };
 </script>

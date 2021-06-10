@@ -37,6 +37,7 @@ import Drip from '@/assets/svg/drip.svg';
 import Pricing from '@/components/Pricing.vue';
 import { HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '@/core/constants';
 import { mapActions, mapGetters, mapState } from 'vuex';
+import EventBus from '@/core/eventBus';
 
 export default {
   name: 'Home',
@@ -73,8 +74,15 @@ export default {
       },
     },
   },
+  mounted() {
+    EventBus.on('scrollToPricing', this.scrollToPricing);
+    EventBus.on('scrollToTop', this.scrollToTop);
+  },
   methods: {
     ...mapActions(['setPageLoaded']),
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
     scrollToPricing() {
       let position = document.getElementById('pricing').getBoundingClientRect().top - this.offset;
       const bodyTop = window.pageYOffset
