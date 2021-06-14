@@ -149,7 +149,7 @@ export default {
       left: 49%;
       width: 110%;
       transform: translate(-50%, 0) scaleY(-1);
-      z-index: 1;
+      z-index: 3;
       fill: white;
       height: 75px;
       @include bpMedium {
