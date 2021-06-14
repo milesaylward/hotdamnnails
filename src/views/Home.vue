@@ -167,8 +167,10 @@ export default {
       object-fit: cover;
       object-position: center;
       margin-left: 10%;
+      min-height: 100%;
     }
     img {
+      margin-left: 0;
       position: absolute;
       z-index: 1;
     }
