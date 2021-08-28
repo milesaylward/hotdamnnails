@@ -1,24 +1,11 @@
 <template>
   <div class="page page--policy policy">
-    <div class="policy__hero">
-      <div class="policy__hero__content">
-        <Appearable>
-          <h1>{{content.title}}</h1>
-        </Appearable>
-      </div>
-      <div class="policy__hero__overlay" />
-      <video
-        :src="content.video"
-        playsinline
-        muted
-        autoplay
-        loop
-        @play="fallback = false;"
-        @canplay="handleVideoLoaded"
-      />
-      <img :src="content.fallback" v-if="fallback">
-      <Drip class="policy__hero__border" />
-    </div>
+    <Hero
+      :video="content.video"
+      :fallback="content.fallback"
+      :title="content.title"
+      @load="handleVideoLoaded"
+    />
     <div class="policy__content container">
       <div class="policy__content__blocks">
         <Appearable v-for="block in content.blocks" :key="block.title">
@@ -83,12 +70,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Drip from '@/assets/svg/drip.svg';
+import Hero from '@/components/Hero.vue';
 
 export default {
   name: 'Policy',
   components: {
-    Drip,
+    Hero,
   },
   data: () => ({
     fallback: true,
@@ -128,77 +115,6 @@ export default {
       &--can-appear {
         hr {
           transform: scaleX(1);
-        }
-      }
-    }
-  }
-  &__hero {
-    width: 100%;
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-    height: 150px;
-    @include bpMedium {
-      height: 300px;
-    }
-    &__border {
-      position: absolute;
-      bottom: -10px;
-      left: 49%;
-      width: 110%;
-      transform: translate(-50%, 0) scaleY(-1);
-      z-index: 1;
-      fill: white;
-      height: 75px;
-      @include bpMedium {
-        height: 200px;
-      }
-    }
-    video, img {
-      object-fit: cover;
-      object-position: center;
-      height: 100%;
-      width: 100%;
-    }
-    img {
-      position: absolute;
-    }
-    &__overlay {
-      background: rgba(#000, 0.3);
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-    }
-    &__content {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-      .appearable {
-        width: 100%;
-        height: 100%;
-        &__content {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          h1 {
-            font-size: 34px;
-            text-transform: uppercase;
-            color: white;
-            margin-bottom: 10%;
-            @include bpMedium {
-              margin-bottom: 5%;
-              font-size: 40px;
-            }
-          }
         }
       }
     }

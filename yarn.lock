@@ -1670,6 +1670,13 @@
   "resolved" "https://registry.npmjs.org/acorn/-/acorn-7.4.1.tgz"
   "version" "7.4.1"
 
+"acuityscheduling@^0.1.9":
+  "integrity" "sha512-cXdYzEtZynbiPVKjJkgQWVI6aEW37hyjjYZaBeLxmWZjmUeIA/68XNkoekVxxtGszbPQjB0azs3FRTMzlMzPRA=="
+  "resolved" "https://registry.npmjs.org/acuityscheduling/-/acuityscheduling-0.1.9.tgz"
+  "version" "0.1.9"
+  dependencies:
+    "request" "^2.66.0"
+
 "address@^1.1.2":
   "integrity" "sha512-aT6camzM4xEA54YVJYSqxz1kv4IHnQZRtThJJHhUMRExaU5spC7jX5ugSwTaTgJliIgs4VhZOk7htClvQ/LmRA=="
   "resolved" "https://registry.npmjs.org/address/-/address-1.1.2.tgz"
@@ -4612,6 +4619,11 @@
   "integrity" "sha512-nTnJ528pbqxYanhpDYsi4Rd8MAeaBA67+RZ10CM1m3bTAVFEDcd5AuA4a6W5YkGZ1iNXHzZz8T6TBKLeBuNriQ=="
   "resolved" "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.2.6.tgz"
   "version" "4.2.6"
+
+"gsap@^3.7.1":
+  "integrity" "sha512-4qxuaC2yFWRjMRof5tI/7c9/+L4xMsCoqHrZAmuh+IbOokTnZyoeF0VgvcVHq3uo+/VJZCs7PTvjrFasfGl+ww=="
+  "resolved" "https://registry.npmjs.org/gsap/-/gsap-3.7.1.tgz"
+  "version" "3.7.1"
 
 "gzip-size@^5.0.0":
   "integrity" "sha512-FNHi6mmoHvs1mxZAds4PpdCS6QG8B4C1krxJsMutgxl5t3+GlRTzzI3NEkifXx2pVsOvJdOGSmIgDhQ55FwdPA=="
@@ -7781,7 +7793,7 @@
   dependencies:
     "is-finite" "^1.0.0"
 
-"request@^2.87.0", "request@^2.88.0", "request@^2.88.2":
+"request@^2.66.0", "request@^2.87.0", "request@^2.88.0", "request@^2.88.2":
   "integrity" "sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw=="
   "resolved" "https://registry.npmjs.org/request/-/request-2.88.2.tgz"
   "version" "2.88.2"

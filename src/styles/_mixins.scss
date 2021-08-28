@@ -6,6 +6,12 @@
   }
 }
 
+@mixin on-hover {
+  body:not(.touch) &:hover {
+    @content;
+  }
+}
+
 @mixin checkeredBorder($left: true) {
   position: fixed;
   width: calc(100vh - #{$headerHeightMobile});
