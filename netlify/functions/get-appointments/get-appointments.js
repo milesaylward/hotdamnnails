@@ -24,6 +24,7 @@ const fetchData = async () => {
   const addons = await fetchAddons();
   types.forEach(type => {
     type.addons = [];
+    type.price = parseFloat(type.price);
     type.addonIDs.forEach(id => {
       const addon = addons.find(addon => addon.id === id);
       type.addons.push(addon);

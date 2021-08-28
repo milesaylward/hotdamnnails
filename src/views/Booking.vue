@@ -117,13 +117,43 @@
             <span>{{designChoice.name}}</span>
             <span>{{designChoice.price}}$</span>
           </p>
-          <p class="total" v-if="preChoice && lengthChoice && designChoice">
+          <p class="total" v-if="canShowTotal">
             <span>Total: </span>
             <span>{{totalPrice}}$</span>
           </p>
         </div>
+        <button
+          v-if="canShowTotal"
+          class="availibility" @click="checkAvailibility"
+        >
+          Check Availability
+        </button>
       </div>
     </div>
+    <transition name="fade">
+      <div class="dates container" v-if="availableDates">
+        <div class="dates__date-options">
+          <button
+            class="dates__date-options__date"
+            v-for="date in availableDates"
+            @click="setActiveDate(date)"
+            :key="date.date"
+          >
+            <p>{{date.day_of_week}}</p>
+            <p class="small">{{date.date}}</p>
+          </button>
+        </div>
+        <div class="dates__time-options" v-if="activeDate">
+          <button
+            class="dates__time-options__time"
+            v-for="time in activeDate.times"
+            :key="time.time"
+          >
+          {{time.time}}
+          </button>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -146,10 +176,11 @@ export default {
     designChoice: null,
     preChoice: null,
     shapeChoice: null,
+    activeDate: null,
     totalSteps: 0,
   }),
   computed: {
-    ...mapState(['appointmentData']),
+    ...mapState(['appointmentData', 'availableDates']),
     preCopy() {
       if (!this.appointmentType) return '';
       return this.appointmentType.name === 'Fresh Set' ? 'Do you need a Soak Off?' : 'Pre-Options';
@@ -174,6 +205,9 @@ export default {
       const designs = this.appointmentType.designs_opts;
       return designs.sort((a, b) => { if (a.duration > b.duration) return 1; return -1; });
     },
+    canShowTotal() {
+      return this.preChoice && this.lengthChoice && this.designChoice;
+    },
     totalPrice() {
       const {
         preChoice,
@@ -191,15 +225,19 @@ export default {
     },
   },
   mounted() {
-    console.log(this.appointmentData, 'in booking');
   },
   methods: {
-    ...mapActions(['setPageLoaded']),
+    ...mapActions(['setPageLoaded', 'getAvailableDates']),
     handleScrollTo(id) {
       this.$refs[id].scrollIntoView({
-        block: 'nearest',
         behavior: 'smooth',
       });
+    },
+    checkAvailibility() {
+      this.getAvailableDates({ addons: this.addons, appointment: this.appointmentType });
+    },
+    setActiveDate(date) {
+      this.activeDate = date;
     },
     resetOpts() {
       this.addons = [];
@@ -212,6 +250,7 @@ export default {
         this.addons = this.addons.filter((id) => id !== opt.id);
         this.shapeChoice = null;
       } else {
+        if (shapeChoice) this.addons = this.addons.filter((id) => id !== shapeChoice.id);
         this.addons.push(opt.id);
         this.shapeChoice = opt;
       }
@@ -270,6 +309,18 @@ export default {
     display: flex;
     align-items: center;
   }
+
+  .dates {
+    padding-bottom: 30px;
+    flex-direction: column;
+    &__date-options {
+      display: flex;
+      justify-content: center;
+    }
+    &__time-options {
+      display: flex;
+    }
+  }
   &__total {
     width: 100%;
     margin: 81px 0 0 20px;
@@ -287,6 +338,24 @@ export default {
         display: flex;
         justify-content: space-between;
         margin: 5px 0;
+      }
+    }
+    .availibility {
+      cursor: pointer;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid black;
+      background: white;
+      margin-top: 10px;
+      display: none;
+      transition: background 300ms $easeOutMaterial,
+                  color 300ms $easeOutMaterial;
+      @include on-hover {
+        background: $hdRed;
+        color: white;
+      }
+      @include bpMedium {
+        display: block;
       }
     }
   }

@@ -7,6 +7,7 @@ export default createStore({
     pageLoaded: false,
     viewWidth: 0,
     viewHeight: 0,
+    availableDates: null,
     app: {},
   },
   mutations: {
@@ -25,6 +26,9 @@ export default createStore({
     },
     [types.SET_APPOINTMENT_DATA](state, data) {
       state.appointmentData = data;
+    },
+    [types.SET_AVAILABLE_DATES](state, data) {
+      state.availableDates = data;
     },
   },
   getters: {
@@ -62,6 +66,15 @@ export default createStore({
       fetch('./.netlify/functions/get-appointments').then((res) => res.json())
         .then((data) => {
           commit(types.SET_APPOINTMENT_DATA, data);
+        });
+    },
+    getAvailableDates({ commit }, data) {
+      fetch('./.netlify/functions/get-availability', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }).then((res) => res.json())
+        .then((response) => {
+          commit(types.SET_AVAILABLE_DATES, response);
         });
     },
     setPageLoaded({ commit }, bool) { commit(types.SET_PAGE_LOADED, bool); },
