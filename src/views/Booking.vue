@@ -1,14 +1,6 @@
 <template>
   <div class="page booking">
-    <iframe
-      src="https://app.acuityscheduling.com/schedule.php?owner=21110176"
-      title="Schedule Appointment"
-      width="100%"
-      height="100%"
-      frameBorder="0"
-      ref="iframe"
-      @load="handleBookingLoaded"
-    ></iframe>
+    <h1>Booking Currently Under Construction<br>Please Check back Later</h1>
   </div>
 </template>
 
@@ -31,12 +23,14 @@ export default {
   height: 100vh;
   width: 100%;
   padding: $headerHeightMobile 9px 0;
-  @include bpMedium {
-    padding: $headerHeight 9px 0;
-  }
-  iframe {
-    height: 100vh;
-    border: none;
+  position: relative;
+  h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    text-align: center;
+    transform: translate(-50%, -50%);
   }
 }
 </style>
