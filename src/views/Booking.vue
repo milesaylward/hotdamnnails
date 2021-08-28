@@ -9,11 +9,11 @@ import { mapActions } from 'vuex';
 
 export default {
   name: 'Booking',
+  mounted() {
+    this.setPageLoaded(true);
+  },
   methods: {
     ...mapActions(['setPageLoaded']),
-    handleBookingLoaded() {
-      this.setPageLoaded(true);
-    },
   },
 };
 </script>
