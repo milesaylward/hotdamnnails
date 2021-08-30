@@ -1,5 +1,5 @@
 <template>
-  <div class="page booking">
+  <div class="page maintenance">
     <h1>Booking Currently Under Construction<br>Please Check back Later</h1>
   </div>
 </template>
@@ -19,7 +19,7 @@ export default {
 </script>
 
 <style lang="scss">
-.booking {
+.maintenance {
   height: 100vh;
   width: 100%;
   padding: $headerHeightMobile 9px 0;
