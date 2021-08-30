@@ -22,8 +22,8 @@
                 :key="appt.id"
               />
             </div>
-            <transition name="fade" mode="out-in">
-              <div class="screen" v-if="appointmentType" :key="appointmentType.id">
+            <transition name="fade" mode="out-in" @enter="handleScrollTo('screen')">
+              <div class="screen" v-if="appointmentType" :key="appointmentType.id" ref="screen">
                 <p v-if="isSoakOff" class="note">
                   <b>Note:</b>
                   I do not do only soak offs on foreign nails (not done by me).

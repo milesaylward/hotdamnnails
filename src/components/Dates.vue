@@ -228,7 +228,7 @@ export default {
       background: rgba(white, 0);
       border: none;
       color: $darkGrey;
-      padding: 0 10px;
+      padding: 0;
       height: $itemHeight;
       border-radius: 4px;
       transition: background 300ms $easeOutMaterial,
