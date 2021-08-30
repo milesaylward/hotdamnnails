@@ -35,7 +35,9 @@ const fetchTimes = (days, data) => {
       (err, res, times) => {
         if (err) reject(err);
         times.forEach(time => {
-          time.time_parsed = DateTime.fromISO(time.time).toLocaleString(DateTime.TIME_SIMPLE);
+          time.time_parsed = DateTime.fromISO(time.time).toLocaleString(DateTime.TIME_SIMPLE, {
+            timeZone: 'America/New_York',
+          });
         });
         out_times[day.date] = times;
         resolve();

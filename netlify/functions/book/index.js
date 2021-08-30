@@ -26,7 +26,6 @@ const parseDuration = (app) => {
 }
 
 const bookAppointment = (data) => new Promise((resolve, reject) => {
-  console.log(data.addons);
   var options = {
     method: 'POST',
     body: {
@@ -37,6 +36,7 @@ const bookAppointment = (data) => new Promise((resolve, reject) => {
       email: data.user.email,
       phone: data.user.number,
       addonIDs: data.addons,
+      timezone: 'America/New_York',
     }
   };
   acuity.request('/appointments', options, function (err, res, appointment) {
