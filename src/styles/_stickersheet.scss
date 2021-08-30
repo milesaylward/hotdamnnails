@@ -28,11 +28,15 @@ body {
       font-size: 20px;
     }
   }
-  p, a, buttom {
+  p, a, button {
     font-family: $bodyFontFamily;
     font-weight: 400;
     color: $lightGrey;
     margin: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  input, div {
+    -webkit-tap-highlight-color: transparent;
   }
   p {
     font-size: 16px;

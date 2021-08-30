@@ -10,11 +10,15 @@
     "dev": "netlify dev"
   },
   "dependencies": {
+    "acuityscheduling": "^0.1.9",
     "airtable": "^0.11.1",
     "core-js": "^3.6.5",
     "fastdom": "^1.0.10",
+    "gsap": "^3.7.1",
     "lodash": "^4.17.21",
+    "luxon": "^2.0.2",
     "mitt": "^2.1.0",
+    "ua-parser-js": "^0.7.28",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"

@@ -6,6 +6,18 @@
   }
 }
 
+@mixin bpLarge {
+  @media screen and (min-width: $lg) {
+    @content;
+  }
+}
+
+@mixin on-hover {
+  body:not(.touch) &:hover {
+    @content;
+  }
+}
+
 @mixin checkeredBorder($left: true) {
   position: fixed;
   width: calc(100vh - #{$headerHeightMobile});

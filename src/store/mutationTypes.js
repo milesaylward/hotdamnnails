@@ -1,3 +1,12 @@
 export const SET_SITE_DATA = 'Set/Site data is loaded';
 export const SET_PAGE_LOADED = 'Set/Set page is loaded';
 export const SET_WINDOW_SIZE = 'Set/Set window size';
+export const SET_APPOINTMENT_DATA = 'Set/Set appointment data';
+export const SET_AVAILABLE_DATES = 'Set/set Available dates';
+export const SET_DATES_LOADING = 'Set/Set dates loading';
+export const CLEAR_AVAILABLE_DATES = 'Clear/clear available date';
+export const SET_BOOKING_LOADING = 'Set/Booking Loading';
+export const SET_BOOKING_SUCCESS = 'Set/Booking success';
+export const SET_BOOKING_ERROR = 'Set/Booking error';
+export const SET_ADMIN_AUTH = 'Set/Admin auth';
+export const SET_ADMIN_ERROR = 'Set/Admin error';

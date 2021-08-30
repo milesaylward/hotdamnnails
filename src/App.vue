@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import Navigation from '@/components/Navigation.vue';
 import Loader from '@/components/Loader.vue';
 import MediaListeners from '@/core/mediaListeners';
@@ -21,8 +21,7 @@ export default {
     Loader,
   },
   computed: {
-    ...mapGetters(['pageLoaded']),
-    ...mapState(['siteDataLoaded']),
+    ...mapGetters(['pageLoaded', 'siteDataLoaded', 'isTouchDevice']),
   },
   watch: {
     $route: {
@@ -36,14 +35,23 @@ export default {
         }
       },
     },
+    isTouchDevice: {
+      immediate: true,
+      handler(val) {
+        if (val) {
+          document.body.classList.add('touch');
+        }
+      },
+    },
   },
   created() {
     this.fetchSiteData();
+    this.fetchAppointmentData();
     this.media = new MediaListeners(this.$store);
     this.media.init();
   },
   methods: {
-    ...mapActions(['fetchSiteData']),
+    ...mapActions(['fetchSiteData', 'fetchAppointmentData']),
     ...mapActions(['setPageLoaded']),
   },
 };
