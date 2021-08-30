@@ -12,6 +12,8 @@ export default createStore({
     viewWidth: 0,
     viewHeight: 0,
     availableDates: null,
+    adminLoggedIn: false,
+    adminError: false,
     datesLoading: false,
     bookingLoading: false,
     bookingSuccess: null,
@@ -55,6 +57,14 @@ export default createStore({
       state.bookingLoading = false;
       state.bookingError = true;
     },
+    [types.SET_ADMIN_AUTH](state, bool) {
+      state.adminError = false;
+      state.adminLoggedIn = bool;
+    },
+    [types.SET_ADMIN_ERROR](state) {
+      state.adminLoggedIn = false;
+      state.adminError = true;
+    },
   },
   getters: {
     getContentByPath: (state) => (path) => {
@@ -74,6 +84,7 @@ export default createStore({
     isMobile: (state) => state.viewWidth < 600,
     isLarge: (state) => state.viewWidth > 1024,
     isIOS: () => parser.getOS().name === 'iOS',
+    isAdmin: (state) => state.adminLoggedIn,
     isTouchDevice: () => {
       if (window.matchMedia('(pointer: coarse)').matches) {
         return true;
@@ -125,6 +136,22 @@ export default createStore({
       }).catch(() => {
         commit(types.SET_BOOKING_LOADING, false);
         commit(types.SET_BOOKING_ERROR, true);
+      });
+    },
+    authAdmin({ commit }, data) {
+      fetch('./.netlify/functions/auth', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }).then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        throw new Error(res);
+      }).then((response) => {
+        commit(types.SET_ADMIN_AUTH, response.authenticated);
+      }).catch(() => {
+        console.log('caught error');
+        commit(types.SET_ADMIN_ERROR);
       });
     },
     setPageLoaded({ commit }, bool) { commit(types.SET_PAGE_LOADED, bool); },

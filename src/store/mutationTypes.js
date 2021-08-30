@@ -8,3 +8,5 @@ export const CLEAR_AVAILABLE_DATES = 'Clear/clear available date';
 export const SET_BOOKING_LOADING = 'Set/Booking Loading';
 export const SET_BOOKING_SUCCESS = 'Set/Booking success';
 export const SET_BOOKING_ERROR = 'Set/Booking error';
+export const SET_ADMIN_AUTH = 'Set/Admin auth';
+export const SET_ADMIN_ERROR = 'Set/Admin error';
