@@ -14,7 +14,7 @@
             <div class="appointments" ref="types">
               <HDButton
                 class="appointments__button"
-                @click="handleChooseType(appt)"
+                @buttonClick="handleChooseType(appt)"
                 v-for="appt in appointmentData"
                 :active="appointmentType && appointmentType.name === appt.name"
                 :inactive="appointmentType && appointmentType.name !== appt.name"
@@ -44,7 +44,7 @@
                     <HDButton
                       v-for="opt in preOpts"
                       :key="opt.id"
-                      @click="handlePreChange(opt)"
+                      @buttonClick="handlePreChange(opt)"
                       :active="preChoice && preChoice.id === opt.id"
                       :inactive="preChoice && preChoice.id !== opt.id"
                       :copy="opt.parsed_name"
@@ -58,7 +58,7 @@
                       <HDButton
                         v-for="length in lengths"
                         :key="length.id"
-                        @click="handleChooseLength(length)"
+                        @buttonClick="handleChooseLength(length)"
                         :active="lengthChoice && lengthChoice.id === length.id"
                         :inactive="lengthChoice && lengthChoice.id !== length.id"
                         :copy="length.parsed_name"
@@ -74,7 +74,7 @@
                         class="full-width"
                         v-for="opt in shapeOpts"
                         :key="opt.id"
-                        @click="handleChooseShape(opt)"
+                        @buttonClick="handleChooseShape(opt)"
                         :active="shapeChoice && shapeChoice.id === opt.id"
                         :inactive="shapeChoice && shapeChoice.id !== opt.id"
                         :copy="opt.parsed_name"
@@ -89,7 +89,7 @@
                       <HDButton
                         v-for="length in fillTimes"
                         :key="length.id"
-                        @click="handleChooseLength(length)"
+                        @buttonClick="handleChooseLength(length)"
                         :active="lengthChoice && lengthChoice.id === length.id"
                         :inactive="lengthChoice && lengthChoice.id !== length.id"
                         :copy="`${length.parsed_name} ago`"
@@ -109,7 +109,7 @@
                       <HDButton
                         v-for="design in designs"
                         :key="design.id"
-                        @click="handleChooseDesign(design)"
+                        @buttonClick="handleChooseDesign(design)"
                         :active="designChoice && designChoice.id === design.id"
                         :inactive="designChoice && designChoice.id !== design.id"
                         :copy="design.parsed_name"

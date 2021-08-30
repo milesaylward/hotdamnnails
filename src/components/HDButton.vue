@@ -1,5 +1,5 @@
 <template>
-  <button class="hd-button" @click="$emit('click')" :class="buttonClasses">
+  <button class="hd-button" @click="$emit('buttonClick')" :class="buttonClasses">
     {{copy}}
   </button>
 </template>

@@ -34,7 +34,7 @@
       v-if="canShowTotal"
       :loading="loading"
       :disabled="disabled"
-      @click="$emit('checkAvailability')"
+      @buttonClick="$emit('checkAvailability')"
     />
   </div>
 </template>

@@ -157,10 +157,16 @@ export default {
         &--prev {
           left: 0;
           transform: translate(-90%, -50%);
+          @include bpLarge {
+            transform: translate(-120%, -50%);
+          }
         }
         &--next {
           right: 0;
           transform: translate(90%, -50%);
+           @include bpLarge {
+            transform: translate(120%, -50%);
+          }
         }
       }
     }

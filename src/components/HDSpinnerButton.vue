@@ -1,7 +1,7 @@
 <template>
   <button
     class="hd-spinner-button"
-    @click="$emit('click')"
+    @click="$emit('buttonClick')"
     :class="{
       loading: loading,
       disabled: disabled,
