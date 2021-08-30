@@ -12,7 +12,7 @@ export default createStore({
     viewWidth: 0,
     viewHeight: 0,
     availableDates: null,
-    adminLoggedIn: false,
+    adminLoggedIn: false || process.env.NODE_ENV === 'development',
     adminError: false,
     datesLoading: false,
     bookingLoading: false,

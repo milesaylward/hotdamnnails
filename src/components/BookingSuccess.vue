@@ -67,17 +67,15 @@ export default {
       return 'intent://cash.me/$hotdamnnails#Intent;package=com.squareup.cash;scheme=https;end';
     },
   },
-  mounted() {
-    console.log(this.bookingSuccess);
-  },
 };
 </script>
 
 <style lang="scss">
 .booking-success {
-  margin-top: 30px;
+  padding: 40px 0;
   &__content {
-    justify-content: space-between;
+    justify-content: center;
+    flex-wrap: wrap;
     h2 {
       margin-bottom: 10px;
     }
@@ -88,12 +86,29 @@ export default {
     .confirm {
       margin-bottom: 10px;
     }
+    &__copy {
+      width: 100%;
+      max-width: 600px;
+      p {
+        a {
+          white-space: nowrap;
+        }
+      }
+      @include bpLarge {
+        width: 48%;
+      }
+    }
     &__booking {
       width: 100%;
       max-width: 600px;
       border: 1px solid $hdRed;
       text-align: left;
       border-radius: 4px;
+      margin-top: 30px;
+      @include bpLarge {
+        width: 48%;
+        margin-top: 0px;
+      }
       h3 {
         padding: 10px 0;
         line-height: 1;
