@@ -107,7 +107,7 @@ export default {
         justify-content: center;
         align-items: center;
         h1 {
-          font-size: 34px;
+          font-size: 26px;
           text-transform: uppercase;
           color: white;
           margin-bottom: 10%;

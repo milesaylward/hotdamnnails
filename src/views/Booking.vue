@@ -1,189 +1,254 @@
 <template>
   <div class="page booking">
     <Hero
-      title="Booking"
+      title="Book with me"
       video="https://dl.airtable.com/.attachments/dda1f57a1256a5082a9a1267a89993d0/a3a6c324/policy_cover.mp4"
       fallback="https://dl.airtable.com/.attachments/02217580f492a317fcf7ddf2d4f5e450/492d60b1/policy_fallback.jpeg"
       @load="handleVideoLoaded"
     />
-    <div class="container">
-      <div class="booking__content" :class="{ total: appointmentType }">
-        <h1>Appointment Types</h1>
-        <div class="appointments" ref="types">
-          <button
-            class="appointments__button"
-            @click="handleChooseType(appt)"
-            v-for="appt in appointmentData"
-            :class="{
-              active: appointmentType && appointmentType.name === appt.name,
-              inactive: appointmentType && appointmentType.name !== appt.name,
-            }"
-            :key="appt.id"
-          >
-            {{appt.name}}
-          </button>
-        </div>
-        <transition name="fade">
-          <div class="screen" v-if="appointmentType">
-            <h1>{{preCopy}}</h1>
-            <div class="screen__content">
-              <div v-for="opt in preOpts" :key="opt.id" class="radio"
-                :class="{
-                  active: preChoice && preChoice.id === opt.id
-                }"
-              >
-                <input
-                  type="checkbox"
-                  :id="opt.id"
-                  :value="opt"
-                  @change="handlePreChange(opt)"
-                >
-                <span class="radio__control"></span>
-                <span class="radio__label">{{opt.name}}</span>
-              </div>
+    <transition name="fade" mode="out-in">
+      <div class="booking__wrapper" v-if="!bookingSuccess">
+        <div class="container" ref="root">
+          <div class="booking__content" :class="{ 'booking__content--total': appointmentType }">
+            <h1>Services</h1>
+            <div class="appointments" ref="types">
+              <HDButton
+                class="appointments__button"
+                @click="handleChooseType(appt)"
+                v-for="appt in appointmentData"
+                :active="appointmentType && appointmentType.name === appt.name"
+                :inactive="appointmentType && appointmentType.name !== appt.name"
+                :copy="appt.name"
+                :key="appt.id"
+              />
             </div>
-            <transition name="fade">
-              <div v-if="preChoice && lengths.length">
-                <h1>Length</h1>
-                <div class="screen__content">
-                  <button class="screen__content__button"
-                    v-for="length in lengths"
-                    :key="length.id"
-                    @click="handleChooseLength(length)"
-                    :class="{
-                      active: lengthChoice && lengthChoice.id === length.id,
-                      inactive: lengthChoice && lengthChoice.id !== length.id,
-                    }"
-                  >
-                    {{length.name}}
-                  </button>
-                </div>
-                <h4>Custom Shape:</h4>
-                <div class="shape-opts">
-                  <div v-for="opt in shapeOpts" :key="opt.id" class="radio"
-                    :class="{
-                      active: shapeChoice && shapeChoice.id === opt.id
-                    }"
-                  >
-                    <input
-                      type="checkbox"
-                      :id="opt.id"
-                      :value="opt"
-                      @change="handleShapeChange(opt)"
-                    >
-                    <span class="radio__control"></span>
-                    <span class="radio__label">{{opt.name}}</span>
+            <transition name="fade" mode="out-in">
+              <div class="screen" v-if="appointmentType" :key="appointmentType.id">
+                <p v-if="isSoakOff" class="note">
+                  <b>Note:</b>
+                  I do not do only soak offs on foreign nails (not done by me).
+                  I will soak off foreign nails if you book a fresh set!
+                </p>
+                <RadioOption
+                  :options="preOpts"
+                  :multi="isFill"
+                  :addons="addons"
+                  :copy="preCopy"
+                  :choice="preChoice"
+                  v-if="preOpts.length && !isFresh"
+                  @changeOpt="handlePreChange"
+                />
+                <div v-if="isFresh" ref="pre">
+                  <h1>Do you need a soak off?</h1>
+                  <div class="screen__content">
+                    <HDButton
+                      v-for="opt in preOpts"
+                      :key="opt.id"
+                      @click="handlePreChange(opt)"
+                      :active="preChoice && preChoice.id === opt.id"
+                      :inactive="preChoice && preChoice.id !== opt.id"
+                      :copy="opt.parsed_name"
+                    />
                   </div>
                 </div>
-              </div>
-            </transition>
-            <transition name="fade" @afterEnter="handleScrollTo('design')">
-              <div v-if="lengthChoice" ref="design">
-                <h1 v-if="designs.length">Design</h1>
-                <div class="screen__content" v-if="designs.length">
-                  <button class="screen__content__button"
-                    v-for="design in designs"
-                    :key="design.id"
-                    @click="handleChooseDesign(design)"
-                    :class="{
-                      active: designChoice && designChoice.id === design.id,
-                      inactive: designChoice && designChoice.id !== design.id,
-                    }"
-                  >
-                    {{design.name}}
-                  </button>
-                </div>
+                <transition name="fade" @enter="handleScrollTo('length')">
+                  <div v-if="preChoice && lengths.length" ref="length">
+                    <h1>Length</h1>
+                    <div class="screen__content">
+                      <HDButton
+                        v-for="length in lengths"
+                        :key="length.id"
+                        @click="handleChooseLength(length)"
+                        :active="lengthChoice && lengthChoice.id === length.id"
+                        :inactive="lengthChoice && lengthChoice.id !== length.id"
+                        :copy="length.parsed_name"
+                      />
+                    </div>
+                  </div>
+                </transition>
+                <transition name="fade" @enter="handleScrollTo('shapes')">
+                  <div v-if="(lengthChoice && isFresh) && shapeOpts.length" ref="shapes">
+                    <h1>Shape</h1>
+                    <div class="screen__content">
+                      <HDButton
+                        class="full-width"
+                        v-for="opt in shapeOpts"
+                        :key="opt.id"
+                        @click="handleChooseShape(opt)"
+                        :active="shapeChoice && shapeChoice.id === opt.id"
+                        :inactive="shapeChoice && shapeChoice.id !== opt.id"
+                        :copy="opt.parsed_name"
+                      />
+                    </div>
+                  </div>
+                </transition>
+                <transition name="fade" @enter="handleScrollTo('fills')">
+                  <div v-if="fillTimes.length" ref="fills">
+                    <h1>Last Nail Appointment was:</h1>
+                    <div class="screen__content">
+                      <HDButton
+                        v-for="length in fillTimes"
+                        :key="length.id"
+                        @click="handleChooseLength(length)"
+                        :active="lengthChoice && lengthChoice.id === length.id"
+                        :inactive="lengthChoice && lengthChoice.id !== length.id"
+                        :copy="`${length.parsed_name} ago`"
+                      />
+                    </div>
+                  </div>
+                </transition>
+                <transition name="fade" @enter="handleScrollTo('design')">
+                  <div v-if="(shapeChoice || isGel) && designs.length" ref="design">
+                    <h1>Design</h1>
+                    <p class="note">
+                      <b>Note:</b>
+                      Design is the most important factor in appointment length & price.
+                      If you're are unsure what to book please consult first.
+                    </p>
+                    <div class="screen__content" v-if="designs.length">
+                      <HDButton
+                        v-for="design in designs"
+                        :key="design.id"
+                        @click="handleChooseDesign(design)"
+                        :active="designChoice && designChoice.id === design.id"
+                        :inactive="designChoice && designChoice.id !== design.id"
+                        :copy="design.parsed_name"
+                      />
+                    </div>
+                  </div>
+                </transition>
               </div>
             </transition>
           </div>
+          <transition name="fade">
+            <Total
+              v-show="appointmentType"
+              :type="appointmentType"
+              :canShowTotal="canShowTotal"
+              :loading="datesLoading"
+              :disabled="computedDates.length"
+              :options="addons"
+              @checkAvailability="checkAvailability"
+            />
+          </transition>
+        </div>
+        <transition name="fade" @enter="handleScrollTo('dates')">
+          <Dates
+            ref="dates"
+            v-if="computedDates.length"
+            :activeDate="activeDate"
+            :dates="computedDates"
+            :dateSize="dateSize"
+            :activeTime="activeTime"
+            @setDate="setActiveDate"
+            @setTime="setSelectedTime"
+            @scrollTo="handleScrollTo"
+          />
+        </transition>
+        <transition name="fade" @enter="handleScrollTo('form')">
+          <div class="container" v-if="showUserForm" ref="form">
+            <UserForm @book="handleBookUser" />
+          </div>
         </transition>
       </div>
-      <div class="booking__total" v-if="appointmentType">
-        <div class="booking__total__content">
-          <h3>{{appointmentType.name}}</h3>
-          <p v-if="preChoice">
-            <span>{{preChoice.name}}</span>
-            <span>{{preChoice.price}}$</span>
-          </p>
-          <p v-if="lengthChoice">
-            <span>{{lengthChoice.name}}</span>
-            <span>{{lengthChoice.price}}$</span>
-          </p>
-          <p v-if="shapeChoice" class="sub">
-            <span>{{shapeChoice.name}}</span>
-            <span>{{shapeChoice.price}}$</span>
-          </p>
-          <p v-if="designChoice">
-            <span>{{designChoice.name}}</span>
-            <span>{{designChoice.price}}$</span>
-          </p>
-          <p class="total" v-if="canShowTotal">
-            <span>Total: </span>
-            <span>{{totalPrice}}$</span>
-          </p>
-        </div>
-        <button
-          v-if="canShowTotal"
-          class="availibility" @click="checkAvailibility"
-        >
-          Check Availability
-        </button>
-      </div>
-    </div>
+      <BookingSuccess v-else />
+    </transition>
     <transition name="fade">
-      <div class="dates container" v-if="availableDates">
-        <div class="dates__date-options">
-          <button
-            class="dates__date-options__date"
-            v-for="date in availableDates"
-            @click="setActiveDate(date)"
-            :key="date.date"
-          >
-            <p>{{date.day_of_week}}</p>
-            <p class="small">{{date.date}}</p>
-          </button>
-        </div>
-        <div class="dates__time-options" v-if="activeDate">
-          <button
-            class="dates__time-options__time"
-            v-for="time in activeDate.times"
-            :key="time.time"
-          >
-          {{time.time}}
-          </button>
-        </div>
-      </div>
+      <BookingLoader v-if="bookingLoading" />
     </transition>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import Hero from '@/components/Hero.vue';
+import UserForm from '@/components/UserForm.vue';
+import RadioOption from '@/components/RadioOption.vue';
+import HDButton from '@/components/HDButton.vue';
+import Total from '@/components/Total.vue';
+import Dates from '@/components/Dates.vue';
+import BookingLoader from '@/components/BookingLoader.vue';
+import BookingSuccess from '@/components/BookingSuccess.vue';
 
 export default {
   name: 'Booking',
   components: {
     Hero,
+    Total,
+    UserForm,
+    RadioOption,
+    HDButton,
+    Dates,
+    BookingLoader,
+    BookingSuccess,
   },
   data: () => ({
     fallback: true,
     currentStep: 0,
     appointmentType: null,
     addons: [],
+    selected: [],
     soakOff: null,
+    showUserForm: false,
     lengthChoice: null,
     designChoice: null,
+    userInfo: {
+      number: '',
+      name: '',
+      email: '',
+    },
+    dateSize: 0,
+    dateMaxWidth: 0,
+    currentDateIndex: 0,
     preChoice: null,
     shapeChoice: null,
     activeDate: null,
+    activeTime: null,
     totalSteps: 0,
   }),
   computed: {
-    ...mapState(['appointmentData', 'availableDates']),
+    ...mapState([
+      'appointmentData',
+      'availableDates',
+      'datesLoading',
+      'bookingLoading',
+      'bookingSuccess',
+    ]),
+    ...mapGetters(['isLarge']),
     preCopy() {
       if (!this.appointmentType) return '';
-      return this.appointmentType.name === 'Fresh Set' ? 'Do you need a Soak Off?' : 'Pre-Options';
+      return this.isFresh ? 'Do you need a Soak Off?' : 'Optional:';
+    },
+    isFresh() {
+      if (!this.appointmentType) return false;
+      return this.appointmentType.name === 'Fresh Set';
+    },
+    isGel() {
+      if (!this.appointmentType) return false;
+      return this.appointmentType.name === 'Gel Manicure';
+    },
+    preRequired() {
+      return this.isFresh;
+    },
+    isFill() {
+      if (!this.appointmentType) return false;
+      return this.appointmentType.name === 'Fills';
+    },
+    isSoakOff() {
+      if (!this.appointmentType) return false;
+      return this.appointmentType.name === 'Soak Off Only';
+    },
+    datesToShow() {
+      return this.isLarge ? 10 : 4;
+    },
+    computedDates() {
+      const { availableDates } = this;
+      if (!availableDates) return [];
+      const arrayOfArrays = [];
+      for (let i = 0; i < availableDates.length; i += this.datesToShow) {
+        arrayOfArrays.push(availableDates.slice(i, i + this.datesToShow));
+      }
+      return arrayOfArrays;
     },
     shapeOpts() {
       if (!this.appointmentType) return [];
@@ -200,68 +265,92 @@ export default {
       const lengths = this.appointmentType.length_opts;
       return lengths.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
     },
+    fillTimes() {
+      if (!this.appointmentType) return [];
+      const times = this.appointmentType.fill_time_opts;
+      return times.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
+    },
     designs() {
       if (!this.appointmentType) return [];
       const designs = this.appointmentType.designs_opts;
       return designs.sort((a, b) => { if (a.duration > b.duration) return 1; return -1; });
     },
     canShowTotal() {
-      return this.preChoice && this.lengthChoice && this.designChoice;
+      if (this.isFresh) return this.preChoice && this.lengthChoice && this.designChoice;
+      if (this.isFill) return this.lengthChoice;
+      if (this.isGel) return this.designChoice;
+      return this.isSoakOff;
     },
-    totalPrice() {
-      const {
-        preChoice,
-        shapeChoice,
-        lengthChoice,
-        designChoice,
-      } = this;
-      let price = 0;
-      price += this.appointmentType.price;
-      price += lengthChoice.price;
-      price += designChoice.price;
-      if (preChoice) price += preChoice.price;
-      if (shapeChoice) price += shapeChoice.price;
-      return price;
-    },
-  },
-  mounted() {
   },
   methods: {
-    ...mapActions(['setPageLoaded', 'getAvailableDates']),
-    handleScrollTo(id) {
-      this.$refs[id].scrollIntoView({
+    ...mapActions([
+      'setPageLoaded',
+      'getAvailableDates',
+      'bookAppointment',
+      'clearAvailableDates',
+    ]),
+    handleBookUser(user) {
+      const addons = this.addons.map((addon) => addon.id);
+      const data = {
+        user,
+        ...this.appointmentType,
+        addons,
+        time: this.activeTime,
+      };
+      this.bookAppointment(data);
+    },
+    handleScrollTo(id, isRef = true) {
+      let el;
+      if (isRef) el = this.$refs[id].$el || this.$refs[id];
+      else el = document.getElementById(id);
+      el.scrollIntoView({
         behavior: 'smooth',
       });
     },
-    checkAvailibility() {
-      this.getAvailableDates({ addons: this.addons, appointment: this.appointmentType });
+    checkAvailability() {
+      const addons = this.addons.map((addon) => addon.id);
+      this.getAvailableDates({ addons, appointment: this.appointmentType });
     },
     setActiveDate(date) {
       this.activeDate = date;
+      this.activeTime = null;
+      this.showUserForm = false;
+    },
+    setSelectedTime(time) {
+      this.activeTime = time;
+      this.showUserForm = true;
     },
     resetOpts() {
       this.addons = [];
       this.designChoice = null;
       this.lengthChoice = null;
+      this.shapeChoice = null;
+      this.preChoice = null;
+      this.activeTime = null;
+      this.activeDate = null;
+      this.showUserForm = false;
+      this.clearAvailableDates();
     },
-    handleShapeChange(opt) {
+    handleChooseShape(shape) {
       const { shapeChoice } = this;
-      if (shapeChoice && shapeChoice.id === opt.id) {
-        this.addons = this.addons.filter((id) => id !== opt.id);
-        this.shapeChoice = null;
-      } else {
-        if (shapeChoice) this.addons = this.addons.filter((id) => id !== shapeChoice.id);
-        this.addons.push(opt.id);
-        this.shapeChoice = opt;
+      if (shapeChoice) {
+        this.addons = this.addons.filter((opt) => opt.id !== shapeChoice.id);
       }
+      this.addons.push(shape);
+      this.shapeChoice = shape;
     },
-    handlePreChange(opt) {
-      const { preChoice } = this;
-      if (preChoice) {
-        this.addons = this.addons.filter((id) => id !== preChoice.id);
+    handlePreChange(pre) {
+      const { preChoice, preRequired } = this;
+      if (preChoice || !preRequired) {
+        if (preRequired) this.addons = this.addons.filter((opt) => opt.id !== preChoice.id);
+        if (!preRequired && this.addons.indexOf(pre) > -1) {
+          this.addons = this.addons.filter((opt) => opt.id !== pre.id);
+          this.preChoice = null;
+          return;
+        }
       }
-      this.addons.push(opt.id);
-      this.preChoice = opt;
+      this.addons.push(pre);
+      this.preChoice = pre;
     },
     handleChooseType(type) {
       this.appointmentType = type;
@@ -270,17 +359,17 @@ export default {
     handleChooseLength(length) {
       const { lengthChoice } = this;
       if (lengthChoice) {
-        this.addons = this.addons.filter((addon) => addon !== lengthChoice.id);
+        this.addons = this.addons.filter((opt) => opt.id !== lengthChoice.id);
       }
-      this.addons.push(length.id);
+      this.addons.push(length);
       this.lengthChoice = length;
     },
     handleChooseDesign(design) {
       const { designChoice } = this;
-      if (designChoice && designChoice.id === design.id) {
-        this.addons = this.addons.filter((addon) => addon !== designChoice.id);
+      if (designChoice) {
+        this.addons = this.addons.filter((opt) => opt.id !== designChoice.id);
       }
-      this.addons.push(design.id);
+      this.addons.push(design);
       this.designChoice = design;
     },
     handleVideoLoaded() {
@@ -304,60 +393,24 @@ export default {
   .container {
     position: relative;
   }
+  &__wrapper {
+    margin-top: 20px;
+  }
+  .note {
+    margin: 10px 0;
+    b {
+      color: $hdRed;
+    }
+  }
   .shape-opts {
     margin-top: 10px;
     display: flex;
     align-items: center;
   }
-
-  .dates {
-    padding-bottom: 30px;
-    flex-direction: column;
-    &__date-options {
-      display: flex;
-      justify-content: center;
-    }
-    &__time-options {
-      display: flex;
-    }
-  }
-  &__total {
-    width: 100%;
-    margin: 81px 0 0 20px;
-    z-index: 30;
-    &__content {
-      width: 100%;
-      border: 1px solid black;
-      padding: 10px;
-      h3 {
-        margin: 0 0 10px;
-        left: 0;
-        text-align: center;
-      }
-      p {
-        display: flex;
-        justify-content: space-between;
-        margin: 5px 0;
-      }
-    }
-    .availibility {
-      cursor: pointer;
-      width: 100%;
-      padding: 10px;
-      border: 1px solid black;
-      background: white;
-      margin-top: 10px;
-      display: none;
-      transition: background 300ms $easeOutMaterial,
-                  color 300ms $easeOutMaterial;
-      @include on-hover {
-        background: $hdRed;
-        color: white;
-      }
-      @include bpMedium {
-        display: block;
-      }
-    }
+  h1 {
+    text-transform: uppercase;
+    font-size: 24px;
+    margin: 25px 0 15px;
   }
   &__content {
     overflow: hidden;
@@ -365,83 +418,54 @@ export default {
     flex-direction: column;
     width: 100%;
     max-width: 100%;
-    padding-bottom: 75px;
     transition: max-width 300ms $easeOutMaterial;
     flex-shrink: 0;
-    &.total {
-      @include bpMedium {
+    &--total {
+      @include bpLarge {
         max-width: 75%;
-      }
-    }
-    h1 {
-      margin: 30px 0 15px;
-    }
-    .radio {
-      margin-left: 15px;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      position: relative;
-      &:first-of-type {
-        margin-left: 0;
-      }
-      &__control {
-        width: 20px;
-        height: 20px;
-        border: 1px solid black;
-        margin-right: 10px;
-        transition: background 300ms $easeOutMaterial;
-      }
-      &.active {
-        .radio__control {
-          background: $hdRed;
-        }
-      }
-      input {
-        opacity: 0;
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
       }
     }
     .appointments {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       width: 100%;
+      flex-wrap: wrap;
+      @include bpLarge {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+      }
     }
-    button {
-      cursor: pointer;
-      font-family: $headlineFontFamily;
-      width: 100%;
-      background: none;
-      border: 1px solid black;
-      padding: 30px 0;
-      margin: 0 20px;
-      font-size: 30px;
-      text-transform: uppercase;
-      transition: background 300ms $easeOutMaterial,
-                  color 300ms $easeOutMaterial,
-                  opacity 300ms $easeOutMaterial;
-      &:first-of-type { margin-left: 0; }
-      &:last-of-type { margin-right: 0; }
-      @include on-hover {
-        background: $hdRed;
-        color: white;
+    .hd-button {
+      width: 48%;
+      padding: 20px 0;
+      margin: 7.5px 0;
+      &.full-width {
+        width: 100%;
+        @include bpLarge {
+          width: 50%;
+        }
       }
-      &.active {
-        background: $hdRed;
-        color: white;
+      @include bpLarge {
+        width: 25%;
+        margin: 0 10px;
+        &:first-of-type { margin-left: 0; }
+        &:last-of-type { margin-right: 0; }
       }
-      &.inactive {
-        opacity: 0.35;
-      }
+    }
+    .hd-spinner-button {
+      margin: 15px 0;
     }
     .screen {
       width: 100%;
+      padding-bottom: 60px;
       &__content {
         display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        @include bpLarge {
+          flex-wrap: nowrap;
+          justify-content: flex-start;
+        }
       }
     }
   }

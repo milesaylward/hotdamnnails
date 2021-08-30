@@ -1,6 +1,10 @@
 import { createStore } from 'vuex';
+import UAParser from 'ua-parser-js';
+// import { TEST_BOOKING } from '@/core/constants';
 import parseData from './utils';
 import * as types from './mutationTypes';
+
+const parser = new UAParser();
 
 export default createStore({
   state: {
@@ -8,6 +12,10 @@ export default createStore({
     viewWidth: 0,
     viewHeight: 0,
     availableDates: null,
+    datesLoading: false,
+    bookingLoading: false,
+    bookingSuccess: null,
+    bookingError: false,
     app: {},
   },
   mutations: {
@@ -30,6 +38,23 @@ export default createStore({
     [types.SET_AVAILABLE_DATES](state, data) {
       state.availableDates = data;
     },
+    [types.SET_DATES_LOADING](state, bool) {
+      state.datesLoading = bool;
+    },
+    [types.CLEAR_AVAILABLE_DATES](state) {
+      state.availableDates = null;
+    },
+    [types.SET_BOOKING_LOADING](state, bool) {
+      state.bookingLoading = bool;
+    },
+    [types.SET_BOOKING_SUCCESS](state, booking) {
+      state.bookingLoading = false;
+      state.bookingSuccess = booking;
+    },
+    [types.SET_BOOKING_ERROR](state) {
+      state.bookingLoading = false;
+      state.bookingError = true;
+    },
   },
   getters: {
     getContentByPath: (state) => (path) => {
@@ -47,6 +72,8 @@ export default createStore({
     siteDataLoaded: (state) => state.app && state.appointmentData,
     pageLoaded: (state, getters) => getters.siteDataLoaded && state.pageLoaded,
     isMobile: (state) => state.viewWidth < 600,
+    isLarge: (state) => state.viewWidth > 1024,
+    isIOS: () => parser.getOS().name === 'iOS',
     isTouchDevice: () => {
       if (window.matchMedia('(pointer: coarse)').matches) {
         return true;
@@ -55,6 +82,9 @@ export default createStore({
     },
   },
   actions: {
+    clearAvailableDates({ commit }) {
+      commit(types.CLEAR_AVAILABLE_DATES);
+    },
     fetchSiteData({ commit }) {
       fetch('/.netlify/functions/get-copy').then((response) => response.json())
         .then((data) => {
@@ -69,13 +99,33 @@ export default createStore({
         });
     },
     getAvailableDates({ commit }, data) {
+      commit(types.SET_DATES_LOADING, true);
       fetch('./.netlify/functions/get-availability', {
         method: 'POST',
         body: JSON.stringify(data),
       }).then((res) => res.json())
         .then((response) => {
           commit(types.SET_AVAILABLE_DATES, response);
+          commit(types.SET_DATES_LOADING, false);
         });
+    },
+    bookAppointment({ commit }, data) {
+      commit(types.SET_BOOKING_LOADING, true);
+      fetch('./.netlify/functions/book', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }).then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+        throw new Error(res);
+      }).then((response) => {
+        commit(types.SET_BOOKING_LOADING, false);
+        commit(types.SET_BOOKING_SUCCESS, response);
+      }).catch(() => {
+        commit(types.SET_BOOKING_LOADING, false);
+        commit(types.SET_BOOKING_ERROR, true);
+      });
     },
     setPageLoaded({ commit }, bool) { commit(types.SET_PAGE_LOADED, bool); },
   },

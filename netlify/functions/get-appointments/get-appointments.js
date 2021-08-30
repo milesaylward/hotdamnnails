@@ -38,27 +38,27 @@ const fetchData = async () => {
     type.addons.forEach(item => {
       item.price = parseFloat(item.price);
       if (item.name.includes('Design:')) {
-        item.name = item.name.replace('Design:', '');
+        item.parsed_name = item.name.replace('Design:', '');
         type.designs_opts.push(item);
       }
       if (item.name.includes('Pre:')) {
-        item.name = item.name.replace('Pre:', '');
+        item.parsed_name = item.name.replace('Pre:', '');
         type.pre_opts.push(item);
       }
       if (item.name.includes('Length:')) {
-        item.name = item.name.replace('Length:', '');
+        item.parsed_name = item.name.replace('Length:', '');
         type.length_opts.push(item);
       }
       if (item.name.includes('Shape:')) {
-        item.name = item.name.replace('Shape:', '');
+        item.parsed_name = item.name.replace('Shape:', '');
         type.shape_opts.push(item);
       }
       if (item.name.includes('FillTime:')) {
-        item.name = item.name.replace('FillTime:', '');
+        item.parsed_name = item.name.replace('FillTime:', '');
         type.fill_time_opts.push(item);
       }
       if (item.name.includes('Fill:')) {
-        item.name = item.name.replace('Fill:', '');
+        item.parsed_name = item.name.replace('Fill:', '');
         type.fill_opts.push(item);
       }
     });

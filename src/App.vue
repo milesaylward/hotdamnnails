@@ -21,7 +21,7 @@ export default {
     Loader,
   },
   computed: {
-    ...mapGetters(['pageLoaded', 'siteDataLoaded']),
+    ...mapGetters(['pageLoaded', 'siteDataLoaded', 'isTouchDevice']),
   },
   watch: {
     $route: {

@@ -35,7 +35,7 @@ const fetchTimes = (days, data) => {
       (err, res, times) => {
         if (err) reject(err);
         times.forEach(time => {
-          time.time = DateTime.fromISO(time.time).toLocaleString(DateTime.TIME_SIMPLE);
+          time.time_parsed = DateTime.fromISO(time.time).toLocaleString(DateTime.TIME_SIMPLE);
         });
         out_times[day.date] = times;
         resolve();
@@ -59,8 +59,8 @@ const fetchData = async (data) => {
         const d = DateTime.fromISO(time);
         const data = {};
         date.time = d;
-        data.day_of_week = d.toFormat('cccc');
-        data.date = d.toFormat('MMMM dd');
+        data.day_of_week = d.toFormat('ccc');
+        data.date = d.toFormat('MMM dd');
         data.times = times[time];
         out.push(data);
       });
