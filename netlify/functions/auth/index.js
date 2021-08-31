@@ -1,5 +1,10 @@
 const authUser = (data) => new Promise((resolve, reject) => {
-  if (data.name === process.env.ADMIN_NAME && data.password && process.env.ADMIN_PASSWORD) {
+  const isAdmin = data.name === process.env.ADMIN_NAME;
+  const isUser = data.name === process.env.USER_NAME;
+  let passwordMatch = false;
+  if (isAdmin && data.password === process.env.ADMIN_PASSWORD) passwordMatch = true;
+  if (isUser && data.password === process.env.USER_PASSWORD) passwordMatch = true;
+  if ((isAdmin || isUser) && passwordMatch) {
     resolve({ authenticated: true }); 
   } else {
     reject({ authenticated: false }); 
