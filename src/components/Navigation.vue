@@ -113,7 +113,7 @@ export default {
     &--right {
       @include checkeredBorder(false);
       transform-origin: top right;
-      transform: rotate(-90deg) translate(-100%, -10px) scaleX(-1);
+      transform: rotate(-90deg) translate(-100%, -5px) scaleX(-1);
       left: auto;
       right: 0;
     }

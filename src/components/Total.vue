@@ -13,22 +13,29 @@
         <span class="red red--fade">${{type.price}}</span>
       </p>
       <p v-for="opt in options" :key="opt.id">
-        <span>{{opt.parsed_name}}</span>
+        <span class="name" v-html="opt.parsed_name"></span>
         <span class="red red--fade">${{opt.price}}</span>
       </p>
       <hr v-if="canShowTotal">
       <p class="red" v-if="canShowTotal">
-        <span>Total</span>
+        <span>TOTAL APPT TIME:</span>
+        <span>{{parsedDuration.duration}}</span>
+      </p>
+      <p class="red" v-if="canShowTotal">
+        <span>TOTAL:</span>
         <span>${{totalPrice}}</span>
       </p>
       <p class="red" v-if="canShowTotal">
-        <span>Deposit</span>
+        <span>DEPOSIT:</span>
         <span>${{parsedDuration.deposit}}</span>
       </p>
-      <p class="red" v-if="canShowTotal">
-        <span>Appt. Length</span>
-        <span>{{parsedDuration.duration}}</span>
-      </p>
+       <p class="red" v-if="canShowTotal">
+          <span>
+            <span class="small">(after appt)</span>
+            REMAINDER:
+          </span>
+          <span>${{remainder}}</span>
+        </p>
     </div>
     <HDSpinnerButton
       v-if="canShowTotal"
@@ -101,6 +108,9 @@ export default {
         deposit: 10 + hoursDeposit,
       };
     },
+    remainder() {
+      return this.totalPrice - this.parsedDuration.deposit;
+    },
     totalPrice() {
       let price = 0;
       this.options.forEach((opt) => { price += opt.price; });
@@ -159,6 +169,9 @@ export default {
     width: calc(100% - 20px);
     margin: 20px auto;
     padding: 20px 0;
+    @include bpLarge {
+      width: 100%;
+    }
   }
   &__content {
     width: 100%;
@@ -183,6 +196,14 @@ export default {
       span {
         margin-right: 10px;
       }
+    }
+    .name {
+      .small {
+        display: none;
+      }
+    }
+    .small {
+      font-size: 12px;
     }
     .red {
       color: $hdRed;

@@ -7,8 +7,12 @@
       @load="handleVideoLoaded"
     />
     <transition name="fade" mode="out-in">
-      <div class="booking__wrapper" v-if="!bookingSuccess">
-        <div class="container" ref="root">
+      <BookingPolicy
+        @accept="policyAccepted = true;"
+        v-if="!policyAccepted"
+      />
+      <div class="booking__wrapper" v-else-if="!bookingSuccess && policyAccepted">
+        <div class="container main" ref="root">
           <div class="booking__content" :class="{ 'booking__content--total': appointmentType }">
             <h1>Services</h1>
             <div class="appointments" ref="types">
@@ -35,15 +39,18 @@
                   :addons="addons"
                   :copy="preCopy"
                   :choice="preChoice"
-                  v-if="preOpts.length && !isFresh"
+                  v-if="preOpts.length && !isFresh && !isGel"
                   @changeOpt="handlePreChange"
                 />
-                <div v-if="isFresh" ref="pre">
-                  <h1>Do you need a soak off?</h1>
+                <div v-if="isFresh || isGel" ref="pre">
+                  <h1>{{preCopy}}</h1>
                   <div class="screen__content">
                     <HDButton
                       v-for="opt in preOpts"
                       :key="opt.id"
+                      :class="{
+                        'full-width': isGel,
+                      }"
                       @buttonClick="handlePreChange(opt)"
                       :active="preChoice && preChoice.id === opt.id"
                       :inactive="preChoice && preChoice.id !== opt.id"
@@ -82,32 +89,25 @@
                     </div>
                   </div>
                 </transition>
-                <transition name="fade" @enter="handleScrollTo('fills')">
-                  <div v-if="fillTimes.length" ref="fills">
-                    <h1>Last Nail Appointment was:</h1>
-                    <div class="screen__content">
-                      <HDButton
-                        v-for="length in fillTimes"
-                        :key="length.id"
-                        @buttonClick="handleChooseLength(length)"
-                        :active="lengthChoice && lengthChoice.id === length.id"
-                        :inactive="lengthChoice && lengthChoice.id !== length.id"
-                        :copy="`${length.parsed_name} ago`"
-                      />
-                    </div>
-                  </div>
-                </transition>
-                <transition name="fade" @enter="handleScrollTo('design')">
-                  <div v-if="(shapeChoice || isGel) && designs.length" ref="design">
+                <transition name="fade" @enter="!isFill && handleScrollTo('design')">
+                  <div
+                    v-if="(shapeChoice || (isGel && preChoice) || isFill) && designs.length"
+                    ref="design"
+                  >
                     <h1>Design</h1>
                     <p class="note">
                       <b>Note:</b>
                       Design is the most important factor in appointment length & price.
-                      If you're are unsure what to book please consult first.
+                      If you're are unsure what to book please consult first.<br>
+                      Basic does not include accent nails, please choose at least minimal
+                      if you'd like any accent nails.<br>
+                      Check HD Nails Freestyle if you do not have design inspiration or would
+                      like a unique freestyle design.
                     </p>
                     <div class="screen__content" v-if="designs.length">
                       <HDButton
                         v-for="design in designs"
+                        class="full-width"
                         :key="design.id"
                         @buttonClick="handleChooseDesign(design)"
                         :active="designChoice && designChoice.id === design.id"
@@ -115,6 +115,12 @@
                         :copy="design.parsed_name"
                       />
                     </div>
+                    <RadioOption
+                      v-if="!designChoice || designChoice.id !== designs[0].id"
+                      :options="freestyleOpts"
+                      :choice="freestyleChoice"
+                      @changeOpt="handleChooseFreestyle"
+                    />
                   </div>
                 </transition>
               </div>
@@ -146,7 +152,7 @@
           />
         </transition>
         <transition name="fade" @enter="handleScrollTo('form')">
-          <div class="container" v-if="showUserForm" ref="form">
+          <div class="container main" v-if="showUserForm" ref="form">
             <UserForm @book="handleBookUser" />
           </div>
         </transition>
@@ -168,6 +174,7 @@ import HDButton from '@/components/HDButton.vue';
 import Total from '@/components/Total.vue';
 import Dates from '@/components/Dates.vue';
 import BookingLoader from '@/components/BookingLoader.vue';
+import BookingPolicy from '@/components/BookingPolicy.vue';
 import BookingSuccess from '@/components/BookingSuccess.vue';
 
 export default {
@@ -181,10 +188,12 @@ export default {
     Dates,
     BookingLoader,
     BookingSuccess,
+    BookingPolicy,
   },
   data: () => ({
     fallback: true,
     currentStep: 0,
+    policyAccepted: false,
     appointmentType: null,
     addons: [],
     selected: [],
@@ -200,6 +209,7 @@ export default {
     dateSize: 0,
     dateMaxWidth: 0,
     currentDateIndex: 0,
+    freestyleChoice: null,
     preChoice: null,
     shapeChoice: null,
     activeDate: null,
@@ -217,7 +227,10 @@ export default {
     ...mapGetters(['isLarge']),
     preCopy() {
       if (!this.appointmentType) return '';
-      return this.isFresh ? 'Do you need a Soak Off?' : 'Optional:';
+      if (this.isFresh) return 'Do you need a Soak Off?';
+      if (this.isFill) return 'Please check all that apply for your fill in:';
+      if (this.isGel) return 'SELECT WHAT YOU NEED DONE PLEASE';
+      return '';
     },
     isFresh() {
       if (!this.appointmentType) return false;
@@ -228,7 +241,7 @@ export default {
       return this.appointmentType.name === 'Gel Manicure';
     },
     preRequired() {
-      return this.isFresh;
+      return this.isFresh || this.isGel;
     },
     isFill() {
       if (!this.appointmentType) return false;
@@ -260,6 +273,11 @@ export default {
       const opts = this.appointmentType.pre_opts;
       return opts.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
     },
+    freestyleOpts() {
+      if (!this.appointmentType) return [];
+      const opts = this.appointmentType.freestyle_opts;
+      return opts.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
+    },
     lengths() {
       if (!this.appointmentType) return [];
       const lengths = this.appointmentType.length_opts;
@@ -273,13 +291,22 @@ export default {
     designs() {
       if (!this.appointmentType) return [];
       const designs = this.appointmentType.designs_opts;
-      return designs.sort((a, b) => { if (a.duration > b.duration) return 1; return -1; });
+      return designs.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
     },
     canShowTotal() {
       if (this.isFresh) return this.preChoice && this.lengthChoice && this.designChoice;
-      if (this.isFill) return this.lengthChoice;
+      if (this.isFill) return this.designChoice;
       if (this.isGel) return this.designChoice;
       return this.isSoakOff;
+    },
+  },
+  watch: {
+    addons: {
+      deep: true,
+      handler() {
+        this.clearAvailableDates();
+        this.showUserForm = false;
+      },
     },
   },
   methods: {
@@ -305,6 +332,7 @@ export default {
       else el = document.getElementById(id);
       el.scrollIntoView({
         behavior: 'smooth',
+        block: 'start',
       });
     },
     checkAvailability() {
@@ -326,6 +354,7 @@ export default {
       this.lengthChoice = null;
       this.shapeChoice = null;
       this.preChoice = null;
+      this.freestyleChoice = null;
       this.activeTime = null;
       this.activeDate = null;
       this.showUserForm = false;
@@ -364,6 +393,16 @@ export default {
       this.addons.push(length);
       this.lengthChoice = length;
     },
+    handleChooseFreestyle(freestyle) {
+      const { freestyleChoice } = this;
+      if (freestyleChoice) {
+        this.addons = this.addons.filter((opt) => opt.id !== freestyleChoice.id);
+        this.freestyleChoice = null;
+      } else if (freestyle) {
+        this.addons.push(freestyle);
+        this.freestyleChoice = freestyle;
+      }
+    },
     handleChooseDesign(design) {
       const { designChoice } = this;
       if (designChoice) {
@@ -371,6 +410,7 @@ export default {
       }
       this.addons.push(design);
       this.designChoice = design;
+      this.handleChooseFreestyle();
     },
     handleVideoLoaded() {
       this.setPageLoaded(true);
@@ -383,21 +423,23 @@ export default {
 .booking {
   min-height: 100vh;
   width: 100%;
-  padding: $headerHeightMobile 9px 0;
+  padding: $headerHeightMobile 5px 0;
   @include bpMedium {
-    padding: $headerHeight 9px 0;
+    padding: $headerHeight 5px 0;
   }
   h4 {
     margin-top: 10px;
   }
-  .container {
-    position: relative;
-  }
   &__wrapper {
     margin-top: 20px;
+    .main {
+      position: relative;
+      padding: 0;
+    }
   }
   .note {
     margin: 10px 0;
+    padding: 0 14px;
     b {
       color: $hdRed;
     }
@@ -410,7 +452,13 @@ export default {
   h1 {
     text-transform: uppercase;
     font-size: 24px;
-    margin: 25px 0 15px;
+    margin: 0 0 15px;
+    padding: 25px 14px 0;
+    @include bpLarge {
+      padding: {
+        left: 0;
+      }
+    }
   }
   &__content {
     overflow: hidden;
@@ -436,9 +484,9 @@ export default {
       }
     }
     .hd-button {
-      width: 48%;
+      width: 50%;
       padding: 20px 0;
-      margin: 7.5px 0;
+      margin: 0;
       &.full-width {
         width: 100%;
         @include bpLarge {
@@ -457,7 +505,7 @@ export default {
     }
     .screen {
       width: 100%;
-      padding-bottom: 60px;
+      padding-bottom: 200px;
       &__content {
         display: flex;
         flex-wrap: wrap;

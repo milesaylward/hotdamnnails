@@ -33,9 +33,9 @@ const fetchData = async () => {
     type.length_opts = [];
     type.pre_opts = [];
     type.shape_opts = [];
-    type.fill_opts = [];
-    type.fill_time_opts = [];
+    type.freestyle_opts = [];
     type.addons.forEach(item => {
+      console.log(item);
       item.price = parseFloat(item.price);
       if (item.name.includes('Design:')) {
         item.parsed_name = item.name.replace('Design:', '');
@@ -45,6 +45,10 @@ const fetchData = async () => {
         item.parsed_name = item.name.replace('Pre:', '');
         type.pre_opts.push(item);
       }
+      if (item.name.includes('Freestyle:')) {
+        item.parsed_name = item.name.replace('Freestyle:', '');
+        type.freestyle_opts.push(item);
+      }
       if (item.name.includes('Length:')) {
         item.parsed_name = item.name.replace('Length:', '');
         type.length_opts.push(item);
@@ -52,14 +56,6 @@ const fetchData = async () => {
       if (item.name.includes('Shape:')) {
         item.parsed_name = item.name.replace('Shape:', '');
         type.shape_opts.push(item);
-      }
-      if (item.name.includes('FillTime:')) {
-        item.parsed_name = item.name.replace('FillTime:', '');
-        type.fill_time_opts.push(item);
-      }
-      if (item.name.includes('Fill:')) {
-        item.parsed_name = item.name.replace('Fill:', '');
-        type.fill_opts.push(item);
       }
     });
   });

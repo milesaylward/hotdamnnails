@@ -3,9 +3,15 @@ export const HEADER_HEIGHT = 85;
 export const HEADER_HEIGHT_MOBILE = 65;
 export const USER_INPUTS = [
   {
-    label: 'Name',
+    label: 'First Name',
     type: 'text',
-    id: 'name',
+    id: 'firstName',
+    icon: 'person',
+  },
+  {
+    label: 'Last Name',
+    type: 'text',
+    id: 'lastName',
     icon: 'person',
   },
   {
@@ -20,6 +26,20 @@ export const USER_INPUTS = [
     id: 'number',
     icon: 'smartphone',
   },
+];
+
+export const POLICY_COPY = [
+  [
+    'This booking site allows you to curate your appointment based on your desired time and budget (yay!!)',
+    'Nail art is difficult to price due to custom designs and addons. But hopefully this makes it easy for you and I to understand. Feedback on how to improve the site is greatly appreciated!',
+    'Feel free consult before booking if you have any confusion with the booking process. Services / Designs can take anywhere from 2 to 4 hours based on your design and service needs.',
+  ],
+  [
+    'Being decisive about your design is very important because I do not function like a walk-in salon, but I really do want to give you the best possible service and experience.',
+    'Please make sure you have the time before you book an appointment slot, and if things like broken nails happen after you book please let me know ahead so we can plan/adjust your time slot if needed.',
+    'The services you book are all that can be done in that time. All other changes during your appointment can change the time needed and the remaining price.',
+    'I hope to see you all soon!!',
+  ],
 ];
 
 export const TEST_BOOKING = {

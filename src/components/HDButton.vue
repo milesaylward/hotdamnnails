@@ -10,6 +10,10 @@ export default {
     copy: {
       type: String,
     },
+    color: {
+      type: String,
+      default: '',
+    },
     active: {
       type: Boolean,
       default: false,
@@ -25,7 +29,7 @@ export default {
   },
   computed: {
     buttonClasses() {
-      const classes = [];
+      const classes = [this.color];
       if (this.active) classes.push('active');
       if (this.inactive) classes.push('inactive');
       if (this.disabled) classes.push('disabled');
@@ -39,9 +43,10 @@ export default {
 .hd-button {
   cursor: pointer;
   font-family: $headlineFontFamily;
-  background: none;
-  border: 1px solid $hdRed;
+  background: rgba($hdRed, 0.03);
+  border: none;
   padding: 10px 20px;
+  color: #777;
   text-transform: uppercase;
   transition: background 300ms $easeOutMaterial,
               color 300ms $easeOutMaterial,
@@ -49,6 +54,13 @@ export default {
   @include on-hover {
     background: $hdRed;
     color: white;
+  }
+  &.red {
+    background: $hdRed;
+    color: white;
+    @include on-hover {
+      background: darken($hdRed, 10%);
+    }
   }
   &.active {
     background: $hdRed;

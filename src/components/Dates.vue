@@ -98,13 +98,22 @@ export default {
 
 <style lang="scss">
 .dates {
-  margin-top: -55px;
-  padding-bottom: 100px;
-  display: block;
+  &.container {
+    padding: 0;
+    margin-top: -180px;
+    padding-bottom: 200px;
+    display: block;
+    position: relative;
+    z-index: 12;
+    @include bpLarge {
+      margin-top: -160px;
+    }
+  }
   h1.title {
-    margin-left: 10px;
+    padding: 0 14px;
     @include bpLarge {
       margin-left: 0;
+      padding: 0;
     }
   }
   &__container {
@@ -112,7 +121,7 @@ export default {
       position: relative;
     &__wrapper {
       overflow: hidden;
-      width: calc(100% - 20px);
+      width: calc(100% - 68px);
       @include bpLarge {
         width: 100%;
       }
@@ -125,7 +134,10 @@ export default {
     }
     .controls {
       position: absolute;
-      width: 100%;
+      width: calc(100% - 20px);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       height: 100%;
       &__control {
         background: none;
@@ -155,17 +167,17 @@ export default {
           pointer-events: none;
         }
         &--prev {
-          left: 0;
-          transform: translate(-90%, -50%);
+          left: 0px;
+          transform: translate(-25%, -50%);
           @include bpLarge {
-            transform: translate(-120%, -50%);
+            transform: translate(0%, -50%);
           }
         }
         &--next {
-          right: 0;
-          transform: translate(90%, -50%);
+          right: 0px;
+          transform: translate(25%, -50%);
            @include bpLarge {
-            transform: translate(120%, -50%);
+            transform: translate(0%, -50%);
           }
         }
       }
@@ -219,7 +231,7 @@ export default {
     align-content: flex-start;
     justify-content: flex-start;
     max-height: $itemHeight * 4;
-    width: calc(100% - 20px);
+    width: calc(100% - 68px);
     margin: 10px auto 0;
     @include bpLarge {
       width: 100%;

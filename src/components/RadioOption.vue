@@ -1,7 +1,7 @@
 <template>
   <div class="radio-option" :class="{small}">
-    <h1 v-if="!small">{{copy}}</h1>
-    <h4 v-else>{{copy}}</h4>
+    <h1 class="title" v-if="!small && copy">{{copy}}</h1>
+    <h4 v-else-if="copy">{{copy}}</h4>
     <div class="radio-option__content">
       <div v-for="opt in options" :key="opt.id" class="radio"
         :class="{
@@ -16,7 +16,7 @@
           @change="handleChange(opt)"
         >
         <span class="radio__control"></span>
-        <span class="radio__label">{{opt.parsed_name}}</span>
+        <span class="radio__label" v-html="opt.parsed_name" />
       </div>
     </div>
   </div>
@@ -45,11 +45,6 @@ export default {
       default: false,
     },
   },
-  watch: {
-    choice() {
-      console.log(this.multi, this.addons);
-    },
-  },
   methods: {
     handleChange(opt) {
       this.$emit('changeOpt', opt);
@@ -60,8 +55,17 @@ export default {
 
 <style lang="scss">
 .radio-option {
+  padding: 0 14px;
+  margin-top: 15px;;
   h4 {
     margin-bottom: 10px;
+  }
+  h1.title {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 80px;
+    margin-top: -30px;
+    pointer-events: none;
   }
   &__content {
     display: flex;
@@ -73,7 +77,7 @@ export default {
     .radio {
       margin: {
         left: 15px;
-        top: 10px;
+        top: 12px;
       };
       display: flex;
       align-items: center;
@@ -82,10 +86,16 @@ export default {
       @include bpMedium {
         width: auto;
       }
+      &__label {
+        color: #777777;
+        .small {
+          font-size: 14px;
+        }
+      }
       &__control {
         width: 20px;
         height: 20px;
-        border: 1px solid black;
+        border: 1px solid $hdRed;
         margin-right: 10px;
         transition: background 300ms $easeOutMaterial;
       }
