@@ -31,8 +31,8 @@ const bookAppointment = (data) => new Promise((resolve, reject) => {
     body: {
       appointmentTypeID: data.id,
       datetime: data.time.time,
-      firstName: data.user.name.split(' ')[0],
-      lastName: data.user.name.split(' ')[1] || '',
+      firstName: data.user.firstName,
+      lastName: data.user.lastName,
       email: data.user.email,
       phone: data.user.number,
       addonIDs: data.addons,
