@@ -10,9 +10,15 @@
         </p>
         <p>Your deposit amount is listed here along with other relevant appointment information.</p>
         <p>
-          Deposits can be paid through either
-          <a :href="venmoLink" target="_blank">Venmo</a> or
-          <a :href="cashAppLink" target="_blank">Cash App</a>
+          Deposits can be paid through either:
+          <span class="links">
+            <a :href="venmoLink" target="_blank">
+              <Venmo />
+            </a>
+            <a :href="cashAppLink" target="_blank">
+              <CashApp />
+            </a>
+          </span>
         </p>
       </div>
       <div class="booking-success__content__booking">
@@ -20,14 +26,17 @@
         <div class="info">
           <p>Name: {{user}}</p>
           <p>Services:
-            <span v-for="service in services" :key="service">
-              {{service}}&nbsp;
-            </span>
+            <span
+              v-for="service in services"
+              :key="service"
+              v-html="`${service}&nbsp;`"
+            />
           </p>
           <p>Appointment: {{bookingSuccess.date}} at {{bookingSuccess.time}}</p>
           <p>Appointment Length: {{bookingSuccess.duration_parsed}}</p>
           <p>Appointment Cost: ${{bookingSuccess.price}}</p>
           <p>Appointment Deposit: ${{bookingSuccess.deposit}}</p>
+          <p>Appointment Remainder: ${{bookingSuccess.price - bookingSuccess.deposit}}</p>
         </div>
       </div>
     </div>
@@ -36,9 +45,15 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
+import Venmo from '@/assets/svg/venmo.svg';
+import CashApp from '@/assets/svg/cashapp.svg';
 
 export default {
   name: 'BookingSuccess',
+  components: {
+    Venmo,
+    CashApp,
+  },
   computed: {
     ...mapState(['bookingSuccess', 'appointmentData']),
     ...mapGetters(['isIOS', 'isMobile']),
@@ -90,8 +105,15 @@ export default {
       width: 100%;
       max-width: 600px;
       p {
+        .links {
+          display: flex;
+          margin-top: 10px;
+        }
         a {
-          white-space: nowrap;
+          margin-right: 10px;
+          display: flex;
+          width: 100px;
+          border: none;
         }
       }
       @include bpLarge {

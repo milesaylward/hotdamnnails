@@ -1,4 +1,13 @@
 /* eslint-disable */
+import SolidCover from '@/assets/images/designs/basic/solids/cover.jpg';
+import FrenchCover from '@/assets/images/designs/basic/french/cover.jpg';
+import MinimalCover from '@/assets/images/designs/minimal/cover.jpg';
+import ModerateCover from '@/assets/images/designs/moderate/cover.jpg';
+import ExtremeCover from '@/assets/images/designs/extreme/cover.jpg';
+
+function importAll(r) {
+  return r.keys().map(r);
+}
 export const HEADER_HEIGHT = 85;
 export const HEADER_HEIGHT_MOBILE = 65;
 export const USER_INPUTS = [
@@ -41,6 +50,82 @@ export const POLICY_COPY = [
     'I hope to see you all soon!!',
   ],
 ];
+
+export const DESIGN_CAROUSELS = [
+  {
+    cover: SolidCover,
+    title: 'Solid',
+    slides: importAll(require.context('@/assets/images/designs/basic/solids/slides', false, /\.(png|jpe?g|svg)$/)),
+    description: [
+      [
+        'Solid Styles:',
+        'Solid colors only on each nails',
+        'It can be different colors or one',
+      ]
+    ]
+  },
+  {
+    cover: FrenchCover,
+    title: 'French',
+    slides: importAll(require.context('@/assets/images/designs/basic/french/slides', false, /\.(png|jpe?g|svg)$/)),
+    description: [
+      [
+        'French Styles:',
+        'One style of French tips on set of nails.',
+        'It can be different colors or one',
+        'Styles of french tips include: Basic french, V-tips, Edge Tips, Diagonal, Thin line',
+        'Handpainted application method only'
+      ],
+      [
+        'Ombres:',
+        'Ombre application will depend on the color available.',
+		    'Some can be sponged, acrylic, or powdered.',
+      ]
+    ]
+  },
+  {
+    cover: MinimalCover,
+    title: 'Minimal',
+    slides: importAll(require.context('@/assets/images/designs/minimal/slides', false, /\.(png|jpe?g|svg)$/)),
+    description: [
+      [
+        'Minimal Styles:',
+        'Basic nails with 2-4 simple accent nails such as gold foils, glitter shapes',
+		    'It can be a set of nails with minimal abstract / organic art such as swirls, simple florals, glitter shapes or minimal detailed lines or marbles.',
+		    'The set is composed of 1-3 color palette',
+		    'Overall minimal look',
+      ]
+    ]
+  },
+  {
+    cover: ModerateCover,
+    title: 'Moderate',
+    slides: importAll(require.context('@/assets/images/designs/moderate/slides', false, /\.(png|jpe?g|svg)$/)),
+    description: [
+      [
+        'Moderate Styles:',
+        'Multiple nails with detailed accent nails or 3D / bling, chrome.',
+		    'It can be a set of nails with specific details such as fire, clouds, smiley faces, stars, your initials, checkerboard, logo or 	anything that seems detailed.',
+		    'Composed of 3+ color palette',
+		    'Most clients that likes handpainted designs or minimal bling arrangement choose this design category',
+      ]
+    ]
+  },
+  {
+    cover: ExtremeCover,
+    title: 'Extreme',
+    slides: importAll(require.context('@/assets/images/designs/extreme/slides', false, /\.(png|jpe?g|svg)$/)),
+    description: [
+      [
+        'Extreme Styles:',
+        'When most or all nails have different designs/ styles',
+		    'When most nails have multiple layered art such as chrome, sugar glitter, 3D / Bling.',
+		    'Unlimited color palette',
+		    'Any textured set, anime design, and other extremely detailed set may fall in this category.',
+      ]
+    ]
+  },
+]
 
 export const TEST_BOOKING = {
   "id": 659786147,

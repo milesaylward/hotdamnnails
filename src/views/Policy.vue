@@ -8,9 +8,9 @@
     />
     <div class="policy__content container">
       <div class="policy__content__blocks">
-        <Appearable v-for="block in content.blocks" :key="block.title">
+        <Appearable v-for="(block, index) in content.blocks" :key="index">
           <div class="block ap-child">
-            <h4 class="block__title">{{block.title}}</h4>
+            <h4 class="block__title" v-if="block.title">{{block.title}}</h4>
             <ul class="block__items">
               <li
                 class="block__items__item"
@@ -23,19 +23,6 @@
             </ul>
           </div>
         </Appearable>
-      </div>
-    </div>
-    <Appearable>
-      <hr />
-    </Appearable>
-    <div class="policy__recommended container">
-      <Appearable>
-        <div class="policy__recommended__title ap-child">
-          <h2 v-html="content.recommended.title.value" />
-          <h3>{{content.recommended.title.smallCopy}}</h3>
-        </div>
-      </Appearable>
-      <div class="policy__recommended__blocks">
         <Appearable
           v-for="block in content.recommended.blocks"
           :key="block.title"
@@ -57,11 +44,6 @@
               </li>
             </ul>
           </div>
-        </Appearable>
-        <Appearable>
-          <p class="policy__recommended__notice ap-child">
-            {{content.recommended.notice}} 😁
-          </p>
         </Appearable>
       </div>
     </div>

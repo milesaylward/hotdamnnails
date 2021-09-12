@@ -56,7 +56,12 @@ export default {
 <style lang="scss">
 .radio-option {
   padding: 0 14px;
-  margin-top: 15px;;
+  margin-top: 15px;
+  @include bpLarge {
+    padding: {
+      left: 0;
+    }
+  }
   h4 {
     margin-bottom: 10px;
   }

@@ -75,6 +75,17 @@ export default {
   }
   span {
     line-height: 1.2;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &.small {
+      font-size: 14px;
+      display: block;
+      white-space: nowrap;
+      & ~ br {
+        display: none;
+      }
+    }
   }
 }
 </style>

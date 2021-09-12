@@ -4,3 +4,8 @@
 @import './_grid.scss';
 @import './_stickersheet.scss';
 @import './_transitions.scss';
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}

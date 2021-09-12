@@ -65,9 +65,13 @@ export default {
     padding: 0 16px;
     h2 {
       padding: 0;
+      margin-top: 15px;
     }
     p {
       margin: 10px 0;
+    }
+    .hd-button {
+      height: 60px;
     }
     .terms {
       display: flex;

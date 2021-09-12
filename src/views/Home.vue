@@ -16,6 +16,11 @@
       <div class="hero__content">
         <Appearable>
           <Logo class="hero__logo ap-child" />
+          <span class="button-holder ap-child ap-child--1">
+            <router-link to="/booking">
+              <HDButton copy="Book with me" color="red" />
+            </router-link>
+          </span>
           <div class="scroll-prompt ap-child ap-child--2">
             <h4>{{content.scroll}}</h4>
             <button class="scroll-prompt__button" @click="scrollToPricing">
@@ -26,16 +31,19 @@
       </div>
       <Drip class="hero__drip" />
     </div>
+    <Designs />
   </div>
 </template>
 
 <script>
+import { mapActions, mapGetters, mapState } from 'vuex';
+import { HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '@/core/constants';
+import EventBus from '@/core/eventBus';
 import Logo from '@/assets/svg/logo.svg';
 import Arrow from '@/assets/svg/down_arrow.svg';
 import Drip from '@/assets/svg/drip.svg';
-import { HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '@/core/constants';
-import { mapActions, mapGetters, mapState } from 'vuex';
-import EventBus from '@/core/eventBus';
+import Designs from '@/components/Designs.vue';
+import HDButton from '../components/HDButton.vue';
 
 export default {
   name: 'Home',
@@ -43,6 +51,8 @@ export default {
     Logo,
     Arrow,
     Drip,
+    Designs,
+    HDButton,
   },
   data: () => ({
     fallback: true,
@@ -65,7 +75,7 @@ export default {
       deep: false,
       immediate: true,
       handler(val) {
-        if (val.hash === '#pricing') {
+        if (val.hash === '#designs') {
           this.$nextTick(() => { this.scrollToPricing(); });
         }
       },
@@ -81,7 +91,7 @@ export default {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
     scrollToPricing() {
-      let position = document.getElementById('pricing').getBoundingClientRect().top - this.offset;
+      let position = document.getElementById('designs').getBoundingClientRect().top - this.offset;
       const bodyTop = window.pageYOffset
                       || document.documentElement.scrollTop
                       || document.body.scrollTop || 0;
@@ -108,6 +118,20 @@ export default {
     justify-content: center;
     position: relative;
     overflow: hidden;
+    .button-holder {
+      width: 60%;
+      display: block;
+      margin: 30px auto;
+      max-width: 300px;
+      @include bpMedium {
+        margin: 30px auto;
+      }
+      .hd-button {
+        width: 100%;
+        padding: 20px 20px;
+        font-size: 20px;
+      }
+    }
     &__drip {
       position: absolute;
       bottom: -10px;
@@ -153,9 +177,9 @@ export default {
       display: flex;
       width: 75%;
       max-width: 400px;
-      margin-top: 25%;
+      margin-top: 15%;
       @include bpMedium {
-        margin-top: 10%;
+        margin-top: 30px;
       }
     }
     video, img {
@@ -163,7 +187,6 @@ export default {
       width: 110%;
       object-fit: cover;
       object-position: center;
-      margin-left: 10%;
       min-height: 100%;
     }
     img {
@@ -178,12 +201,14 @@ export default {
       align-items: center;
       margin-bottom: 75px;
       @include bpMedium {
-        margin-bottom: 125px;
+        margin-bottom: 100px;
       }
       text-align: center;
       h4 {
+        width: 205px;
         text-transform: uppercase;
         font-size: 24px;
+        // font-weight: normal;
         color: $white;
         margin-bottom: 25px;
       }

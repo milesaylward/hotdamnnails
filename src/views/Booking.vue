@@ -193,7 +193,7 @@ export default {
   data: () => ({
     fallback: true,
     currentStep: 0,
-    policyAccepted: false,
+    policyAccepted: false || process.env.NODE_ENV === 'development',
     appointmentType: null,
     addons: [],
     selected: [],
@@ -448,6 +448,11 @@ export default {
     padding: 0 14px;
     b {
       color: $hdRed;
+    }
+    @include bpLarge {
+      padding: {
+        left: 0;
+      }
     }
   }
   .shape-opts {

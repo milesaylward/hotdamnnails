@@ -6,7 +6,7 @@
       </a>
       <ul class="navigation__items" v-if="!isMobile">
         <li class="navigation__items__item">
-          <a @click="handleClick(true)">Pricing</a>
+          <a @click="handleClick(true)">Designs</a>
         </li>
         <li class="navigation__items__item">
           <router-link to="/policies">Policies</router-link>
@@ -40,7 +40,7 @@
             <a
               @click="handleClick"
             >
-              Pricing
+              Designs
             </a>
           </li>
           <li class="navigation__mobile-menu__items__item">
@@ -58,8 +58,8 @@
 </template>
 
 <script>
-import Logo from '@/assets/svg/header_logo.svg';
 import { mapGetters } from 'vuex';
+import Logo from '@/assets/svg/header_logo.svg';
 import EventBus from '@/core/eventBus';
 
 export default {
@@ -87,20 +87,20 @@ export default {
   methods: {
     handleClick(priceClick) {
       this.menuOpen = false;
-      if (priceClick && this.$route.hash === '#pricing') {
+      if (priceClick && this.$route.hash === '#designs') {
         this.menuOpen = false;
         return;
       }
       if (this.isHome) {
         if (priceClick) {
-          this.$router.replace({ path: '/', hash: '#pricing' });
+          this.$router.replace({ path: '/', hash: '#designs' });
           EventBus.emit('scrollToPricing');
         } else {
           this.$router.replace({ path: '/', hash: '' });
           EventBus.emit('scrollToTop');
         }
       } else if (priceClick) {
-        this.$router.push({ name: 'Home', hash: '#pricing' });
+        this.$router.push({ name: 'Home', hash: '#designs' });
       } else {
         this.$router.push({ name: 'Home' });
       }
@@ -184,6 +184,7 @@ export default {
         a {
           border-bottom: none;
           color: $hdRed;
+          cursor: pointer;
         }
       }
     }
@@ -258,6 +259,7 @@ export default {
       a {
         text-transform: uppercase;
         font-size: 16px;
+        cursor: pointer;
         @include bpMedium {
           font-size: 20px;
         }
