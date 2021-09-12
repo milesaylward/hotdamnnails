@@ -26,7 +26,6 @@
       </div>
       <Drip class="hero__drip" />
     </div>
-    <Pricing />
   </div>
 </template>
 
@@ -34,7 +33,6 @@
 import Logo from '@/assets/svg/logo.svg';
 import Arrow from '@/assets/svg/down_arrow.svg';
 import Drip from '@/assets/svg/drip.svg';
-import Pricing from '@/components/Pricing.vue';
 import { HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '@/core/constants';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import EventBus from '@/core/eventBus';
@@ -44,7 +42,6 @@ export default {
   components: {
     Logo,
     Arrow,
-    Pricing,
     Drip,
   },
   data: () => ({
