@@ -153,13 +153,18 @@ export default {
     border-top: 1px solid $hdLightGrey;
     border-bottom: 1px solid $hdLightGrey;
     display: flex;
+    flex-direction: column-reverse;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 0 10px;
     height: 80px;
     .title {
-      margin: 0;
+      margin: 0 0 20px;
       text-transform: uppercase;
+    }
+
+    .material-icons {
+      color: $hdRed;
     }
     @include bpLarge {
       display: none;

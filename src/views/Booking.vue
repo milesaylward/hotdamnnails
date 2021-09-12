@@ -266,7 +266,7 @@ export default {
     shapeOpts() {
       if (!this.appointmentType) return [];
       const opts = this.appointmentType.shape_opts;
-      return opts.sort((a, b) => { if (a.price < b.price) return 1; return -1; });
+      return opts.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
     },
     preOpts() {
       if (!this.appointmentType) return [];

@@ -100,7 +100,7 @@ export default {
 .dates {
   &.container {
     padding: 0;
-    margin-top: -180px;
+    margin-top: -130px;
     padding-bottom: 200px;
     display: block;
     position: relative;
@@ -231,6 +231,7 @@ export default {
     align-content: flex-start;
     justify-content: flex-start;
     max-height: $itemHeight * 4;
+    min-height: $itemHeight * 2;
     width: calc(100% - 68px);
     margin: 10px auto 0;
     @include bpLarge {
@@ -248,6 +249,7 @@ export default {
       color: $darkGrey;
       padding: 0;
       height: $itemHeight;
+      max-height: $itemHeight;
       border-radius: 4px;
       transition: background 300ms $easeOutMaterial,
                   opacity 300ms $easeOutMaterial;
