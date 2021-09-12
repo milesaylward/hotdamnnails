@@ -1,6 +1,6 @@
 <template>
   <button class="hd-button" @click="$emit('buttonClick')" :class="buttonClasses">
-    {{copy}}
+    <span v-html="copy" />
   </button>
 </template>
 <script>
@@ -72,6 +72,9 @@ export default {
   &.disabled {
     opacity: 0.35;
     pointer-events: none;
+  }
+  span {
+    line-height: 1.2;
   }
 }
 </style>

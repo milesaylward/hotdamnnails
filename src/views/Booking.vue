@@ -54,7 +54,7 @@
                       @buttonClick="handlePreChange(opt)"
                       :active="preChoice && preChoice.id === opt.id"
                       :inactive="preChoice && preChoice.id !== opt.id"
-                      :copy="opt.parsed_name"
+                      :copy="`${opt.parsed_name}<br>${opt.price}`"
                     />
                   </div>
                 </div>
@@ -68,7 +68,7 @@
                         @buttonClick="handleChooseLength(length)"
                         :active="lengthChoice && lengthChoice.id === length.id"
                         :inactive="lengthChoice && lengthChoice.id !== length.id"
-                        :copy="length.parsed_name"
+                        :copy="`${length.parsed_name}<br>${length.price}`"
                       />
                     </div>
                   </div>
@@ -84,7 +84,7 @@
                         @buttonClick="handleChooseShape(opt)"
                         :active="shapeChoice && shapeChoice.id === opt.id"
                         :inactive="shapeChoice && shapeChoice.id !== opt.id"
-                        :copy="opt.parsed_name"
+                        :copy="`${opt.parsed_name}<br>${opt.price}`"
                       />
                     </div>
                   </div>
@@ -101,8 +101,8 @@
                       If you're are unsure what to book please consult first.<br>
                       Basic does not include accent nails, please choose at least minimal
                       if you'd like any accent nails.<br>
-                      Check HD Nails Freestyle if you do not have design inspiration or would
-                      like a unique freestyle design.
+                      Check HD Nails Freestyle if you do not have design inspiration or if
+                      you’d like a unique freestyle in that category.
                     </p>
                     <div class="screen__content" v-if="designs.length">
                       <HDButton
@@ -112,7 +112,7 @@
                         @buttonClick="handleChooseDesign(design)"
                         :active="designChoice && designChoice.id === design.id"
                         :inactive="designChoice && designChoice.id !== design.id"
-                        :copy="design.parsed_name"
+                        :copy="`${design.parsed_name}<br>${design.price}`"
                       />
                     </div>
                     <RadioOption
@@ -308,6 +308,12 @@ export default {
         this.showUserForm = false;
       },
     },
+    computedDates: {
+      handler(val) {
+        if (val.length) [[this.activeDate]] = val;
+      },
+      deep: true,
+    },
   },
   methods: {
     ...mapActions([
@@ -484,9 +490,9 @@ export default {
       }
     }
     .hd-button {
-      width: 50%;
+      width: calc(50% - 8px);
       padding: 20px 0;
-      margin: 0;
+      margin: 4px;
       &.full-width {
         width: 100%;
         @include bpLarge {

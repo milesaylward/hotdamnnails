@@ -47,9 +47,6 @@ export default {
     accepted: false,
     showError: false,
   }),
-  mounted() {
-    console.log(this.accepted);
-  },
   methods: {
     updateInfo(e, name) {
       this.formData[name] = e.target.value;
@@ -156,13 +153,14 @@ export default {
     }
   }
   .submit {
-    margin-top: 10px;
+    margin-top: 20px;
+    height: 46px;
     width: 100%;
   }
 
   .error {
     color: $hdRed;
-    margin: 20px 0 15px;
+    margin: 20px 0 0;
     transition: opacity 300ms $easeOutMaterial;
   }
 }

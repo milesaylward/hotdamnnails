@@ -37,18 +37,17 @@
       />
         <ul class="navigation__mobile-menu__items">
           <li class="navigation__mobile-menu__items__item">
-            <router-link
-              :to="{name: 'Home', hash: '#pricing'}"
-              @click="menuOpen = false"
+            <a
+              @click="handleClick"
             >
               Pricing
-            </router-link>
+            </a>
           </li>
           <li class="navigation__mobile-menu__items__item">
-            <router-link @click="menuOpen = false" to="/policies">Policies</router-link>
+            <router-link to="/policies">Policies</router-link>
           </li>
           <li class="navigation__mobile-menu__items__item">
-            <router-link @click="menuOpen = false" to="/booking">Booking</router-link>
+            <router-link to="/booking">Booking</router-link>
           </li>
         </ul>
       </div>
@@ -73,13 +72,31 @@ export default {
   },
   computed: {
     ...mapGetters(['isMobile']),
+    isHome() {
+      return this.$route.name === 'Home';
+    },
+    currentRouteName() {
+      return this.$route.name;
+    },
+  },
+  watch: {
+    $route() {
+      this.menuOpen = false;
+    },
   },
   methods: {
     handleClick(priceClick) {
-      if (this.$route.name === 'Home') {
+      this.menuOpen = false;
+      if (priceClick && this.$route.hash === '#pricing') {
+        this.menuOpen = false;
+        return;
+      }
+      if (this.isHome) {
         if (priceClick) {
+          this.$router.replace({ path: '/', hash: '#pricing' });
           EventBus.emit('scrollToPricing');
         } else {
+          this.$router.replace({ path: '/', hash: '' });
           EventBus.emit('scrollToTop');
         }
       } else if (priceClick) {

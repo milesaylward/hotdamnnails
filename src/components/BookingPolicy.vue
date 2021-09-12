@@ -74,14 +74,14 @@ export default {
       align-items: center;
       margin: 25px 0 10px;
       p {
-        margin-left: 10px;
+        margin-left: 15px;
         line-height: 1;
         a {
           font-size: inherit;
         }
       }
       .switch {
-        $size: 28px;
+        $size: 38px;
         $halfSize: $size / 2;
         display: inline-block;
         height: $halfSize;

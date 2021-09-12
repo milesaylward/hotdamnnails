@@ -65,7 +65,7 @@ export default {
   },
   watch: {
     $route: {
-      deep: true,
+      deep: false,
       immediate: true,
       handler(val) {
         if (val.hash === '#pricing') {

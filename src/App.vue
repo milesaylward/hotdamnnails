@@ -24,16 +24,13 @@ export default {
     ...mapGetters(['pageLoaded', 'siteDataLoaded', 'isTouchDevice']),
   },
   watch: {
-    $route: {
-      deep: true,
-      handler(val, prevVal) {
-        if (val.name !== prevVal.name) {
-          this.setPageLoaded(false);
-          window.scrollTo({
-            top: 0,
-          });
-        }
-      },
+    $route(val, prevVal) {
+      if (val.name !== prevVal.name) {
+        // this.setPageLoaded(false);
+        window.scrollTo({
+          top: 0,
+        });
+      }
     },
     isTouchDevice: {
       immediate: true,

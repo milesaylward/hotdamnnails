@@ -136,7 +136,7 @@ export default {
   left: 0;
   background: white;
   z-index: 1000;
-  transform: translateY(calc(100% - 50px));
+  transform: translateY(calc(100% - 80px));
   transition: transform 400ms $easeOutMaterial;
   display: flex;
   flex-direction: column;
@@ -156,7 +156,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 0 10px;
-    height: 50px;
+    height: 80px;
     .title {
       margin: 0;
       text-transform: uppercase;
