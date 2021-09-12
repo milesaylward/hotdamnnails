@@ -18,8 +18,10 @@
     "lodash": "^4.17.21",
     "luxon": "^2.0.2",
     "mitt": "^2.1.0",
+    "swiper": "^7.0.5",
     "ua-parser-js": "^0.7.28",
     "vue": "^3.0.0",
+    "vue-awesome-swiper": "^4.1.1",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
   },
