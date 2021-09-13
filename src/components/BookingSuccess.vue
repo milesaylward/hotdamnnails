@@ -113,7 +113,12 @@ export default {
           margin-right: 10px;
           display: flex;
           width: 100px;
+          height: 30px;
           border: none;
+          svg {
+            width: 100%;
+            height: 100%;
+          }
         }
       }
       @include bpLarge {
