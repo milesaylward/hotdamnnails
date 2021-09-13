@@ -16,7 +16,7 @@
           @change="handleChange(opt)"
         >
         <span class="radio__control"></span>
-        <span class="radio__label" v-html="opt.parsed_name" />
+        <span class="radio__label" v-html="getCopy(opt.parsed_name)" />
       </div>
     </div>
   </div>
@@ -48,6 +48,11 @@ export default {
   methods: {
     handleChange(opt) {
       this.$emit('changeOpt', opt);
+    },
+    getCopy(copy) {
+      const computedCopy = copy;
+      const small = computedCopy.match(/\((.*)\)/);
+      return small ? computedCopy.replace(/\((.*)\)/, `<span class="small">${small[0]}</span>`) : computedCopy;
     },
   },
 };

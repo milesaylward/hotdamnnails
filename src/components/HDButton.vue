@@ -1,6 +1,6 @@
 <template>
   <button class="hd-button" @click="$emit('buttonClick')" :class="buttonClasses">
-    <span v-html="copy" />
+    <span v-html="computedCopy" />
   </button>
 </template>
 <script>
@@ -34,6 +34,11 @@ export default {
       if (this.inactive) classes.push('inactive');
       if (this.disabled) classes.push('disabled');
       return classes;
+    },
+    computedCopy() {
+      const computedCopy = this.copy;
+      const small = this.copy.match(/\((.*)\)/);
+      return small ? computedCopy.replace(/\((.*)\)/, `<span class="small">${small[0]}</span>`) : computedCopy;
     },
   },
 };

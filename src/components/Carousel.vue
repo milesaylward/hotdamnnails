@@ -98,6 +98,8 @@ export default {
       gsap.to(this, {
         offsetPosition: val * -this.slideWidth,
         clientMove: 0,
+        ease: 'power2.out',
+        duration: 0.35,
       });
     },
     viewWidth() {
@@ -125,11 +127,13 @@ export default {
     },
     clearStartPos() {
       this.startPos = null;
-      if (Math.abs(this.clientMove) > 20) {
+      if (Math.abs(this.clientMove) > 50) {
         if (this.clientMove > 0) {
           if (this.activeIndex === 0) {
             gsap.to(this, {
               clientMove: 0,
+              ease: 'power2.out',
+              duration: 0.35,
             });
           } else {
             this.activeIndex -= 1;
@@ -137,10 +141,18 @@ export default {
         } else if (this.activeIndex === this.totalItems) {
           gsap.to(this, {
             clientMove: 0,
+            ease: 'power2.out',
+            duration: 0.35,
           });
         } else {
           this.activeIndex += 1;
         }
+      } else {
+        gsap.to(this, {
+          clientMove: 0,
+          ease: 'power2.out',
+          duration: 0.35,
+        });
       }
     },
     setStartPos(e) {
