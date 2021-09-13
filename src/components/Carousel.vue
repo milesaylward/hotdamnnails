@@ -84,7 +84,7 @@ export default {
       return this.images.length - 1;
     },
     images() {
-      let images = this.items;
+      let images = [...this.items];
       if (this.items.length > 9) {
         images = images.sort(() => 0.5 - Math.random());
         images = images.slice(0, 9);
@@ -177,6 +177,7 @@ export default {
   margin: 25px 0;
   &__controls {
     position: absolute;
+    touch-action: pan-y;
     top: 0;
     left: 0;
     width: 100%;
