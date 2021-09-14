@@ -52,7 +52,7 @@ const fetchData = async (data) => {
     const out = [];
     const date = DateTime.now().setZone('America/New_York');
     const currMonth = date.toISODate().substr(0, 7);
-    const nextMonth = date.plus({ weeks: 1 }).toISODate().substr(0, 7);
+    const nextMonth = date.plus({ weeks: 4 }).toISODate().substr(0, 7);
     const dates = await fetchDates([currMonth, currMonth !== nextMonth && nextMonth], data);
     const times = await fetchTimes(dates, data);
     Object.keys(times)

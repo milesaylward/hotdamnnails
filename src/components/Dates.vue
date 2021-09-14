@@ -170,14 +170,14 @@ export default {
           left: 0px;
           transform: translate(-25%, -50%);
           @include bpLarge {
-            transform: translate(0%, -50%);
+            transform: translate(-150%, -50%);
           }
         }
         &--next {
           right: 0px;
           transform: translate(25%, -50%);
            @include bpLarge {
-            transform: translate(0%, -50%);
+            transform: translate(150%, -50%);
           }
         }
       }
