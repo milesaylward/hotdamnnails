@@ -108,6 +108,11 @@ export default {
     @include bpLarge {
       margin-top: -160px;
     }
+    &.soak {
+      @include bpLarge {
+        margin-top: 0;
+      }
+    }
   }
   h1.title {
     padding: 0 14px;
@@ -230,7 +235,7 @@ export default {
     flex-wrap: wrap;
     align-content: flex-start;
     justify-content: flex-start;
-    max-height: $itemHeight * 4;
+    max-height: $itemHeight * 5;
     min-height: $itemHeight * 2;
     width: calc(100% - 68px);
     margin: 10px auto 0;

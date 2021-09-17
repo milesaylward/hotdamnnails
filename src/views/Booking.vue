@@ -140,6 +140,7 @@
         </div>
         <transition name="fade" @enter="handleScrollTo('dates')">
           <Dates
+            :class="{ soak: isSoakOff }"
             ref="dates"
             v-if="computedDates.length"
             :activeDate="activeDate"
@@ -162,6 +163,7 @@
     <transition name="fade">
       <BookingLoader v-if="bookingLoading" />
     </transition>
+    <BookingError />
   </div>
 </template>
 
@@ -176,6 +178,7 @@ import Dates from '@/components/Dates.vue';
 import BookingLoader from '@/components/BookingLoader.vue';
 import BookingPolicy from '@/components/BookingPolicy.vue';
 import BookingSuccess from '@/components/BookingSuccess.vue';
+import BookingError from '@/components/BookingError.vue';
 
 export default {
   name: 'Booking',
@@ -189,6 +192,7 @@ export default {
     BookingLoader,
     BookingSuccess,
     BookingPolicy,
+    BookingError,
   },
   data: () => ({
     fallback: true,

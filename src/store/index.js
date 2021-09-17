@@ -18,6 +18,8 @@ export default createStore({
     bookingLoading: false,
     bookingSuccess: null,
     bookingError: false,
+    bookingErrorBlocked: false,
+    bookingErrorCopy: '',
     app: {},
   },
   mutations: {
@@ -53,9 +55,11 @@ export default createStore({
       state.bookingLoading = false;
       state.bookingSuccess = booking;
     },
-    [types.SET_BOOKING_ERROR](state) {
+    [types.SET_BOOKING_ERROR](state, { copy, isBlocked }) {
       state.bookingLoading = false;
       state.bookingError = true;
+      state.bookingErrorCopy = copy;
+      state.bookingErrorBlocked = isBlocked;
     },
     [types.SET_ADMIN_AUTH](state, bool) {
       state.adminError = false;
@@ -64,6 +68,11 @@ export default createStore({
     [types.SET_ADMIN_ERROR](state) {
       state.adminLoggedIn = false;
       state.adminError = true;
+    },
+    [types.CLEAR_BOOKING_ERROR](state) {
+      state.bookingError = false;
+      state.bookingErrorBlocked = false;
+      state.bookingErrorCopy = '';
     },
   },
   getters: {
@@ -96,6 +105,9 @@ export default createStore({
     clearAvailableDates({ commit }) {
       commit(types.CLEAR_AVAILABLE_DATES);
     },
+    clearBookingError({ commit }) {
+      commit(types.CLEAR_BOOKING_ERROR);
+    },
     fetchSiteData({ commit }) {
       fetch('/.netlify/functions/get-copy').then((response) => response.json())
         .then((data) => {
@@ -125,18 +137,21 @@ export default createStore({
       fetch('./.netlify/functions/book', {
         method: 'POST',
         body: JSON.stringify(data),
-      }).then((res) => {
-        if (res.status === 200) {
-          return res.json();
-        }
-        throw new Error(res);
-      }).then((response) => {
-        commit(types.SET_BOOKING_LOADING, false);
-        commit(types.SET_BOOKING_SUCCESS, response);
-      }).catch(() => {
-        commit(types.SET_BOOKING_LOADING, false);
-        commit(types.SET_BOOKING_ERROR, true);
-      });
+      }).then((res) => res.json())
+        .then((response) => {
+          console.log(response);
+          if (response.status_code !== 200) {
+            const isBlocked = response.error === 'scheduling_forbidden';
+            const errorCopy = isBlocked
+              ? response.data.client_message
+              : 'Something went wrong please try again';
+            commit(types.SET_BOOKING_ERROR, { copy: errorCopy, isBlocked });
+            return;
+          }
+          commit(types.SET_BOOKING_LOADING, false);
+          commit(types.SET_BOOKING_SUCCESS, response);
+        }).catch(() => {
+        });
     },
     authAdmin({ commit }, data) {
       fetch('./.netlify/functions/auth', {
