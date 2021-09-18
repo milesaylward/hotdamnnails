@@ -139,8 +139,7 @@ export default createStore({
         body: JSON.stringify(data),
       }).then((res) => res.json())
         .then((response) => {
-          console.log(response);
-          if (response.status_code !== 200) {
+          if (response.status_code && response.status_code !== 200) {
             const isBlocked = response.error === 'scheduling_forbidden';
             const errorCopy = isBlocked
               ? response.data.client_message
