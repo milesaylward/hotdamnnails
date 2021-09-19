@@ -7,15 +7,16 @@
       </p>
       <h2 v-if="i === 0">Price & Time</h2>
       <p v-if="i === 1">-Coleene</p>
-      <div class="terms" v-if="i === 1">
-        <label class="switch" for="checkbox">
-          <input type="checkbox" id="checkbox" v-model="accepted" />
-          <div class="switch__slider"></div>
-        </label>
+      <Switch
+        class="terms"
+        v-if="i === 1"
+        id="termsSwitch"
+        @switchChange="handleSwitchChange"
+      >
         <p>I have read the message above and agree to all
           <router-link to="/policies" target="_blank">policies</router-link>.
         </p>
-      </div>
+      </Switch>
       <HDButton
         v-if="i === 1"
         copy="I AM READY TO BOOK"
@@ -30,11 +31,13 @@
 <script>
 import { POLICY_COPY } from '@/core/constants';
 import HDButton from './HDButton.vue';
+import Switch from './Switch.vue';
 
 export default {
   name: 'BookingPolicy',
   components: {
     HDButton,
+    Switch,
   },
   data: () => ({
     blocks: POLICY_COPY,
@@ -43,6 +46,9 @@ export default {
   methods: {
     handleAccept() {
       this.$emit('accept');
+    },
+    handleSwitchChange(val) {
+      this.accepted = val;
     },
   },
 };
@@ -82,50 +88,6 @@ export default {
         line-height: 1;
         a {
           font-size: inherit;
-        }
-      }
-      .switch {
-        $size: 38px;
-        $halfSize: $size / 2;
-        display: inline-block;
-        height: $halfSize;
-        position: relative;
-        width: $size;
-        input {
-          display:none;
-          &:checked ~ .switch {
-            &__slider {
-              background-color: $hdRed;
-              &:before {
-                transform: translate($halfSize, -50%);
-              }
-            }
-          }
-        }
-        &__slider {
-          background-color: #ccc;
-          bottom: 0;
-          cursor: pointer;
-          left: 0;
-          position: absolute;
-          width: $size;
-          height: $halfSize;
-          border-radius: $halfSize;
-          right: 0;
-          top: 0;
-          transition: all 300ms $easeOutMaterial;
-          &:before {
-            background-color: #fff;
-            content: "";
-            height: calc(100% - 4px);
-            width: calc(50% - 4px);
-            position: absolute;
-            transition: all 300ms $easeOutMaterial;
-            border-radius: 50%;
-            left: 2px;
-            top: 50%;
-            transform: translate(0%, -50%);
-          }
         }
       }
     }

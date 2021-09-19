@@ -1,6 +1,16 @@
 <template>
   <div class="dates container" ref="dates">
-    <h1 class="title">Dates & Times</h1>
+    <div class="dates__header">
+      <h1 class="title">Dates & Times</h1>
+      <Switch @switchChange="handleSwitchChange" id="dateSwitch" v-if="canShowAfterHours">
+        <p>View After Hours<span class="small">(10$ after hours fee applied)</span></p>
+      </Switch>
+      <p v-else>
+        <span class="small none">
+          (No after hours appointments available for selection)
+        </span>
+      </p>
+    </div>
     <div class="dates__container">
       <div class="controls" v-if="dates.length > 1">
         <button
@@ -46,7 +56,7 @@
       <div class="dates__time-options" v-if="activeDate" :key="activeDate.date" id="times">
         <button
           class="dates__time-options__time"
-          v-for="time in activeDate.times"
+          v-for="time in getTimes(activeDate)"
           :key="time.time"
           :class="{
             active: activeTime && activeTime.time === time.time,
@@ -62,7 +72,10 @@
 </template>
 
 <script>
+import Switch from './Switch.vue';
+
 export default {
+  components: { Switch },
   name: 'Dates',
   props: {
     dates: {
@@ -75,6 +88,12 @@ export default {
       required: true,
     },
     dateSize: {
+      required: true,
+    },
+    viewAfterHours: {
+      required: true,
+    },
+    canShowAfterHours: {
       required: true,
     },
   },
@@ -92,12 +111,47 @@ export default {
     handleDateControl(inc) {
       this.currentDateIndex += inc;
     },
+    getTimes(date) {
+      return this.viewAfterHours ? date.after_hours : date.normal_hours;
+    },
+    handleSwitchChange(val) {
+      this.currentDateIndex = 0;
+      this.$emit('afterHoursChange', val);
+    },
   },
 };
 </script>
 
 <style lang="scss">
 .dates {
+  &__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    margin-left: 18px;
+    @include bpLarge {
+      margin-left: 0;
+    }
+    .switch {
+      width: 100%;
+      justify-content: flex-start;
+      margin: 10px 0 0 14px;
+      @include bpMedium {
+        width: auto;
+        margin-top: 0;
+      }
+      p {
+        .small {
+          margin-left: 5px;
+        }
+      }
+    }
+    .none {
+      font-size: 85%;
+      margin-left: 0;
+    }
+  }
   &.container {
     padding: 0;
     margin-top: -130px;
@@ -116,8 +170,8 @@ export default {
   }
   h1.title {
     padding: 0 14px;
-    @include bpLarge {
-      margin-left: 0;
+    margin: 0;
+    @include bpMedium {
       padding: 0;
     }
   }

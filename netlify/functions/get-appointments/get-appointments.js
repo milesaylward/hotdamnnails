@@ -34,11 +34,16 @@ const fetchData = async () => {
     type.pre_opts = [];
     type.shape_opts = [];
     type.freestyle_opts = [];
+    type.after_hours_opts = [];
     type.addons.forEach(item => {
       item.price = parseFloat(item.price);
       if (item.name.includes('Design:')) {
         item.parsed_name = item.name.replace('Design:', '');
         type.designs_opts.push(item);
+      }
+      if (item.name.includes('AfterHours:')) {
+        item.parsed_name = item.name.replace('AfterHours:', '');
+        type.after_hours_opts.push(item);
       }
       if (item.name.includes('Pre:')) {
         item.parsed_name = item.name.replace('Pre:', '');

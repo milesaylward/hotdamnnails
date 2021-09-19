@@ -64,6 +64,17 @@ const fetchData = async (data) => {
         data.day_of_week = d.toFormat('ccc');
         data.date = d.toFormat('MMM dd');
         data.times = times[time];
+        data.normal_hours = times[time].filter(time => {
+          const hours = DateTime.fromISO(time.time, { zone: 'America/New_York' }).toLocaleString(DateTime.TIME_24_SIMPLE, { zone: 'America/New_York' }).replace(':', '');
+          if (hours < 1700) return time;
+        });
+        data.after_hours = times[time].filter(time => {
+          const hours = DateTime.fromISO(time.time, { zone: 'America/New_York' }).toLocaleString(DateTime.TIME_24_SIMPLE, { zone: 'America/New_York' }).replace(':', '');
+          if (hours >= 1700) {
+            time.after_hours = true;
+            return time;
+          }
+        });
         out.push(data);
       });
     return out;

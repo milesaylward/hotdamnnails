@@ -100,9 +100,7 @@
                       Design is the most important factor in appointment length & price.
                       If you're are unsure what to book please consult first.<br>
                       Basic does not include accent nails, please choose at least minimal
-                      if you'd like any accent nails.<br>
-                      Check HD Nails Freestyle if you do not have design inspiration or if
-                      you’d like a unique freestyle in that category.
+                      if you'd like any accent nails.
                     </p>
                     <div class="screen__content" v-if="designs.length">
                       <HDButton
@@ -115,12 +113,30 @@
                         :copy="`${design.parsed_name}<br>${design.price}`"
                       />
                     </div>
-                    <RadioOption
-                      v-if="!designChoice || designChoice.id !== designs[0].id"
-                      :options="freestyleOpts"
-                      :choice="freestyleChoice"
-                      @changeOpt="handleChooseFreestyle"
-                    />
+                  </div>
+                </transition>
+                <transition name="fade" @enter="handleScrollTo('freestyle')">
+                  <div
+                    ref="freestyle"
+                    v-if="showFreestyle && freestyleOpts.length"
+                  >
+                    <h1>
+                      Is this a unique freestyle design?
+                      <span class="small">
+                        (select freestyle if you don't have design inspiration)
+                      </span>
+                    </h1>
+                    <div class="screen__content">
+                      <HDButton
+                        v-for="opt in freestyleOpts"
+                        class="full-width"
+                        :key="opt.id"
+                        @buttonClick="handleChooseFreestyle(opt)"
+                        :active="freestyleChoice && freestyleChoice.id === opt.id"
+                        :inactive="freestyleChoice && freestyleChoice.id !== opt.id"
+                        :copy="`${opt.parsed_name}<br>${opt.price}`"
+                      />
+                    </div>
                   </div>
                 </transition>
               </div>
@@ -145,11 +161,14 @@
             v-if="computedDates.length"
             :activeDate="activeDate"
             :dates="computedDates"
+            :viewAfterHours="viewAfterHours"
+            :canShowAfterHours="canShowAfterHours"
             :dateSize="dateSize"
             :activeTime="activeTime"
             @setDate="setActiveDate"
             @setTime="setSelectedTime"
             @scrollTo="handleScrollTo"
+            @afterHoursChange="handleAfterHoursChange"
           />
         </transition>
         <transition name="fade" @enter="handleScrollTo('form')">
@@ -219,6 +238,7 @@ export default {
     activeDate: null,
     activeTime: null,
     totalSteps: 0,
+    viewAfterHours: false,
   }),
   computed: {
     ...mapState([
@@ -255,6 +275,12 @@ export default {
       if (!this.appointmentType) return false;
       return this.appointmentType.name === 'Soak Off Only';
     },
+    showFreestyle() {
+      const { designChoice } = this;
+      return designChoice
+        && designChoice.parsed_name.indexOf('Basic') < 0
+        && designChoice.parsed_name.indexOf('Fill') < 0;
+    },
     datesToShow() {
       return this.isLarge ? 10 : 4;
     },
@@ -262,10 +288,18 @@ export default {
       const { availableDates } = this;
       if (!availableDates) return [];
       const arrayOfArrays = [];
-      for (let i = 0; i < availableDates.length; i += this.datesToShow) {
-        arrayOfArrays.push(availableDates.slice(i, i + this.datesToShow));
+      const datesSelected = !this.viewAfterHours
+        ? availableDates : availableDates.filter((date) => date.after_hours.length > 0);
+      for (let i = 0; i < datesSelected.length; i += this.datesToShow) {
+        arrayOfArrays.push(datesSelected.slice(i, i + this.datesToShow));
       }
       return arrayOfArrays;
+    },
+    canShowAfterHours() {
+      const { availableDates } = this;
+      if (!availableDates) return false;
+      const afterHours = availableDates.filter((date) => date.after_hours.length > 0);
+      return afterHours.length > 0 && this.afterHoursOpts.length;
     },
     shapeOpts() {
       if (!this.appointmentType) return [];
@@ -280,7 +314,11 @@ export default {
     freestyleOpts() {
       if (!this.appointmentType) return [];
       const opts = this.appointmentType.freestyle_opts;
-      return opts.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
+      return opts.sort((a, b) => { if (a.price < b.price) return 1; return -1; });
+    },
+    afterHoursOpts() {
+      if (!this.appointmentType) return [];
+      return this.appointmentType.after_hours_opts;
     },
     lengths() {
       if (!this.appointmentType) return [];
@@ -298,9 +336,19 @@ export default {
       return designs.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
     },
     canShowTotal() {
-      if (this.isFresh) return this.preChoice && this.lengthChoice && this.designChoice;
-      if (this.isFill) return this.designChoice;
-      if (this.isGel) return this.designChoice;
+      if (this.isFresh) {
+        return this.preChoice
+          && this.lengthChoice && this.designChoice
+          && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
+      }
+      if (this.isFill) {
+        return this.designChoice
+          && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
+      }
+      if (this.isGel) {
+        return this.designChoice
+          && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
+      }
       return this.isSoakOff;
     },
   },
@@ -308,8 +356,13 @@ export default {
     addons: {
       deep: true,
       handler() {
-        this.clearAvailableDates();
-        this.showUserForm = false;
+        if (!this.ignoreChange) {
+          this.clearAvailableDates();
+          this.viewAfterHours = false;
+          this.showUserForm = false;
+        } else {
+          this.ignoreChange = false;
+        }
       },
     },
     computedDates: {
@@ -326,6 +379,15 @@ export default {
       'bookAppointment',
       'clearAvailableDates',
     ]),
+    handleAfterHoursChange(val) {
+      this.viewAfterHours = val;
+      this.activeTime = null;
+      this.showUserForm = false;
+      this.ignoreChange = true;
+      this.addons = this.addons.filter(
+        (addon) => addon.id !== this.afterHoursOpts[0].id,
+      );
+    },
     handleBookUser(user) {
       const addons = this.addons.map((addon) => addon.id);
       const data = {
@@ -357,6 +419,10 @@ export default {
     setSelectedTime(time) {
       this.activeTime = time;
       this.showUserForm = true;
+      if (time.after_hours) {
+        this.ignoreChange = true;
+        this.addons.push(this.afterHoursOpts[0]);
+      }
     },
     resetOpts() {
       this.addons = [];
@@ -469,6 +535,9 @@ export default {
     font-size: 24px;
     margin: 0 0 15px;
     padding: 25px 14px 0;
+    .small {
+      font-size: 60%;
+    }
     @include bpLarge {
       padding: {
         left: 0;
