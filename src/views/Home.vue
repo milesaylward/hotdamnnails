@@ -1,6 +1,6 @@
 <template>
   <div class="page page--home home">
-    <div class="hero" :style="{ height: heroHeight }">
+    <div class="hero">
       <div class="hero__overlay" />
       <video
         :src="content.video"
@@ -36,8 +36,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
-import { HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '@/core/constants';
+import { mapActions, mapGetters } from 'vuex';
 import EventBus from '@/core/eventBus';
 import Logo from '@/assets/svg/logo.svg';
 import Arrow from '@/assets/svg/down_arrow.svg';
@@ -59,13 +58,6 @@ export default {
   }),
   computed: {
     ...mapGetters(['getContentByPath', 'isMobile']),
-    ...mapState(['viewHeight']),
-    heroHeight() {
-      return `${this.viewHeight - (this.offset * 1.5)}px`;
-    },
-    offset() {
-      return this.isMobile ? HEADER_HEIGHT_MOBILE : HEADER_HEIGHT;
-    },
     content() {
       return this.getContentByPath('landing');
     },
@@ -118,6 +110,10 @@ export default {
     justify-content: center;
     position: relative;
     overflow: hidden;
+    height: calc(100vh - 130px);
+    @include bpMedium {
+      height: calc(100vh - 100px)
+    }
     .button-holder {
       width: 60%;
       display: block;
