@@ -289,7 +289,8 @@ export default {
       if (!availableDates) return [];
       const arrayOfArrays = [];
       const datesSelected = !this.viewAfterHours
-        ? availableDates : availableDates.filter((date) => date.after_hours.length > 0);
+        ? availableDates.filter((date) => date.normal_hours.length > 0)
+        : availableDates.filter((date) => date.after_hours.length > 0);
       for (let i = 0; i < datesSelected.length; i += this.datesToShow) {
         arrayOfArrays.push(datesSelected.slice(i, i + this.datesToShow));
       }
