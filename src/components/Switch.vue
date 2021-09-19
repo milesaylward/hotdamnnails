@@ -33,7 +33,6 @@ export default {
 <style lang="scss">
 .switch {
   display: flex;
-  justify-content: center;
   align-items: center;
   cursor: pointer;
   .small {
