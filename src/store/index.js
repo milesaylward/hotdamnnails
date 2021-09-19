@@ -90,7 +90,7 @@ export default createStore({
     },
     siteDataLoaded: (state) => state.app && state.appointmentData,
     pageLoaded: (state, getters) => getters.siteDataLoaded && state.pageLoaded,
-    isMobile: (state) => state.viewWidth < 600,
+    isMobile: (state) => state.viewWidth < 600 || window.innerWidth < 600,
     isLarge: (state) => state.viewWidth > 1024,
     isIOS: () => parser.getOS().name === 'iOS',
     isAdmin: (state) => state.adminLoggedIn,
