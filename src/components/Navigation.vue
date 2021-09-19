@@ -4,7 +4,7 @@
       <a @click="handleClick(false)" class="navigation__logo">
         <Logo />
       </a>
-      <ul class="navigation__items" v-if="!isMobile">
+      <ul class="navigation__items">
         <li class="navigation__items__item">
           <a @click="handleClick(true)">Designs</a>
         </li>
@@ -19,7 +19,6 @@
         class="navigation__mobile-icon"
         :class="{ open: menuOpen }"
         @click="menuOpen = !menuOpen"
-        v-else
       >
         <span></span>
         <span></span>
@@ -29,7 +28,6 @@
       <div
         class="navigation__mobile-menu"
         :class="{ open: menuOpen }"
-        v-if="isMobile"
       >
       <div
         class="navigation__mobile-menu__overlay"
@@ -143,6 +141,9 @@ export default {
     height: 100%;
     z-index: 1000;
     pointer-events: none;
+    @include bpMedium {
+      display: none;
+    }
     &.open {
       pointer-events: all;
       .navigation__mobile-menu {
@@ -201,6 +202,9 @@ export default {
     position: relative;
     transform: rotate(0deg);
     transition: .5s $easeOutMaterial;
+    @include bpMedium {
+      display: none;
+    }
     span {
       display: block;
       position: absolute;
@@ -236,6 +240,7 @@ export default {
     display: flex;
     width: 45%;
     max-width: 200px;
+    min-width: 150px;
     border: none;
     flex-shrink: 0;
     max-height: 100%;
@@ -246,11 +251,14 @@ export default {
   }
   &__items {
     padding: 0;
-    display: flex;
     list-style: none;
     margin-left: auto;
     align-items: center;
     justify-content: center;
+    display: none;
+    @include bpMedium {
+      display: flex;
+    }
     &__item {
       margin: 0 15px;
       &:last-child {
