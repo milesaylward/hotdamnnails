@@ -216,7 +216,7 @@ export default {
   data: () => ({
     fallback: true,
     currentStep: 0,
-    policyAccepted: false || process.env.NODE_ENV === 'development',
+    policyAccepted: false,
     appointmentType: null,
     addons: [],
     selected: [],
@@ -372,6 +372,10 @@ export default {
       },
       deep: true,
     },
+  },
+  beforeUnmount() {
+    this.resetOpts();
+    this.policyAccepted = false;
   },
   methods: {
     ...mapActions([
