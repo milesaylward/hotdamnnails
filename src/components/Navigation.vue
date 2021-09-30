@@ -34,19 +34,22 @@
         @click="menuOpen = false;"
       />
         <ul class="navigation__mobile-menu__items">
-          <li class="navigation__mobile-menu__items__item">
-            <a
-              @click="handleClick"
-            >
-              Designs
-            </a>
-          </li>
-          <li class="navigation__mobile-menu__items__item">
-            <router-link to="/policies">Policies</router-link>
-          </li>
-          <li class="navigation__mobile-menu__items__item">
-            <router-link to="/booking">Booking</router-link>
-          </li>
+          <a
+            class="navigation__mobile-menu__items__item"
+            @click="handleClick"
+          >
+            Designs
+          </a>
+          <router-link
+            to="/policies"
+            class="navigation__mobile-menu__items__item"
+          >Policies</router-link>
+          <router-link
+            to="/booking"
+            class="navigation__mobile-menu__items__item"
+          >
+            Booking
+          </router-link>
         </ul>
       </div>
     </div>
@@ -145,7 +148,8 @@ export default {
       display: none;
     }
     &.open {
-      pointer-events: all;
+      pointer-events: initial;
+      visibility: visible;
       .navigation__mobile-menu {
         &__overlay { opacity: 1; }
         &__items { transform: translateX(0); }
@@ -174,19 +178,15 @@ export default {
       transform: translateX(100%);
       transition: transform 350ms $easeOutMaterial;
       &__item {
+        display: block;
+        width: 100%;
         font-size: 28px;
         text-align: center;
         padding: 15px 0;
         text-transform: uppercase;
-        // border-bottom: 1px solid $darkGrey;
-        &:first-child {
-          // border-top: 1px solid $darkGrey;
-        }
-        a {
-          border-bottom: none;
-          color: $hdRed;
-          cursor: pointer;
-        }
+        border-bottom: none;
+        color: $hdRed;
+        cursor: pointer;
       }
     }
   }

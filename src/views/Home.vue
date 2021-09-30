@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import gsap from 'gsap/all';
 import { mapActions, mapGetters } from 'vuex';
 import EventBus from '@/core/eventBus';
 import Logo from '@/assets/svg/logo.svg';
@@ -61,10 +62,16 @@ export default {
     content() {
       return this.getContentByPath('landing');
     },
+    routeName() {
+      return this.$route.name;
+    },
+    offset() {
+      return this.isMobile ? 50 : 80;
+    },
   },
   watch: {
     $route: {
-      deep: false,
+      deep: true,
       immediate: true,
       handler(val) {
         if (val.hash === '#designs') {
@@ -88,9 +95,10 @@ export default {
                       || document.documentElement.scrollTop
                       || document.body.scrollTop || 0;
       position += bodyTop;
-      window.scrollTo({
-        top: position,
-        behavior: 'smooth',
+      gsap.to(document.scrollingElement, {
+        scrollTop: position,
+        duration: 0.5,
+        ease: 'power2.out',
       });
     },
     handleVideoLoaded() {
