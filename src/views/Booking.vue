@@ -3,14 +3,11 @@
     <Hero
       title="Book with me"
       video="https://dl.airtable.com/.attachments/dda1f57a1256a5082a9a1267a89993d0/a3a6c324/policy_cover.mp4"
-      fallback="https://dl.airtable.com/.attachments/02217580f492a317fcf7ddf2d4f5e450/492d60b1/policy_fallback.jpeg"
+      fallback="https://dl.airtable.com/.attachments/6c8d983662ca89a89c2f0e822e9a3f11/6f571630/policy_cover_thumbnail.jpg"
       @load="handleVideoLoaded"
     />
     <transition name="fade" mode="out-in">
-      <BookingPolicy
-        @accept="policyAccepted = true;"
-        v-if="!policyAccepted"
-      />
+      <BookingPolicy v-if="!policyAccepted" />
       <div class="booking__wrapper" v-else-if="!bookingSuccess && policyAccepted">
         <div class="container main" ref="root">
           <div class="booking__content" :class="{ 'booking__content--total': appointmentType }">
@@ -224,7 +221,6 @@ export default {
   data: () => ({
     fallback: true,
     currentStep: 0,
-    policyAccepted: false,
     appointmentType: null,
     addons: [],
     selected: [],
@@ -256,6 +252,7 @@ export default {
       'bookingLoading',
       'bookingSuccess',
       'noDates',
+      'policyAccepted',
     ]),
     ...mapGetters(['isLarge']),
     preCopy() {

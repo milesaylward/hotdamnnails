@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
 import UAParser from 'ua-parser-js';
-// import { TEST_BOOKING } from '@/core/constants';
+import { TEST_BOOKING } from '@/core/constants';
 import parseData from './utils';
 import * as types from './mutationTypes';
 
@@ -16,8 +16,9 @@ export default createStore({
     adminError: false,
     datesLoading: false,
     bookingLoading: false,
-    bookingSuccess: null,
+    bookingSuccess: TEST_BOOKING,
     bookingError: false,
+    policyAccepted: false,
     noDates: false,
     bookingErrorBlocked: false,
     bookingErrorCopy: '',
@@ -78,6 +79,12 @@ export default createStore({
     [types.SET_NO_DATES](state, bool) {
       state.noDates = bool;
     },
+    [types.RESET_BOOKING](state) {
+      state.bookingSuccess = null;
+    },
+    [types.SET_POLICY_ACCEPTED](state, bool) {
+      state.policyAccepted = bool;
+    },
   },
   getters: {
     getContentByPath: (state) => (path) => {
@@ -111,6 +118,14 @@ export default createStore({
     },
     clearBookingError({ commit }) {
       commit(types.CLEAR_BOOKING_ERROR);
+    },
+    resetBooking({ commit }) {
+      commit(types.CLEAR_AVAILABLE_DATES);
+      commit(types.CLEAR_BOOKING_ERROR);
+      commit(types.RESET_BOOKING);
+    },
+    setPolicyAccepted({ commit }, bool) {
+      commit(types.SET_POLICY_ACCEPTED, bool);
     },
     fetchSiteData({ commit }) {
       fetch('/.netlify/functions/get-copy').then((response) => response.json())

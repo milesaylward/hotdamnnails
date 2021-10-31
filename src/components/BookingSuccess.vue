@@ -20,6 +20,11 @@
             </a>
           </span>
         </p>
+        <HDButton
+          copy="Book another Appointment"
+          color="red"
+          @buttonClick="handleButtonClick"
+        />
       </div>
       <div class="booking-success__content__booking">
         <h3>Appointment Information</h3>
@@ -44,15 +49,17 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import Venmo from '@/assets/svg/venmo.svg';
 import CashApp from '@/assets/svg/cashapp.svg';
+import HDButton from './HDButton.vue';
 
 export default {
   name: 'BookingSuccess',
   components: {
     Venmo,
     CashApp,
+    HDButton,
   },
   computed: {
     ...mapState(['bookingSuccess', 'appointmentData']),
@@ -82,6 +89,12 @@ export default {
       return 'intent://cash.me/$hotdamnnails#Intent;package=com.squareup.cash;scheme=https;end';
     },
   },
+  methods: {
+    ...mapActions(['resetBooking']),
+    handleButtonClick() {
+      this.resetBooking();
+    },
+  },
 };
 </script>
 
@@ -104,6 +117,9 @@ export default {
     &__copy {
       width: 100%;
       max-width: 600px;
+      .hd-button {
+        margin-top: 15px;
+      }
       p {
         .links {
           display: flex;

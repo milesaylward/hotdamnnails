@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import HDButton from './HDButton.vue';
 import Switch from './Switch.vue';
 
@@ -47,8 +47,9 @@ export default {
     content() { return this.getContentByPath('booking.policies'); },
   },
   methods: {
+    ...mapActions(['setPolicyAccepted']),
     handleAccept() {
-      this.$emit('accept');
+      this.setPolicyAccepted(true);
     },
     handleSwitchChange(val) {
       this.accepted = val;

@@ -91,10 +91,11 @@ export default {
     object-position: center;
     height: 100%;
     width: 100%;
+    z-index: 1;
   }
   img {
     position: absolute;
-    z-index: 1;
+    z-index: 2;
   }
   &__overlay {
     background: rgba(#000, 0.3);
@@ -103,7 +104,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2;
+    z-index: 3;
   }
   &__content {
     position: absolute;
@@ -111,7 +112,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 3;
+    z-index: 4;
     .appearable {
       width: 100%;
       height: 100%;

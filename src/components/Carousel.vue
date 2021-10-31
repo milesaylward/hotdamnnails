@@ -181,7 +181,7 @@ export default {
   margin: 25px 0;
   &__controls {
     position: absolute;
-    touch-action: pan-y;
+    touch-action: pan-x;
     top: 0;
     left: 0;
     width: 100%;
@@ -269,10 +269,12 @@ export default {
     overflow: hidden;
     position: relative;
     width: 100%;
+    touch-action: pan-y;
   }
   &__wrapper {
     width: 100%;
     display: flex;
+    touch-action: pan-y;
     &__slide {
       width: 100%;
       flex-shrink: 0;
