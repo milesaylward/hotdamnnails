@@ -11,6 +11,12 @@
         </span>
       </p>
     </div>
+    <div class="dates__sub">
+      <p>
+        First date shown below is the <b class="red">nearest</b>
+        date available for your selected appointment.
+      </p>
+    </div>
     <div class="dates__container">
       <div class="controls" v-if="dates.length > 1">
         <button
@@ -150,6 +156,12 @@ export default {
     .none {
       font-size: 85%;
       margin-left: 5px;
+    }
+  }
+  &__sub {
+    margin-bottom: 15px;
+    .red {
+      color: $hdRed;
     }
   }
   &.container {
