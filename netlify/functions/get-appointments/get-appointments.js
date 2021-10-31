@@ -35,7 +35,7 @@ const fetchData = async () => {
     type.shape_opts = [];
     type.freestyle_opts = [];
     type.after_hours_opts = [];
-    type.addons.forEach(item => {
+    type.addons.filter(addon => addon).forEach(item => {
       item.price = parseFloat(item.price);
       if (item.name.includes('Design:')) {
         item.parsed_name = item.name.replace('Design:', '');

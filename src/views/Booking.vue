@@ -267,26 +267,26 @@ export default {
     },
     isDesignOnly() {
       if (!this.appointmentType) return false;
-      return this.appointmentType.name === 'Hand Paint Design Only';
+      return this.appointmentType.id === 27823191;
     },
     isFresh() {
       if (!this.appointmentType) return false;
-      return this.appointmentType.name === 'Fresh Set';
+      return this.appointmentType.id === 26099563;
     },
     isGel() {
       if (!this.appointmentType) return false;
-      return this.appointmentType.name === 'Gel Manicure';
+      return this.appointmentType.id === 26100410;
     },
     preRequired() {
       return this.isFresh || this.isGel;
     },
     isFill() {
       if (!this.appointmentType) return false;
-      return this.appointmentType.name === 'Fills';
+      return this.appointmentType.id === 26100150;
     },
     isSoakOff() {
       if (!this.appointmentType) return false;
-      return this.appointmentType.name === 'Soak Off Only';
+      return this.appointmentType.id === 26100539;
     },
     showFreestyle() {
       const { designChoice } = this;
