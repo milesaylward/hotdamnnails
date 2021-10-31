@@ -13,4 +13,4 @@ export const SET_ADMIN_ERROR = 'Set/Admin error';
 export const CLEAR_BOOKING_ERROR = 'Clear/Booking Error';
 export const SET_NO_DATES = 'Set/No Dates';
 export const RESET_BOOKING = 'Reset Booking';
-export const SET_POLICY_ACCEPTED = 'Reset Booking';
+export const SET_POLICY_ACCEPTED = 'Set/Policy accepted';

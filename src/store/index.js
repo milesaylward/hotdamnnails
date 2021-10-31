@@ -1,6 +1,6 @@
 import { createStore } from 'vuex';
 import UAParser from 'ua-parser-js';
-import { TEST_BOOKING } from '@/core/constants';
+// import { TEST_BOOKING } from '@/core/constants';
 import parseData from './utils';
 import * as types from './mutationTypes';
 
@@ -16,7 +16,7 @@ export default createStore({
     adminError: false,
     datesLoading: false,
     bookingLoading: false,
-    bookingSuccess: TEST_BOOKING,
+    bookingSuccess: null,
     bookingError: false,
     policyAccepted: false,
     noDates: false,
@@ -122,6 +122,7 @@ export default createStore({
     resetBooking({ commit }) {
       commit(types.CLEAR_AVAILABLE_DATES);
       commit(types.CLEAR_BOOKING_ERROR);
+      commit(types.SET_POLICY_ACCEPTED, false);
       commit(types.RESET_BOOKING);
     },
     setPolicyAccepted({ commit }, bool) {
