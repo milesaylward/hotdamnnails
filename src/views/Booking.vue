@@ -91,7 +91,10 @@
                 </transition>
                 <transition name="fade" @enter="!isFill && handleScrollTo('design')">
                   <div
-                    v-if="(shapeChoice || (isGel && preChoice) || isFill) && designs.length"
+                    v-if="
+                      (shapeChoice || (isGel && preChoice) || (isFill || isDesignOnly))
+                      && designs.length
+                    "
                     ref="design"
                   >
                     <h1>Design</h1>
@@ -170,6 +173,11 @@
             @scrollTo="handleScrollTo"
             @afterHoursChange="handleAfterHoursChange"
           />
+          <div class="container main main--sub" v-else-if="noDates" ref="dates">
+            <h3>
+              Sorry there are no appointmentes available at this time.
+            </h3>
+          </div>
         </transition>
         <transition name="fade" @enter="handleScrollTo('form')">
           <div class="container main" v-if="showUserForm" ref="form">
@@ -247,6 +255,7 @@ export default {
       'datesLoading',
       'bookingLoading',
       'bookingSuccess',
+      'noDates',
     ]),
     ...mapGetters(['isLarge']),
     preCopy() {
@@ -255,6 +264,10 @@ export default {
       if (this.isFill) return 'Please check all that apply for your fill in:';
       if (this.isGel) return 'SELECT WHAT YOU NEED DONE PLEASE';
       return '';
+    },
+    isDesignOnly() {
+      if (!this.appointmentType) return false;
+      return this.appointmentType.name === 'Hand Paint Design Only';
     },
     isFresh() {
       if (!this.appointmentType) return false;
@@ -350,6 +363,7 @@ export default {
         return this.designChoice
           && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
       }
+      if (this.isDesignOnly) return this.designChoice;
       return this.isSoakOff;
     },
   },
@@ -516,6 +530,9 @@ export default {
     .main {
       position: relative;
       padding: 0;
+      &--sub {
+        margin-top: -100px;
+      }
     }
   }
   .note {

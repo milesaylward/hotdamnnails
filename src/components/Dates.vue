@@ -149,7 +149,7 @@ export default {
     }
     .none {
       font-size: 85%;
-      margin-left: 0;
+      margin-left: 5px;
     }
   }
   &.container {

@@ -59,12 +59,14 @@ export default {
   @include on-hover {
     background: $hdRed;
     color: white;
+    opacity: 1;
   }
   &.red {
     background: $hdRed;
     color: white;
     @include on-hover {
       background: darken($hdRed, 10%);
+      opacity: 1;
     }
   }
   &.active {

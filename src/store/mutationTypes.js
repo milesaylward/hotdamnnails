@@ -11,3 +11,4 @@ export const SET_BOOKING_ERROR = 'Set/Booking error';
 export const SET_ADMIN_AUTH = 'Set/Admin auth';
 export const SET_ADMIN_ERROR = 'Set/Admin error';
 export const CLEAR_BOOKING_ERROR = 'Clear/Booking Error';
+export const SET_NO_DATES = 'Set/No Dates';

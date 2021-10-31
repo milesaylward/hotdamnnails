@@ -1,22 +1,15 @@
 <template>
   <div id="designs" class="designs">
     <div class="designs__content container">
-      <h1>Designs</h1>
-      <p class="copy">
-        Below are some design examples grouped by the type
-        of design you would choose if you were booking.
-        As always if you have any confusion booking feel free
-        to consult with me on instagram
-        <a :href="igLink" target="_blank">@HotDamnNails</a>
-      </p>
+      <h1>{{content.title}}</h1>
+      <p class="copy" v-html="computedCopy" />
       <div class="designs__carousels">
         <Carousel
-          v-for="(block, index) in carouselBlocks"
+          v-for="(block, index) in carouselContent"
           :key="index"
-          :items="block.slides"
-          :cover="block.cover"
+          :items="block.images"
           :title="block.title"
-          :description="block.description"
+          :description="block.copy"
         />
       </div>
     </div>
@@ -26,22 +19,29 @@
 <script>
 import { mapGetters } from 'vuex';
 import Carousel from './Carousel.vue';
-import { DESIGN_CAROUSELS } from '@/core/constants';
 
 export default {
   name: 'Designs',
   components: {
     Carousel,
   },
-  data: () => ({
-    carouselBlocks: DESIGN_CAROUSELS,
-  }),
   computed: {
-    ...mapGetters(['isIOS', 'isMobile']),
+    ...mapGetters(['isIOS', 'isMobile', 'getContentByPath']),
+    carouselContent() { return this.getContentByPath('landing.carousels'); },
+    content() { return this.getContentByPath('landing.designs'); },
+    computedCopy() { return this.replaceString(this.content.copy, this.igLink); },
     igLink() {
       if (this.isIOS) return 'instagram://user?username=hotdamnnails';
       if (!this.isMobile) return 'https://www.instagram.com/hotdamnnails/';
       return 'intent://www.instagram.com/hotdamnnails/#Intent;package=com.instagram.android;scheme=https;end';
+    },
+  },
+  methods: {
+    replaceString(string, link) {
+      return string.replace(
+        /{{(.+?)}}/,
+        (match, inner) => `<a href="${link}" target="_blank">${inner}</a>`,
+      );
     },
   },
 };

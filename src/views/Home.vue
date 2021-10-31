@@ -9,7 +9,9 @@
         muted
         autoplay
         loop
-        @play="fallback = false;"
+        @play="videoPlay"
+        @pause="handleSuspend"
+        @suspend="handleSuspend"
         @canplay="handleVideoLoaded"
       />
       <img :src="content.fallback" v-if="fallback">
@@ -89,6 +91,14 @@ export default {
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     },
+    handleSuspend() {
+      if (this.$refs.video) {
+        this.fallback = this.$refs.video.paused;
+      }
+    },
+    videoPlay() {
+      this.fallback = false;
+    },
     scrollToPricing() {
       let position = document.getElementById('designs').getBoundingClientRect().top - this.offset;
       const bodyTop = window.pageYOffset
@@ -142,7 +152,7 @@ export default {
       left: 49%;
       width: 110%;
       transform: translate(-50%, 0) scaleY(-1);
-      z-index: 1;
+      z-index: 3;
       fill: white;
       height: 75px;
       pointer-events: none;
@@ -157,7 +167,7 @@ export default {
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 2;
+      z-index: 3;
     }
     &__content {
       position: absolute;
@@ -188,15 +198,17 @@ export default {
     }
     video, img {
       display: block;
-      width: 110%;
+      width: 100%;
       object-fit: cover;
       object-position: center;
-      min-height: 100%;
+      height: 100%;
+      position: relative;
+      z-index: 1;
     }
     img {
       margin-left: 0;
       position: absolute;
-      z-index: 1;
+      z-index: 2;
     }
     .scroll-prompt {
       display: flex;

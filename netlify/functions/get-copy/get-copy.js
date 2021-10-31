@@ -17,7 +17,10 @@ const fetchData = () => new Promise((resolve, reject) => {
         const small = record.get('small');
         let links = record.get('Links');
         if (links) links = links.split('\n').filter(link => !!link);
-        if (attachment && !value) value = attachment[0].url;
+        if (attachment && !value) {
+          if (attachment.length === 1) value = attachment[0].url;
+          else value = attachment.map(val => val.url);
+        }
         response[record.get('id')] = {
           value,
           smallCopy: small,

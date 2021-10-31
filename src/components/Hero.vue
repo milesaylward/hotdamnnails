@@ -8,11 +8,14 @@
   <div class="hero__overlay" />
   <video
     :src="video"
+    ref="video"
     playsinline
     muted
     autoplay
     loop
-    @play="showFallback = false;"
+    @play="handleVideoPlayed"
+    @pause="handleSuspend"
+    @suspend="handleSuspend"
     @canplay="$emit('load')"
   />
   <img :src="fallback" v-if="showFallback">
@@ -45,6 +48,16 @@ export default {
   data: () => ({
     showFallback: true,
   }),
+  methods: {
+    handleSuspend() {
+      if (this.$refs.video) {
+        this.showFallback = this.$refs.video.paused;
+      }
+    },
+    handleVideoPlayed() {
+      this.showFallback = false;
+    },
+  },
 };
 </script>
 
@@ -66,7 +79,7 @@ export default {
     left: 49%;
     width: 110%;
     transform: translate(-50%, 0) scaleY(-1);
-    z-index: 1;
+    z-index: 4;
     fill: white;
     height: 75px;
     @include bpMedium {
@@ -81,6 +94,7 @@ export default {
   }
   img {
     position: absolute;
+    z-index: 1;
   }
   &__overlay {
     background: rgba(#000, 0.3);
@@ -89,7 +103,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 2;
   }
   &__content {
     position: absolute;
@@ -97,7 +111,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2;
+    z-index: 3;
     .appearable {
       width: 100%;
       height: 100%;

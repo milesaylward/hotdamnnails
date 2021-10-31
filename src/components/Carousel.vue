@@ -83,15 +83,7 @@ export default {
     totalItems() {
       return this.images.length - 1;
     },
-    images() {
-      let images = [...this.items];
-      if (this.items.length > 9) {
-        images = images.sort(() => 0.5 - Math.random());
-        images = images.slice(0, 9);
-      }
-      if (this.cover) images.unshift(this.cover);
-      return images;
-    },
+    images() { return this.items; },
   },
   watch: {
     activeIndex(val) {

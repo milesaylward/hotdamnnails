@@ -18,6 +18,7 @@ export default createStore({
     bookingLoading: false,
     bookingSuccess: null,
     bookingError: false,
+    noDates: false,
     bookingErrorBlocked: false,
     bookingErrorCopy: '',
     app: {},
@@ -74,6 +75,9 @@ export default createStore({
       state.bookingErrorBlocked = false;
       state.bookingErrorCopy = '';
     },
+    [types.SET_NO_DATES](state, bool) {
+      state.noDates = bool;
+    },
   },
   getters: {
     getContentByPath: (state) => (path) => {
@@ -123,12 +127,17 @@ export default createStore({
     },
     getAvailableDates({ commit }, data) {
       commit(types.SET_DATES_LOADING, true);
+      commit(types.SET_NO_DATES, false);
       fetch('./.netlify/functions/get-availability', {
         method: 'POST',
         body: JSON.stringify(data),
       }).then((res) => res.json())
         .then((response) => {
-          commit(types.SET_AVAILABLE_DATES, response);
+          if (response.length) {
+            commit(types.SET_AVAILABLE_DATES, response);
+          } else {
+            commit(types.SET_NO_DATES, true);
+          }
           commit(types.SET_DATES_LOADING, false);
         });
     },

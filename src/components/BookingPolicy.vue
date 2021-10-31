@@ -1,11 +1,10 @@
 <template>
   <div class="booking-policy">
-    <h2 class="title">HEY, THANKS FOR CHECKING IN!</h2>
     <div class="container" v-for="(block, i) in blocks" :key="i">
-      <p v-for="line in block" :key="line">
+      <h2>{{block.title}}</h2>
+      <p v-for="line in block.lines" :key="line">
         {{line}}
       </p>
-      <h2 v-if="i === 0">Price & Time</h2>
       <p v-if="i === 1">-Coleene</p>
       <Switch
         class="terms"
@@ -19,7 +18,7 @@
       </Switch>
       <HDButton
         v-if="i === 1"
-        copy="I AM READY TO BOOK"
+        :copy="content.button"
         :disabled="!accepted"
         color="red"
         @click="handleAccept"
@@ -29,7 +28,7 @@
 </template>
 
 <script>
-import { POLICY_COPY } from '@/core/constants';
+import { mapGetters } from 'vuex';
 import HDButton from './HDButton.vue';
 import Switch from './Switch.vue';
 
@@ -40,9 +39,13 @@ export default {
     Switch,
   },
   data: () => ({
-    blocks: POLICY_COPY,
     accepted: false,
   }),
+  computed: {
+    ...mapGetters(['getContentByPath']),
+    blocks() { return this.content.blocks; },
+    content() { return this.getContentByPath('booking.policies'); },
+  },
   methods: {
     handleAccept() {
       this.$emit('accept');
