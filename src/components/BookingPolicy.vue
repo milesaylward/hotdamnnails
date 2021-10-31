@@ -5,16 +5,14 @@
       <p v-for="line in block.lines" :key="line">
         {{line}}
       </p>
-      <p v-if="i === 1">-Coleene</p>
+      <p v-if="i === 1">{{content.me}}</p>
       <Switch
         class="terms"
         v-if="i === 1"
         id="termsSwitch"
         @switchChange="handleSwitchChange"
       >
-        <p>I have read the message above and agree to all
-          <router-link to="/policies" target="_blank">policies</router-link>.
-        </p>
+      <p v-html="computedTerms" />
       </Switch>
       <HDButton
         v-if="i === 1"
@@ -45,6 +43,9 @@ export default {
     ...mapGetters(['getContentByPath']),
     blocks() { return this.content.blocks; },
     content() { return this.getContentByPath('booking.policies'); },
+    computedTerms() {
+      return this.replaceString(this.content.terms, '/policies');
+    },
   },
   methods: {
     ...mapActions(['setPolicyAccepted']),
@@ -53,6 +54,12 @@ export default {
     },
     handleSwitchChange(val) {
       this.accepted = val;
+    },
+    replaceString(string, link) {
+      return string.replace(
+        /{{(.+?)}}/,
+        (match, inner) => `<a href="${link}" target="_blank">${inner}</a>`,
+      );
     },
   },
 };

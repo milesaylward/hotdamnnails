@@ -160,6 +160,15 @@ export default {
   }
   &__sub {
     margin-bottom: 15px;
+    padding: 0 14px;
+    margin-left: 18px;
+    @include bpMedium {
+      padding: 0;
+    }
+    @include bpLarge {
+      margin: 0;
+      padding: 0;
+    }
     .red {
       color: $hdRed;
     }
