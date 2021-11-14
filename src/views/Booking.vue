@@ -99,8 +99,7 @@
                       <b>Note:</b>
                       Design is the most important factor in appointment length & price.
                       If you're are unsure what to book please consult first.<br>
-                      Basic does not include accent nails, please choose at least minimal
-                      if you'd like any accent nails.
+                      Solid and French sets fall under the Minimal category.
                     </p>
                     <div class="screen__content" v-if="designs.length">
                       <HDButton
