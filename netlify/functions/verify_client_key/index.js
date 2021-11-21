@@ -4,7 +4,7 @@ const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appPnF
 const getKey = () => new Promise((resolve, reject) => {
   base('Table 1').find('recNVPs96mRyxusfb', (err, record) => {
     if (err) reject(err)
-    else resolve(record.fields.value);
+    else resolve(record.fields.value.trim());
   });
 });
 
