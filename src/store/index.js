@@ -193,6 +193,11 @@ export default createStore({
         commit(types.SET_ADMIN_ERROR);
       });
     },
+    async verifyClientKey(context, data) {
+      const key = await fetch('./.netlify/functions/verify_client_key', { method: 'POST', body: JSON.stringify(data) });
+      const response = await key.json();
+      return { message: response.message, status: key.status };
+    },
     setPageLoaded({ commit }, bool) { commit(types.SET_PAGE_LOADED, bool); },
   },
 });
