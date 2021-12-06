@@ -12,6 +12,12 @@
   }
 }
 
+@mixin bpXLarge {
+  @media screen and (min-width: $xlg) {
+    @content;
+  }
+}
+
 @mixin on-hover {
   body:not(.touch) &:hover {
     @content;

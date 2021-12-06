@@ -202,7 +202,7 @@ export default {
     &__wrapper {
       overflow: hidden;
       width: calc(100% - 68px);
-      @include bpLarge {
+      @include bpXLarge {
         width: 100%;
       }
       margin: 0 auto;
@@ -234,7 +234,7 @@ export default {
         cursor: pointer;
         transition: background 500ms $easeOutMaterial,
                     color 500ms $easeOutMaterial;
-        @include bpLarge {
+        @include bpXLarge {
           width: 30px;
           height: 30px;
         }
@@ -249,14 +249,14 @@ export default {
         &--prev {
           left: 0px;
           transform: translate(-25%, -50%);
-          @include bpLarge {
+          @include bpXLarge {
             transform: translate(-150%, -50%);
           }
         }
         &--next {
           right: 0px;
           transform: translate(25%, -50%);
-           @include bpLarge {
+           @include bpXLarge {
             transform: translate(150%, -50%);
           }
         }

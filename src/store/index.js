@@ -18,7 +18,7 @@ export default createStore({
     bookingLoading: false,
     bookingSuccess: null,
     bookingError: false,
-    policyAccepted: false,
+    policyAccepted: false || process.env.NODE_ENV === 'development',
     noDates: false,
     bookingErrorBlocked: false,
     bookingErrorCopy: '',
