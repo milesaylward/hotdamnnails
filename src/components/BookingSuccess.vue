@@ -84,9 +84,9 @@ export default {
       return 'intent://paycharge?txn=pay&recipients=hotdamnnails#Intent;package=com.venmo;scheme=venmo;end';
     },
     cashAppLink() {
-      if (this.isIOS) return 'cashme://cash.me/$hotdamnnails';
-      if (!this.isMobile) return 'https://cash.app/$hotdamnnails';
-      return 'intent://cash.me/$hotdamnnails#Intent;package=com.squareup.cash;scheme=https;end';
+      if (this.isIOS) return 'cashme://cash.me/$hotdamnnails2';
+      if (!this.isMobile) return 'https://cash.app/$hotdamnnails2';
+      return 'intent://cash.me/$hotdamnnails2#Intent;package=com.squareup.cash;scheme=https;end';
     },
   },
   methods: {
