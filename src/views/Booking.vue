@@ -36,10 +36,10 @@
                   :addons="addons"
                   :copy="preCopy"
                   :choice="preChoice"
-                  v-if="preOpts.length && !isFresh && !isGel"
+                  v-if="preOpts.length && !isFresh && !isGel && !isGelExtension"
                   @changeOpt="handlePreChange"
                 />
-                <div v-if="isFresh || isGel" ref="pre">
+                <div v-if="isFresh || isGel || isGelExtension" ref="pre">
                   <h1>{{preCopy}}</h1>
                   <div class="screen__content">
                     <HDButton
@@ -71,8 +71,15 @@
                   </div>
                 </transition>
                 <transition name="fade" @enter="handleScrollTo('shapes')">
-                  <div v-if="(lengthChoice && isFresh) && shapeOpts.length" ref="shapes">
+                  <div
+                    v-if="(lengthChoice && (isFresh || isGelExtension)) && shapeOpts.length"
+                    ref="shapes"
+                  >
                     <h1>Shape</h1>
+                    <p class="note" v-if="shapeNote">
+                      <b>Note:</b>&nbsp;
+                      <span v-html="shapeNote" />
+                    </p>
                     <div class="screen__content">
                       <HDButton
                         class="full-width"
@@ -81,6 +88,7 @@
                         @buttonClick="handleChooseShape(opt)"
                         :active="shapeChoice && shapeChoice.id === opt.id"
                         :inactive="shapeChoice && shapeChoice.id !== opt.id"
+                        :disabled="inactiveShapes.indexOf(opt.id) > -1"
                         :copy="`${opt.parsed_name}<br>${opt.price}`"
                       />
                     </div>
@@ -89,17 +97,15 @@
                 <transition name="fade" @enter="!isFill && handleScrollTo('design')">
                   <div
                     v-if="
-                      (shapeChoice || (isGel && preChoice) || (isFill || isDesignOnly))
+                      (shapeChoice || (isGel && preChoice) || isFill)
                       && designs.length
                     "
                     ref="design"
                   >
                     <h1>Design</h1>
                     <p class="note">
-                      <b>Note:</b>
-                      Design is the most important factor in appointment length & price.
-                      If you're are unsure what to book please consult first.<br>
-                      Solid and French sets fall under the Minimal category.
+                      <b>Note:</b>&nbsp;
+                      <span v-html="designNote" />
                     </p>
                     <div class="screen__content" v-if="designs.length">
                       <HDButton
@@ -253,17 +259,37 @@ export default {
       'noDates',
       'policyAccepted',
     ]),
-    ...mapGetters(['isLarge']),
+    ...mapGetters(['isLarge', 'getContentByPath']),
+    designNote() {
+      return this.getContentByPath('booking.design_note');
+    },
     preCopy() {
       if (!this.appointmentType) return '';
-      if (this.isFresh) return 'Do you need a Soak Off?';
+      if (this.isFresh || this.isGel || this.isGelExtension) return 'Do you need a Soak Off?';
       if (this.isFill) return 'Please check all that apply for your fill in:';
-      if (this.isGel) return 'SELECT WHAT YOU NEED DONE PLEASE';
       return '';
     },
-    isDesignOnly() {
-      if (!this.appointmentType) return false;
-      return this.appointmentType.id === 27823191;
+    isXLongGelExtension() {
+      return this.lengthChoice && this.lengthChoice.id === 2577740;
+    },
+    isLongGelExtension() {
+      return this.lengthChoice && this.lengthChoice.id === 2577728;
+    },
+    shapeNote() {
+      let note;
+      if (this.isGelExtension) {
+        if (this.isXLongGelExtension) note = this.getContentByPath('booking.gelex.xlong_note');
+        if (this.isLongGelExtension) note = this.getContentByPath('booking.gelex.long_note');
+      }
+      return note;
+    },
+    inactiveShapes() {
+      if (this.isGelExtension) {
+        console.log(this.shapeOpts);
+        if (this.isXLongGelExtension) return [2577745, 2577744, 2577746];
+        if (this.isLongGelExtension) return [2577745, 2577746];
+      }
+      return [];
     },
     isFresh() {
       if (!this.appointmentType) return false;
@@ -271,7 +297,11 @@ export default {
     },
     isGel() {
       if (!this.appointmentType) return false;
-      return this.appointmentType.id === 26100410;
+      return this.appointmentType.id === 27823191;
+    },
+    isGelExtension() {
+      if (!this.appointmentType) return false;
+      return this.appointmentType.id === 30936228;
     },
     preRequired() {
       return this.isFresh || this.isGel;
@@ -346,7 +376,7 @@ export default {
       return designs.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
     },
     canShowTotal() {
-      if (this.isFresh) {
+      if (this.isFresh || this.isGelExtension) {
         return this.preChoice
           && this.lengthChoice && this.designChoice
           && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
@@ -359,7 +389,6 @@ export default {
         return this.designChoice
           && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
       }
-      if (this.isDesignOnly) return this.designChoice;
       return this.isSoakOff;
     },
   },
@@ -385,7 +414,6 @@ export default {
   },
   beforeUnmount() {
     this.resetOpts();
-    this.policyAccepted = false;
   },
   methods: {
     ...mapActions([
@@ -587,7 +615,7 @@ export default {
     }
     .hd-button {
       width: calc(50% - 8px);
-      padding: 20px 0;
+      padding: 20px 10px;
       margin: 4px;
       &.full-width {
         width: 100%;

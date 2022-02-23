@@ -14,6 +14,7 @@ const fetchData = () => new Promise((resolve, reject) => {
       records.forEach(function(record) {
         const attachment = record.get('Attachments');
         let value = record.get('value');
+        let active = record.get('active');
         const small = record.get('small');
         let links = record.get('Links');
         if (links) links = links.split('\n').filter(link => !!link);
@@ -21,6 +22,7 @@ const fetchData = () => new Promise((resolve, reject) => {
           if (attachment.length === 1) value = attachment[0].url;
           else value = attachment.map(val => val.url);
         }
+        if (!value && !attachment && active !== undefined) value = active;
         response[record.get('id')] = {
           value,
           smallCopy: small,

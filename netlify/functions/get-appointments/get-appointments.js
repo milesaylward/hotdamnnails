@@ -54,7 +54,8 @@ const fetchData = async () => {
         type.freestyle_opts.push(item);
       }
       if (item.name.includes('Length:')) {
-        item.parsed_name = item.name.replace('Length:', '');
+        const tempName = item.name.replace('Length:', '');
+        item.parsed_name = tempName.replace(' - Duplicate', '');
         type.length_opts.push(item);
       }
       if (item.name.includes('Shape:')) {

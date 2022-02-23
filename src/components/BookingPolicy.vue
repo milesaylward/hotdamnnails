@@ -6,9 +6,8 @@
         {{line}}
       </p>
       <p v-if="i === 1">{{content.me}}</p>
-      <label for="returning_client_code" v-if="i === 1" class="closed-label">
-        Booking is currently closed to new clients.
-        You may only book if you have a Returning Client Code
+      <label for="returning_client_code" v-if="i === 1 && showCodeEntry" class="closed-label">
+        {{content.return_label}}
       </label>
       <div class="input-container" v-if="i === 1">
         <input
@@ -16,6 +15,7 @@
           name="returning_client_code"
           v-model="key"
           placeholder="Returning Client Code"
+          v-if="showCodeEntry"
         />
         <transition name="fade">
           <div class="error" v-if="showErrorMessage">
@@ -66,6 +66,9 @@ export default {
     ...mapGetters(['getContentByPath']),
     blocks() { return this.content.blocks; },
     content() { return this.getContentByPath('booking.policies'); },
+    showCodeEntry() {
+      return this.getContentByPath('base.return_client_key_active');
+    },
     computedTerms() {
       return this.replaceString(this.content.terms, '/policies');
     },
@@ -79,14 +82,19 @@ export default {
   methods: {
     ...mapActions(['setPolicyAccepted', 'verifyClientKey']),
     handleAccept() {
-      this.verifyClientKey({ key: this.key.trim() }).then((res) => {
-        if (res.status !== 200) {
-          this.errorMessage = res.message;
-          this.showErrorMessage = true;
-          return;
-        }
+      console.log(this.showCodeEntry, 'testing');
+      if (this.showCodeEntry) {
+        this.verifyClientKey({ key: this.key.trim() }).then((res) => {
+          if (res.status !== 200) {
+            this.errorMessage = res.message;
+            this.showErrorMessage = true;
+            return;
+          }
+          this.setPolicyAccepted(true);
+        });
+      } else {
         this.setPolicyAccepted(true);
-      });
+      }
     },
     handleSwitchChange(val) {
       this.accepted = val;

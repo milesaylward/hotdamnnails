@@ -1,9 +1,10 @@
 <template>
   <main class="app" :class="{ mounted: pageLoaded }">
-    <Navigation />
-    <router-view v-if="siteDataLoaded" />
+    <Navigation v-if="!underMaintenance" />
+    <router-view v-if="siteDataLoaded && !underMaintenance" />
     <transition name="fade">
       <Loader v-if="!pageLoaded" />
+      <Maintenance v-else-if="pageLoaded && underMaintenance" />
     </transition>
   </main>
 </template>
@@ -13,15 +14,20 @@ import { mapActions, mapGetters } from 'vuex';
 import Navigation from '@/components/Navigation.vue';
 import Loader from '@/components/Loader.vue';
 import MediaListeners from '@/core/mediaListeners';
+import Maintenance from '@/components/Maintenance.vue';
 
 export default {
   name: 'App',
   components: {
     Navigation,
     Loader,
+    Maintenance,
   },
   computed: {
-    ...mapGetters(['pageLoaded', 'siteDataLoaded', 'isTouchDevice']),
+    ...mapGetters(['pageLoaded', 'siteDataLoaded', 'isTouchDevice', 'getContentByPath']),
+    underMaintenance() {
+      return this.getContentByPath('base.site_under_maintenance');
+    },
   },
   watch: {
     $route(val, prevVal) {
@@ -31,6 +37,9 @@ export default {
           top: 0,
         });
       }
+    },
+    siteDataLoaded() {
+      if (this.underMaintenance) this.setPageLoaded(true);
     },
     isTouchDevice: {
       immediate: true,
