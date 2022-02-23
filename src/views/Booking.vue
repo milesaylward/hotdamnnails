@@ -315,10 +315,7 @@ export default {
       return this.appointmentType.id === 26100539;
     },
     showFreestyle() {
-      const { designChoice } = this;
-      return designChoice
-        && designChoice.parsed_name.indexOf('Basic') < 0
-        && designChoice.parsed_name.indexOf('Fill') < 0;
+      return this.designChoice && this.designChoice.id !== 2166634;
     },
     datesToShow() {
       return this.isLarge ? 10 : 4;
