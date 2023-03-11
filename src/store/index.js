@@ -23,6 +23,9 @@ export default createStore({
     bookingErrorBlocked: false,
     bookingErrorCopy: '',
     app: {},
+    modalOpen: false,
+    modalType: null,
+    selectedDesign: null,
   },
   mutations: {
     [types.SET_SITE_DATA](state, { app }) {
@@ -85,6 +88,17 @@ export default createStore({
     [types.SET_POLICY_ACCEPTED](state, bool) {
       state.policyAccepted = bool;
     },
+    [types.SET_MODAL_OPEN](state, modalType) {
+      state.modalOpen = true;
+      state.modalType = modalType;
+    },
+    [types.SET_MODAL_CLOSED](state) {
+      state.modalOpen = false;
+      setTimeout(() => { state.modalType = null; }, 650);
+    },
+    [types.SET_SELECTED_DESIGN](state, type) {
+      state.selectedDesign = type;
+    },
   },
   getters: {
     getContentByPath: (state) => (path) => {
@@ -111,6 +125,12 @@ export default createStore({
       }
       return false;
     },
+    getItemHtml: () => (item) => {
+      const replaceString = (string, link) => string.replace(/{{(.+?)}}/, (match, inner) => `<a href="${link}" target="_blank">${inner}</a>`);
+      let html = item.value;
+      item.links.forEach((link) => { html = replaceString(html, link); });
+      return html;
+    },
   },
   actions: {
     clearAvailableDates({ commit }) {
@@ -118,6 +138,15 @@ export default createStore({
     },
     clearBookingError({ commit }) {
       commit(types.CLEAR_BOOKING_ERROR);
+    },
+    openModal({ commit }, type) {
+      commit(types.SET_MODAL_OPEN, type);
+    },
+    closeModal({ commit }) {
+      commit(types.SET_MODAL_CLOSED);
+    },
+    setSelectedDesign({ commit }, type) {
+      commit(types.SET_SELECTED_DESIGN, type);
     },
     resetBooking({ commit }) {
       commit(types.CLEAR_AVAILABLE_DATES);

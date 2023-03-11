@@ -74,3 +74,10 @@ export const TEST_BOOKING = {
   "isVerified": false,
   "scheduledBy": "hotdamnnails@gmail.com"
 };
+export const MODAL_TYPES = {
+  DESIGN_CONFIRM: 'DESIGN_CONFIRM',
+};
+
+export const EVENT_BUS_EVENTS = {
+  DESIGN_CONFIRM: 'DESIGN_CONFIRM',
+};

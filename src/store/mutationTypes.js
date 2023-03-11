@@ -14,3 +14,6 @@ export const CLEAR_BOOKING_ERROR = 'Clear/Booking Error';
 export const SET_NO_DATES = 'Set/No Dates';
 export const RESET_BOOKING = 'Reset Booking';
 export const SET_POLICY_ACCEPTED = 'Set/Policy accepted';
+export const SET_MODAL_OPEN = 'Set/Modal Open';
+export const SET_MODAL_CLOSED = 'Set/Modal Closed';
+export const SET_SELECTED_DESIGN = 'Set/Selected Design';

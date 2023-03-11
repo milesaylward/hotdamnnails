@@ -36,17 +36,17 @@
                   :addons="addons"
                   :copy="preCopy"
                   :choice="preChoice"
-                  v-if="preOpts.length && !isFresh && !isGel && !isGelExtension"
+                  v-if="preOpts.length && !showButtonOption"
                   @changeOpt="handlePreChange"
                 />
-                <div v-if="isFresh || isGel || isGelExtension" ref="pre">
+                <div v-if="showButtonOption" ref="pre">
                   <h1>{{preCopy}}</h1>
                   <div class="screen__content">
                     <HDButton
                       v-for="opt in preOpts"
                       :key="opt.id"
                       :class="{
-                        'full-width': isGel,
+                        'full-width': showButtonOption,
                       }"
                       @buttonClick="handlePreChange(opt)"
                       :active="preChoice && preChoice.id === opt.id"
@@ -72,7 +72,7 @@
                 </transition>
                 <transition name="fade" @enter="handleScrollTo('shapes')">
                   <div
-                    v-if="(lengthChoice && (isFresh || isGelExtension)) && shapeOpts.length"
+                    v-if="showShape"
                     ref="shapes"
                   >
                     <h1>Shape</h1>
@@ -97,7 +97,7 @@
                 <transition name="fade" @enter="!isFill && handleScrollTo('design')">
                   <div
                     v-if="
-                      (shapeChoice || (isGel && preChoice) || isFill)
+                      (shapeChoice || ((isGel || isPolyGelMani) && preChoice) || isFill)
                       && designs.length
                     "
                     ref="design"
@@ -125,12 +125,7 @@
                     ref="freestyle"
                     v-if="showFreestyle && freestyleOpts.length"
                   >
-                    <h1>
-                      Is this a unique freestyle design?
-                      <span class="small">
-                        (select freestyle if you don't have design inspiration)
-                      </span>
-                    </h1>
+                    <p class="confirm-inspiration" v-html="inspoCopy" />
                     <div class="screen__content">
                       <HDButton
                         v-for="opt in freestyleOpts"
@@ -139,7 +134,7 @@
                         @buttonClick="handleChooseFreestyle(opt)"
                         :active="freestyleChoice && freestyleChoice.id === opt.id"
                         :inactive="freestyleChoice && freestyleChoice.id !== opt.id"
-                        :copy="`${opt.parsed_name}<br>${opt.price}`"
+                        :copy="opt.parsed_name"
                       />
                     </div>
                   </div>
@@ -198,6 +193,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import eventBus from '@/core/eventBus';
 import Hero from '@/components/Hero.vue';
 import UserForm from '@/components/UserForm.vue';
 import RadioOption from '@/components/RadioOption.vue';
@@ -208,6 +204,7 @@ import BookingLoader from '@/components/BookingLoader.vue';
 import BookingPolicy from '@/components/BookingPolicy.vue';
 import BookingSuccess from '@/components/BookingSuccess.vue';
 import BookingError from '@/components/BookingError.vue';
+import { EVENT_BUS_EVENTS, MODAL_TYPES } from '../core/constants';
 
 export default {
   name: 'Booking',
@@ -259,13 +256,16 @@ export default {
       'noDates',
       'policyAccepted',
     ]),
-    ...mapGetters(['isLarge', 'getContentByPath']),
+    ...mapGetters(['isLarge', 'getContentByPath', 'getItemHtml']),
+    content() {
+      return this.getContentByPath('booking');
+    },
     designNote() {
       return this.getContentByPath('booking.design_note');
     },
     preCopy() {
       if (!this.appointmentType) return '';
-      if (this.isFresh || this.isGel || this.isGelExtension) return 'Do you need a Soak Off?';
+      if (this.showButtonOption) return 'Do you need a Soak Off?';
       if (this.isFill) return 'Please check all that apply for your fill in:';
       return '';
     },
@@ -285,7 +285,6 @@ export default {
     },
     inactiveShapes() {
       if (this.isGelExtension) {
-        console.log(this.shapeOpts);
         if (this.isXLongGelExtension) return [2577745, 2577744, 2577746];
         if (this.isLongGelExtension) return [2577745, 2577746];
       }
@@ -302,6 +301,14 @@ export default {
     isGelExtension() {
       if (!this.appointmentType) return false;
       return this.appointmentType.id === 30936228;
+    },
+    isPolyGel() {
+      if (!this.appointmentType) return false;
+      return this.appointmentType.id === 42337457;
+    },
+    isPolyGelMani() {
+      if (!this.appointmentType) return false;
+      return this.appointmentType.id === 42966671;
     },
     preRequired() {
       return this.isFresh || this.isGel;
@@ -373,7 +380,7 @@ export default {
       return designs.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
     },
     canShowTotal() {
-      if (this.isFresh || this.isGelExtension) {
+      if (this.isFresh || this.isGelExtension || this.isPolyGel) {
         return this.preChoice
           && this.lengthChoice && this.designChoice
           && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
@@ -382,11 +389,26 @@ export default {
         return this.designChoice
           && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
       }
-      if (this.isGel) {
+      if (this.isGel || this.isPolyGelMani) {
         return this.designChoice
           && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
       }
       return this.isSoakOff;
+    },
+    showButtonOption() {
+      return this.isFresh
+        || this.isGel
+        || this.isGelExtension
+        || this.isPolyGel
+        || this.isPolyGelMani;
+    },
+    showShape() {
+      return (this.lengthChoice
+        && (this.isFresh || this.isGelExtension || this.isPolyGel))
+        && this.shapeOpts.length;
+    },
+    inspoCopy() {
+      return this.getItemHtml(this.content.inspiration_note);
     },
   },
   watch: {
@@ -409,7 +431,11 @@ export default {
       deep: true,
     },
   },
+  mounted() {
+    eventBus.on(EVENT_BUS_EVENTS.DESIGN_CONFIRM, this.handleConfirmDesign);
+  },
   beforeUnmount() {
+    eventBus.off(EVENT_BUS_EVENTS.DESIGN_CONFIRM, this.handleConfirmDesign);
     this.resetOpts();
   },
   methods: {
@@ -418,6 +444,8 @@ export default {
       'getAvailableDates',
       'bookAppointment',
       'clearAvailableDates',
+      'openModal',
+      'setSelectedDesign',
     ]),
     handleAfterHoursChange(val) {
       this.viewAfterHours = val;
@@ -520,13 +548,18 @@ export default {
       }
     },
     handleChooseDesign(design) {
+      this.setSelectedDesign(design.id);
+      this.openModal(MODAL_TYPES.DESIGN_CONFIRM);
+    },
+    handleConfirmDesign(designId) {
       const { designChoice } = this;
       if (designChoice) {
         this.addons = this.addons.filter((opt) => opt.id !== designChoice.id);
       }
-      this.addons.push(design);
-      this.designChoice = design;
-      this.handleChooseFreestyle();
+      const newDesign = this.designs.find((design) => design.id === designId);
+      this.addons.push(newDesign);
+      this.designChoice = newDesign;
+      setTimeout(() => { this.handleChooseFreestyle(); }, 550);
     },
     handleVideoLoaded() {
       this.setPageLoaded(true);
@@ -566,6 +599,22 @@ export default {
       padding: {
         left: 0;
       }
+    }
+  }
+  .confirm-inspiration {
+    color: $hdRed;
+    text-transform: uppercase;
+    font-weight: normal;
+    padding: 25px 14px 14px;
+    font-style: italic;
+    @include bpLarge {
+      padding: {
+        left: 0;
+      }
+    }
+    a {
+      color: $hdRed;
+      font-style: italic;
     }
   }
   .shape-opts {

@@ -166,7 +166,7 @@ export default {
       padding: 0;
     }
     @include bpLarge {
-      margin: 0;
+      margin-left: 0;
       padding: 0;
     }
     .red {

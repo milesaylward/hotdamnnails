@@ -56,6 +56,7 @@ const fetchData = async () => {
       if (item.name.includes('Length:')) {
         const tempName = item.name.replace('Length:', '');
         item.parsed_name = tempName.replace(' - Duplicate', '');
+        item.parsed_name = item.parsed_name.replace(' - Poly-Gel', '');
         type.length_opts.push(item);
       }
       if (item.name.includes('Shape:')) {

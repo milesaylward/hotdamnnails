@@ -6,15 +6,20 @@
       <Loader v-if="!pageLoaded" />
       <Maintenance v-else-if="pageLoaded && underMaintenance" />
     </transition>
+    <transition name="fade">
+      <ModalManager v-if="modalOpen" />
+    </transition>
   </main>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import Navigation from '@/components/Navigation.vue';
 import Loader from '@/components/Loader.vue';
 import MediaListeners from '@/core/mediaListeners';
 import Maintenance from '@/components/Maintenance.vue';
+import ModalManager from '@/components/ModalManager.vue';
+import { MODAL_TYPES } from './core/constants';
 
 export default {
   name: 'App',
@@ -22,11 +27,13 @@ export default {
     Navigation,
     Loader,
     Maintenance,
+    ModalManager,
   },
   computed: {
+    ...mapState(['adminLoggedIn', 'modalOpen', 'modalType']),
     ...mapGetters(['pageLoaded', 'siteDataLoaded', 'isTouchDevice', 'getContentByPath']),
     underMaintenance() {
-      return this.getContentByPath('base.site_under_maintenance');
+      return this.getContentByPath('base.site_under_maintenance') && !this.adminLoggedIn;
     },
   },
   watch: {
@@ -37,6 +44,13 @@ export default {
           top: 0,
         });
       }
+    },
+    modalType(val, prevVal) {
+      if (!val && prevVal === MODAL_TYPES.DESIGN_CONFIRM) this.setSelectedDesign(null);
+    },
+    modalOpen(val) {
+      if (val) document.body.classList.add('locked');
+      else document.body.classList.remove('locked');
     },
     siteDataLoaded() {
       if (this.underMaintenance) this.setPageLoaded(true);
@@ -57,7 +71,7 @@ export default {
     this.media.init();
   },
   methods: {
-    ...mapActions(['fetchSiteData', 'fetchAppointmentData']),
+    ...mapActions(['fetchSiteData', 'fetchAppointmentData', 'setSelectedDesign']),
     ...mapActions(['setPageLoaded']),
   },
 };
