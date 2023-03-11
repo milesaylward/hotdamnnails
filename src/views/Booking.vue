@@ -470,10 +470,9 @@ export default {
       let el;
       if (isRef) el = this.$refs[id].$el || this.$refs[id];
       else el = document.getElementById(id);
-      el.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
+      const rect = el.getBoundingClientRect();
+      const offset = window.innerWidth > 767 ? 85 : 65;
+      window.scrollTo({ top: window.scrollY + (rect.top - offset), behavior: 'smooth' });
     },
     checkAvailability() {
       const addons = this.addons.map((addon) => addon.id);
