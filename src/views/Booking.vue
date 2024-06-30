@@ -40,7 +40,7 @@
                   @changeOpt="handlePreChange"
                 />
                 <div v-if="showButtonOption" ref="pre">
-                  <h1>{{preCopy}}</h1>
+                  <h1 v-html="preCopy" />
                   <div class="screen__content">
                     <HDButton
                       v-for="opt in preOpts"
@@ -265,7 +265,7 @@ export default {
     },
     preCopy() {
       if (!this.appointmentType) return '';
-      if (this.showButtonOption) return 'Do you need a Soak Off?';
+      if (this.showButtonOption) return 'Do you need a removal?<br><small>(I do not offer acrylic or dip soak offs)</small>';
       if (this.isFill) return 'Please check all that apply for your fill in:';
       return '';
     },
@@ -521,7 +521,8 @@ export default {
           return;
         }
       }
-      this.addons.push(pre);
+      if (!this.showButtonOption) this.addons.push(pre);
+      else this.addons = [pre];
       this.preChoice = pre;
     },
     handleChooseType(type) {
@@ -626,8 +627,11 @@ export default {
     font-size: 24px;
     margin: 0 0 15px;
     padding: 25px 14px 0;
-    .small {
+    line-height: 1;
+    small {
       font-size: 60%;
+      font-weight: 400;
+      color: #777;
     }
     @include bpLarge {
       padding: {
@@ -681,6 +685,11 @@ export default {
     .screen {
       width: 100%;
       padding-bottom: 200px;
+      h1 {
+        .small {
+          font-size: 18px;
+        }
+      }
       &__content {
         display: flex;
         flex-wrap: wrap;
