@@ -130,6 +130,9 @@ export default {
     }
     p {
       margin: 10px 0;
+      &:empty {
+        display: none;
+      }
     }
     .hd-button {
       height: 60px;

@@ -2,8 +2,8 @@
   <div class="page booking">
     <Hero
       title="Book with me"
-      video="https://dl.airtable.com/.attachments/dda1f57a1256a5082a9a1267a89993d0/a3a6c324/policy_cover.mp4"
-      fallback="https://dl.airtable.com/.attachments/6c8d983662ca89a89c2f0e822e9a3f11/6f571630/policy_cover_thumbnail.jpg"
+      :video="video.src"
+      :fallback="video.fallback"
       @load="handleVideoLoaded"
     />
     <transition name="fade" mode="out-in">
@@ -25,11 +25,6 @@
             </div>
             <transition name="fade" mode="out-in" @enter="handleScrollTo('screen')">
               <div class="screen" v-if="appointmentType" :key="appointmentType.id" ref="screen">
-                <p v-if="isSoakOff" class="note">
-                  <b>Note:</b>
-                  I do not do only soak offs on foreign nails (not done by me).
-                  I will soak off foreign nails if you book a fresh set!
-                </p>
                 <RadioOption
                   :options="preOpts"
                   :multi="isFill"
@@ -97,7 +92,7 @@
                 <transition name="fade" @enter="!isFill && handleScrollTo('design')">
                   <div
                     v-if="
-                      (shapeChoice || ((isGel || isPolyGelMani) && preChoice) || isFill)
+                      (shapeChoice || ((isGel || isPolyGelMani || isFill) && preChoice))
                       && designs.length
                     "
                     ref="design"
@@ -260,6 +255,12 @@ export default {
     content() {
       return this.getContentByPath('booking');
     },
+    video() {
+      return {
+        src: this.getContentByPath('booking.video'),
+        fallback: this.getContentByPath('booking.video_fallback'),
+      };
+    },
     designNote() {
       return this.getContentByPath('booking.design_note');
     },
@@ -311,7 +312,7 @@ export default {
       return this.appointmentType.id === 42966671;
     },
     preRequired() {
-      return this.isFresh || this.isGel;
+      return this.isFresh || this.isGel || this.isFill;
     },
     isFill() {
       if (!this.appointmentType) return false;
@@ -353,7 +354,10 @@ export default {
     preOpts() {
       if (!this.appointmentType) return [];
       const opts = this.appointmentType.pre_opts;
-      return opts.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
+      return opts.sort((a, b) => {
+        if (a.price !== b.price) return a.price - b.price;
+        return a.parsed_name.localeCompare(b.parsed_name);
+      });
     },
     freestyleOpts() {
       if (!this.appointmentType) return [];
@@ -512,18 +516,32 @@ export default {
       this.shapeChoice = shape;
     },
     handlePreChange(pre) {
-      const { preChoice, preRequired } = this;
-      if (preChoice || !preRequired) {
-        if (preRequired) this.addons = this.addons.filter((opt) => opt.id !== preChoice.id);
-        if (!preRequired && this.addons.indexOf(pre) > -1) {
+      const noChangeId = 3650951;
+      const { preChoice, showButtonOption } = this;
+      if (showButtonOption) {
+        if (preChoice) {
+          this.addons = this.addons.filter((opt) => opt.id !== preChoice.id);
+        }
+        this.addons.push(pre);
+        this.preChoice = pre;
+      } else {
+        const index = this.addons.findIndex((opt) => opt.id === pre.id);
+        if (index > -1) {
           this.addons = this.addons.filter((opt) => opt.id !== pre.id);
-          this.preChoice = null;
-          return;
+          this.selectedPreChoices = this.addons.map((opt) => opt.id);
+        } else {
+          this.addons.push(pre);
+          if (pre.id === noChangeId) {
+            this.addons = this.addons.filter((opt) => {
+              if (opt.name.startsWith('Pre:') && opt.id !== noChangeId) return false;
+              return true;
+            });
+          } else {
+            this.addons = this.addons.filter((opt) => opt.id !== noChangeId);
+          }
+          this.preChoice = pre;
         }
       }
-      if (!this.showButtonOption) this.addons.push(pre);
-      else this.addons = [pre];
-      this.preChoice = pre;
     },
     handleChooseType(type) {
       this.appointmentType = type;
