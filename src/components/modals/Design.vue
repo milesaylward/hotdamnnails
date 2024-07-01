@@ -38,8 +38,8 @@ export default {
       2551233: 'extreme',
     },
     designIdCopy: {
-      2112127: 'Solid',
-      2112131: 'Minimal',
+      2112127: 'classic',
+      2112131: 'minimal',
       3305940: 'moderate',
       2112135: 'extreme',
       2551233: 'supreme',
@@ -53,7 +53,8 @@ export default {
       return this.carouselContent[this.designIdToCarousel[this.selectedDesign]];
     },
     modalCopy() {
-      return this.designIdCopy[this.selectedDesign];
+      const copy = this.getContentByPath('design_modal');
+      return copy[this.designIdCopy[this.selectedDesign]];
     },
   },
   methods: {
