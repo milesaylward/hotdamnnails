@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import Logo from '@/assets/svg/logo.svg';
+import Logo from '@/assets/svg/logo.svg?component';
 
 export default {
   name: 'maintenance',

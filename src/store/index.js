@@ -113,7 +113,7 @@ export default createStore({
         return `string ${path} not found in state`;
       }
     },
-    siteDataLoaded: (state) => state.app && state.appointmentData,
+    siteDataLoaded: (state) => Object.keys(state.app).length && state.appointmentData,
     pageLoaded: (state, getters) => getters.siteDataLoaded && state.pageLoaded,
     isMobile: (state) => state.viewWidth < 600,
     isLarge: (state) => state.viewWidth > 1024,

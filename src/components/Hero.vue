@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Drip from '@/assets/svg/drip.svg';
+import Drip from '@/assets/svg/drip.svg?component';
 
 export default {
   name: 'Hero',

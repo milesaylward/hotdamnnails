@@ -41,7 +41,7 @@ export default {
   }
   &__switch {
     $size: 40px;
-    $halfSize: $size / 2;
+    $halfSize: calc(#{$size} / 2);
     pointer-events: none;
     display: inline-block;
     height: $halfSize;

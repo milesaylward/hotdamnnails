@@ -50,8 +50,8 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import Venmo from '@/assets/svg/venmo.svg';
-import CashApp from '@/assets/svg/cashapp.svg';
+import Venmo from '@/assets/svg/venmo.svg?component';
+import CashApp from '@/assets/svg/cashapp.svg?component';
 import HDButton from './HDButton.vue';
 
 export default {

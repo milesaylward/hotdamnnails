@@ -11,7 +11,7 @@ const authUser = (data) => new Promise((resolve, reject) => {
   }
 });
 
-const handler = async (event) => {
+export const handler = async (event) => {
   try {
     const data = await authUser(JSON.parse(event.body));
     return { statusCode: 200, body: JSON.stringify(data) };
@@ -19,5 +19,3 @@ const handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify(error) };
   }
 }
-
-module.exports = { handler }

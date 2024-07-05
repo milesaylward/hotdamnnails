@@ -1,5 +1,5 @@
-const Acuity = require('acuityscheduling');
-const { Duration } = require('luxon');
+import Acuity from 'acuityscheduling';
+import { Duration } from 'luxon';
 
 const acuity = Acuity.basic({
   userId: process.env.ACUITY_USER_ID,
@@ -47,7 +47,7 @@ const bookAppointment = (data) => new Promise((resolve, reject) => {
 });
 
 
-const handler = async (event) => {
+export const handler = async (event) => {
   try {
     const data = await bookAppointment(JSON.parse(event.body));
     return { statusCode: 200, body: JSON.stringify(data) };
@@ -55,5 +55,3 @@ const handler = async (event) => {
     return { statusCode: 500, body: JSON.stringify(error) };
   }
 }
-
-module.exports = { handler }

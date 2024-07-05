@@ -41,9 +41,9 @@
 import gsap from 'gsap/all';
 import { mapActions, mapGetters } from 'vuex';
 import EventBus from '@/core/eventBus';
-import Logo from '@/assets/svg/logo.svg';
-import Arrow from '@/assets/svg/down_arrow.svg';
-import Drip from '@/assets/svg/drip.svg';
+import Logo from '@/assets/svg/logo.svg?component';
+import Arrow from '@/assets/svg/down_arrow.svg?component';
+import Drip from '@/assets/svg/drip.svg?component';
 import Designs from '@/components/Designs.vue';
 import HDButton from '../components/HDButton.vue';
 

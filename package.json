@@ -1,13 +1,13 @@
 {
-  "name": "hot-damn-nails",
-  "version": "0.1.0",
+  "name": "hotdamnnails",
   "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "start": "npm run dev",
-    "dev": "netlify dev"
+    "dev": "netlify dev",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "acuityscheduling": "^0.1.9",
@@ -19,25 +19,14 @@
     "luxon": "^2.0.2",
     "mitt": "^2.1.0",
     "ua-parser-js": "^0.7.28",
-    "vue": "^3.0.0",
-    "vue-router": "^4.0.0-0",
-    "vuex": "^4.0.0-0"
+    "vue": "^3.4.29",
+    "vue-router": "^4.4.0",
+    "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
-    "@vue/cli-plugin-vuex": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "@vue/eslint-config-airbnb": "^5.0.2",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-vue": "^7.0.0-0",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.2",
-    "style-resources-loader": "^1.4.1",
-    "vue-svg-loader": "^0.17.0-beta.2"
+    "@vitejs/plugin-vue": "^5.0.5",
+    "sass": "^1.77.6",
+    "vite": "^5.3.1",
+    "vite-svg-loader": "^5.1.0"
   }
 }

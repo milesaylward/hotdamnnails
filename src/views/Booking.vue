@@ -426,6 +426,7 @@ export default {
         } else {
           this.ignoreChange = false;
         }
+        console.log(this.addons, 'changed');
       },
     },
     computedDates: {
@@ -528,7 +529,11 @@ export default {
         const index = this.addons.findIndex((opt) => opt.id === pre.id);
         if (index > -1) {
           this.addons = this.addons.filter((opt) => opt.id !== pre.id);
-          this.selectedPreChoices = this.addons.map((opt) => opt.id);
+          if (this.preChoice.id === pre.id) {
+            const preOpts = this.addons.filter((opt) => opt.name.startsWith('Pre:'));
+            if (!preOpts.length) this.preChoice = null;
+            else this.preChoice = preOpts[0];
+          }
         } else {
           this.addons.push(pre);
           if (pre.id === noChangeId) {

@@ -84,7 +84,7 @@ const fetchData = async (data) => {
   }
 };
 
-const handler = async (event) => {
+export const handler = async (event) => {
   try {
     const data = await fetchData(JSON.parse(event.body));
     return { statusCode: 200, body: JSON.stringify(data) };
@@ -92,6 +92,3 @@ const handler = async (event) => {
     return { statusCode: 500, body: error.toString() };
   }
 }
-
-
-module.exports = { handler }

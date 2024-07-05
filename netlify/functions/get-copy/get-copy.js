@@ -36,7 +36,7 @@ const fetchData = () => new Promise((resolve, reject) => {
   });
 });
 
-const handler = async () => {
+export const handler = async () => {
   try {
     const data = await fetchData();
     return { statusCode: 200, body: JSON.stringify(data) };
@@ -44,5 +44,3 @@ const handler = async () => {
     return { statusCode: 500, body: error.toString() };
   }
 }
-
-module.exports = { handler }
