@@ -53,7 +53,6 @@ export default {
       else document.body.classList.remove('locked');
     },
     siteDataLoaded() {
-      console.log(this.underMaintenance);
       if (this.underMaintenance) this.setPageLoaded(true);
     },
     isTouchDevice: {
