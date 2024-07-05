@@ -45,7 +45,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import Error from '@/assets/svg/error.svg';
+import Error from '@/assets/svg/error.svg?component';
 import HDButton from './HDButton.vue';
 import Switch from './Switch.vue';
 

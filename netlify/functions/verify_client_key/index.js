@@ -1,4 +1,5 @@
-const Airtable = require('airtable');
+import Airtable from 'airtable';
+
 const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base('appPnFPGlYYKyYTxf');
 
 const getKey = () => new Promise((resolve, reject) => {
@@ -20,7 +21,7 @@ const authUser = async (data) => {
   });
 };
 
-const handler = async (event) => {
+export const handler = async (event) => {
   try {
     const data = await authUser(JSON.parse(event.body));
     return { statusCode: 200, body: JSON.stringify(data) };
@@ -28,5 +29,3 @@ const handler = async (event) => {
     return { statusCode: 401, body: JSON.stringify(error) };
   }
 }
-
-module.exports = { handler }

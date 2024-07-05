@@ -60,7 +60,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Logo from '@/assets/svg/header_logo.svg';
+import Logo from '@/assets/svg/header_logo.svg?component';
 import EventBus from '@/core/eventBus';
 
 export default {
