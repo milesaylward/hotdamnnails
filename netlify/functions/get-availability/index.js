@@ -1,5 +1,5 @@
-const Acuity = require('acuityscheduling');
-const { DateTime } = require('luxon');
+import Acuity from 'acuityscheduling';
+import { DateTime } from 'luxon';
 
 const acuity = Acuity.basic({
   userId: process.env.ACUITY_USER_ID,
