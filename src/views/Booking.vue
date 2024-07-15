@@ -92,7 +92,7 @@
                 <transition name="fade" @enter="!isFill && handleScrollTo('design')">
                   <div
                     v-if="
-                      (shapeChoice || ((isGel || isPolyGelMani || isFill) && preChoice))
+                      (isDesignOnly || shapeChoice || ((isGel || isPolyGelMani || isFill) && preChoice))
                       && designs.length
                     "
                     ref="design"
@@ -311,6 +311,10 @@ export default {
       if (!this.appointmentType) return false;
       return this.appointmentType.id === 42966671;
     },
+    isDesignOnly() {
+      if (!this.appointmentType) return false;
+      return this.appointmentType.id === 65769632;
+    },
     preRequired() {
       return this.isFresh || this.isGel || this.isFill;
     },
@@ -397,6 +401,7 @@ export default {
         return this.designChoice
           && ((this.freestyleChoice && this.showFreestyle) || !this.showFreestyle);
       }
+      if (this.isDesignOnly) return this.designChoice;
       return this.isSoakOff;
     },
     showButtonOption() {
@@ -426,7 +431,6 @@ export default {
         } else {
           this.ignoreChange = false;
         }
-        console.log(this.addons, 'changed');
       },
     },
     computedDates: {

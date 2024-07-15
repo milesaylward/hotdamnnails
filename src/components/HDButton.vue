@@ -86,9 +86,8 @@ export default {
     justify-content: center;
     align-items: center;
     &.small {
-      font-size: 14px;
+      font-size: 12px;
       display: block;
-      white-space: nowrap;
       & ~ br {
         display: none;
       }

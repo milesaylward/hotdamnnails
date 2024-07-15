@@ -82,7 +82,6 @@ export default {
   methods: {
     ...mapActions(['setPolicyAccepted', 'verifyClientKey']),
     handleAccept() {
-      console.log(this.showCodeEntry, 'testing');
       if (this.showCodeEntry) {
         this.verifyClientKey({ key: this.key.trim() }).then((res) => {
           if (res.status !== 200) {
