@@ -92,7 +92,7 @@
                 <transition name="fade" @enter="!isFill && handleScrollTo('design')">
                   <div
                     v-if="
-                      (isDesignOnly || shapeChoice || ((isGel || isPolyGelMani || isFill) && preChoice))
+                      showDesign
                       && designs.length
                     "
                     ref="design"
@@ -276,6 +276,10 @@ export default {
     isLongGelExtension() {
       return this.lengthChoice && this.lengthChoice.id === 2577728;
     },
+    showDesign() {
+      if (this.isDesignOnly || this.shapeChoice) return true;
+      if ((this.isGel || this.isPolyGelMani || this.isFill)) return !!this.preChoice;
+    },
     shapeNote() {
       let note;
       if (this.isGelExtension) {
@@ -353,7 +357,10 @@ export default {
     shapeOpts() {
       if (!this.appointmentType) return [];
       const opts = this.appointmentType.shape_opts;
-      return opts.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
+      return opts.sort((a, b) => {
+        if (a.price !== b.price) return a.price - b.price;
+        return a.parsed_name.localeCompare(b.parsed_name);
+      });
     },
     preOpts() {
       if (!this.appointmentType) return [];
@@ -366,7 +373,10 @@ export default {
     freestyleOpts() {
       if (!this.appointmentType) return [];
       const opts = this.appointmentType.freestyle_opts;
-      return opts.sort((a, b) => { if (a.price < b.price) return 1; return -1; });
+      return opts.sort((a, b) => {
+        if (a.price !== b.price) return a.price - b.price;
+        return a.parsed_name.localeCompare(b.parsed_name);
+      });
     },
     afterHoursOpts() {
       if (!this.appointmentType) return [];
@@ -375,17 +385,26 @@ export default {
     lengths() {
       if (!this.appointmentType) return [];
       const lengths = this.appointmentType.length_opts;
-      return lengths.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
+      return lengths.sort((a, b) => {
+        if (a.price !== b.price) return a.price - b.price;
+        return a.parsed_name.localeCompare(b.parsed_name);
+      });
     },
     fillTimes() {
       if (!this.appointmentType) return [];
       const times = this.appointmentType.fill_time_opts;
-      return times.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
+      return times.sort((a, b) => {
+        if (a.price !== b.price) return a.price - b.price;
+        return a.parsed_name.localeCompare(b.parsed_name);
+      });
     },
     designs() {
       if (!this.appointmentType) return [];
       const designs = this.appointmentType.designs_opts;
-      return designs.sort((a, b) => { if (a.price > b.price) return 1; return -1; });
+      return designs.sort((a, b) => {
+        if (a.price !== b.price) return a.price - b.price;
+        return a.parsed_name.localeCompare(b.parsed_name);
+      });
     },
     canShowTotal() {
       if (this.isFresh || this.isGelExtension || this.isPolyGel) {
@@ -554,7 +573,7 @@ export default {
     },
     handleChooseType(type) {
       this.appointmentType = type;
-      this.resetOpts();
+      // this.resetOpts();
     },
     handleChooseLength(length) {
       const { lengthChoice } = this;
