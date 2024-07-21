@@ -32,17 +32,25 @@ export default {
   data: () => ({
     designIdToCarousel: {
       2112127: 'solid',
+      5125087: 'french',
       2112131: 'french',
       3305940: 'minimal',
+      5144320: 'minimal',
       2112135: 'moderate',
+      5125064: 'moderate',
       2551233: 'extreme',
+      5125076: 'extreme',
     },
     designIdCopy: {
       2112127: 'classic',
       2112131: 'minimal',
+      5125087: 'minimal',
       3305940: 'moderate',
+      5144320: 'moderate',
       2112135: 'extreme',
+      5125064: 'extreme',
       2551233: 'supreme',
+      5125076: 'supreme',
     },
   }),
   computed: {
